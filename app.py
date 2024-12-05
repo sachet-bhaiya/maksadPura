@@ -57,6 +57,7 @@ def command():
         # Check for spam commands, make case-insensitive
         if cmd == "spam on":
             spam = True
+            return spam
         elif cmd == "spam off":
             spam = False
 
@@ -81,7 +82,6 @@ def command():
 
         # Clear the message file if spam is off
         if not spam:
-            return spam
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write("")
 
