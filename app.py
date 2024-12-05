@@ -81,6 +81,7 @@ def command():
 
         # Clear the message file if spam is off
         if not spam:
+            return spam
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write("")
 
