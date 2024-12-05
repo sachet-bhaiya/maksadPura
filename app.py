@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
-
+spam = False
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -41,8 +41,8 @@ def edit():
 
 @app.route("/command", methods=["GET", "POST"])
 def command():
-    global startTime
-    spam = None 
+    global startTime 
+    global spam
     if request.method == "GET":
         startTime = time()
         cmd = ""
