@@ -383,7 +383,7 @@ body {
 
 /* Audio List Scroll */
 .audio-list {
-    max-height: calc(100% - 140px); /* Adjust the height to leave space for the buttons */
+    max-height: calc(100% - 140px); /* Adjust the height to leave space for the butons */
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
