@@ -69,7 +69,7 @@ def command():
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
                         
-        with open(os.path.join(STATIC_FOLDER,"message.txt","w")) as file:
+        with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
         	file.write("")
         
         return cmd if cmd else "none"
