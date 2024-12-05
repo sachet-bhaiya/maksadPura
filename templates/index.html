@@ -93,31 +93,12 @@
         </div>
     </div>
 
-    <div class="toggle-container">
-        <!-- Toggle Button -->
-        <button id="toggle-btn" class="toggle-btn">On spam mode</button>
-    </div>
-
     <script>
         const audio_form = document.getElementById('audio-form');
         const audioInput = document.getElementById('audio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
-        fetch("/static/spam.json")
-        .then(response => response.json())
-        .then(data => {
-            const isOn = data.spam; // Assuming the JSON structure has the "spam" key
-            if (Boolean(isOn)) {
-                toggleButton.style.backgroundColor = "red";
-                toggleButton.innerText = "Off spam mode";
-            } else {
-                toggleButton.style.backgroundColor = "green";
-                toggleButton.innerText = "On spam mode";
-            }
-        })
-        .catch(error => {
-            console.error("Error loading spam.json:", error);
-        });
+
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
             if (!file) {
@@ -187,28 +168,6 @@
         }
 
         setInterval(update, 1600);
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggleButton = document.getElementById("toggle-btn");
-            let isOn = false;
-            toggleButton.addEventListener("click", function () {
-                if (isOn) {
-                    toggleButton.style.backgroundColor = "red"; 
-                    toggleButton.innerText = "Off spam mode";
-                } else {
-                    toggleButton.style.backgroundColor = "green"; 
-                    toggleButton.innerText = "On spam mode";
-                }
-                isOn = !isOn; 
-                fetch("/spam", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ spam: isOn }),
-                });
-            });
-        });
 
         update();
     </script>
