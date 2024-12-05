@@ -188,3 +188,6 @@ def delete_task():
             with open(tasks_file, "w") as file:
                 json.dump(new_task, file, indent=4)
     return redirect("/")
+
+if __name__ == "__main__":
+    app.run()
