@@ -179,7 +179,7 @@ def spam():
 	state = str(request.data.decode('utf-8'))
 	mode = f"""
 	{
-		"spam":{spamMode}
+		"spam":{"false" if spamMode else "true"}
 	}
 	"""
 	with open("/static/spam.json","w") as file:
