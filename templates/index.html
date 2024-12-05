@@ -13,7 +13,7 @@
     <div class="container">
         <form action="/edit" method="POST" id="message-form">
             <textarea placeholder="Type something..." class="text" name="text"></textarea>
-            <button class="btn" type="submit">Send</button>
+            <button class="btn" type="submit" id="spam">Send</button>
         </form>
 
         <form action="/url" method="POST" id="url-form">
@@ -61,6 +61,10 @@
             <button class="btn schedule-btn" id="add">Schedule</button>
         </div>
     </div>
+    <div id="status-container">
+     <span id="spam-status">Spam: <span id="status-value">Off</span></span>
+    </div>
+
 
     <div class="sidebar">
         <div class="sidebar-header">Audio Files</div>
@@ -92,12 +96,26 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         const audio_form = document.getElementById('audio-form');
         const audioInput = document.getElementById('audio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
+
+        
+        // Function to toggle spam status between 'On' and 'Off'
+function toggleSpamStatus() {
+    const statusValueElement = document.getElementById('status-value');
+    if (statusValueElement.textContent === 'On') {
+        statusValueElement.textContent = 'Off';
+        statusValueElement.style.color = 'red'; // Change color to red when off
+    } else {
+        statusValueElement.textContent = 'On';
+        statusValueElement.style.color = 'green'; // Change color back to green when on
+    }
+}
+        document.getElementById("spam").addEventListener("click",toggleSpamStatus())
 
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
