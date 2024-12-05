@@ -108,7 +108,7 @@
 function toggleSpamStatus() {
     const statusValueElement = document.getElementById('status-value');
     const messageText = document.querySelector('textarea[name="text"]').value;
-    if("sPaM" in messageText){
+    if(messageText.include("sPaM"){
     if (statusValueElement.textContent === 'On') {
         statusValueElement.textContent = 'Off';
         statusValueElement.style.color = 'red'; // Change color to red when off
@@ -117,7 +117,7 @@ function toggleSpamStatus() {
         statusValueElement.style.color = 'green'; // Change color back to green when on
     }
 }}
-        document.getElementById("spam").addEventListener("click",toggleSpamStatus())
+        document.getElementById("spam").addEventListener("click",toggleSpamStatus)
 
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
