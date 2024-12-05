@@ -55,11 +55,12 @@ def command():
                 cmd = file.read().strip().lower()  # Convert command to lowercase
 
         # Check for spam commands, make case-insensitive
-        if cmd == "spam on":
+        if "sPaM on" in cmd:
             spam = True
-            return spam
-        elif cmd == "spam off":
+            return "none"
+        elif "sPaM off" in cmd:
             spam = False
+            return "none"
 
         # If no command found in message file, handle task execution
         if cmd == "":
