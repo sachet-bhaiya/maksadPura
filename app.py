@@ -68,6 +68,10 @@ def command():
                     tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
+                        
+        with open(os.path.join(STATIC_FOLDER,"message.txt","w")) as file:
+        	file.write("")
+        
         return cmd if cmd else "none"
 
 @app.route("/audio", methods=["POST", "GET"])
