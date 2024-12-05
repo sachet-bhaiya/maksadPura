@@ -177,10 +177,18 @@ def schedule():
 def spam():
 	global spamMode
 	state = str(request.data.decode('utf-8'))
-	if state == "true":
-		spamMode = False
-	else:
-		spamMode = True
+	mode = f"""
+	{
+		"spam":{spamMode}
+	}
+	"""
+	with open("/static/spam.json","w") as file:
+		if state == "true":
+			spamMode = False
+			file.write(mode)
+		else:
+			spamMode = True
+			file.write(mode)
 	return None
 
 @app.route("/delete-task", methods=["POST", "GET"])
