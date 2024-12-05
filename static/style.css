@@ -512,13 +512,13 @@ display: none;
 .toggle-container {
         position: fixed;
         top: 10px;
-        right: 300px; /* Adjust this to align it with the start of the sidebar */
+        right: 315px; /* Adjust this to align it with the start of the sidebar */
         z-index: 1000;
     }
 
     /* Styling for the toggle button */
     .toggle-btn {
-        background-color: red; /* Default color */
+        background-color: green; /* Default color */
         color: white;
         border: none;
         padding: 10px 20px;
