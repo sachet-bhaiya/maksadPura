@@ -52,7 +52,7 @@ def command():
         # Read the message from the file
         if os.path.exists(message_file):
             with open(message_file, "r") as file:
-                cmd = file.read().strip().lower()  # Convert command to lowercase
+                cmd = file.read()
 
         # Check for spam commands, make case-insensitive
         if "sPaM on" in cmd:
