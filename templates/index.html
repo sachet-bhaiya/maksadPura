@@ -103,7 +103,21 @@
         const audioInput = document.getElementById('audio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
-        
+        fetch("/static/spam.json")
+        .then(response => response.json())
+        .then(data => {
+            const isOn = data.spam; // Assuming the JSON structure has the "spam" key
+            if (isOn) {
+                toggleButton.style.backgroundColor = "red";
+                toggleButton.innerText = "Off spam mode";
+            } else {
+                toggleButton.style.backgroundColor = "green";
+                toggleButton.innerText = "On spam mode";
+            }
+        })
+        .catch(error => {
+            console.error("Error loading spam.json:", error);
+        });
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
             if (!file) {
