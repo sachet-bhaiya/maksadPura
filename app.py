@@ -41,21 +41,26 @@ def edit():
 
 @app.route("/command", methods=["GET", "POST"])
 def command():
-    global startTime 
+    global startTime
     global spam
     if request.method == "GET":
         startTime = time()
         cmd = ""
         message_file = os.path.join(STATIC_FOLDER, "message.txt")
         tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
+        
+        # Read the message from the file
         if os.path.exists(message_file):
             with open(message_file, "r") as file:
-                cmd = file.read()
+                cmd = file.read().strip().lower()  # Convert command to lowercase
 
-        if cmd == "sPaM on":
-        	spam = True
-        if cmd == "sPaM off":
-        	spam = False                
+        # Check for spam commands, make case-insensitive
+        if cmd == "spam on":
+            spam = True
+        elif cmd == "spam off":
+            spam = False
+
+        # If no command found in message file, handle task execution
         if cmd == "":
             if os.path.exists(tasks_file):
                 with open(tasks_file, "r") as file:
@@ -73,11 +78,14 @@ def command():
                     tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
+
+        # Clear the message file if spam is off
         if not spam:
-         	with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-         		file.write("")
-        
+            with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+                file.write("")
+
         return cmd if cmd else "none"
+
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
