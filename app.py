@@ -181,6 +181,7 @@ def spam():
 		spamMode = True
 	else:
 		spamMode = False
+	return None
 
 @app.route("/delete-task", methods=["POST", "GET"])
 def delete_task():
