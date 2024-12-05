@@ -93,6 +93,8 @@
             </div>
         </div>
     </div>
+    <!-- Toggle Button -->
+    <button id="toggle-btn" class="toggle-btn">Toggle Mode</button>
 
     <script>
         const audio_form = document.getElementById('audio-form');
@@ -165,7 +167,27 @@
             });
             }
 setInterval(update(), 1600);
-
+	document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-btn");
+        let isOn = false;
+        toggleButton.addEventListener("click", function () {
+            if (isOn) {
+                toggleButton.style.backgroundColor = "red"; 
+                toggleButton.innerText = "Off spam mode";
+            } else {
+                toggleButton.style.backgroundColor = "green"; 
+                toggleButton.innerText = "On spam mode";
+            }
+            isOn = !isOn; 
+	    fetch("/spam", {
+              method: 'POST',
+              headers: {
+              'Content-Type': 'application/json',
+          },
+               body: isOn,
+        });
+        });
+    });
         update()
     </script>
 </body>
