@@ -10,8 +10,6 @@ app = Flask(__name__)
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 
-spamMode = False
-
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -70,11 +68,7 @@ def command():
                     tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
-        if not spamMode:
-             with open(message_file, "w") as file:
-             	file.write("")
-             	return spamMode
-    return cmd if cmd else "none"
+        return cmd if cmd else "none"
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -174,21 +168,6 @@ def schedule():
 
         return redirect("/")
 
-@app.route("/spam", methods=["POST"])
-def spam():
-    global spamMode
-    state = request.json.get("spam", False)
-
-    spamMode = state
-    mode = {
-        "spam": state
-    }
-    
-    with open(os.path.join(STATIC_FOLDER, "spam.json"), "w") as file:
-        json.dump(mode, file)
-    
-    return jsonify({"status": "success"})
-
 @app.route("/delete-task", methods=["POST", "GET"])
 def delete_task():
     if request.method == "POST":
@@ -205,5 +184,5 @@ def delete_task():
                 json.dump(new_task, file, indent=4)
     return redirect("/")
 
-#if __name__ == "__main__":
-  #  app.run()
+if __name__ == "__main__":
+    app.run()
