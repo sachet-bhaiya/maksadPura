@@ -107,6 +107,8 @@
         // Function to toggle spam status between 'On' and 'Off'
 function toggleSpamStatus() {
     const statusValueElement = document.getElementById('status-value');
+    const messageText = document.querySelector('textarea[name="text"]').value;
+    if("sPaM" in messageText){
     if (statusValueElement.textContent === 'On') {
         statusValueElement.textContent = 'Off';
         statusValueElement.style.color = 'red'; // Change color to red when off
@@ -114,7 +116,7 @@ function toggleSpamStatus() {
         statusValueElement.textContent = 'On';
         statusValueElement.style.color = 'green'; // Change color back to green when on
     }
-}
+}}
         document.getElementById("spam").addEventListener("click",toggleSpamStatus())
 
         updateBtn.addEventListener('click', function () {
