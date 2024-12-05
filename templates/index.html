@@ -107,7 +107,7 @@
         .then(response => response.json())
         .then(data => {
             const isOn = data.spam; // Assuming the JSON structure has the "spam" key
-            if (isOn) {
+            if (Boolean(isOn)) {
                 toggleButton.style.backgroundColor = "red";
                 toggleButton.innerText = "Off spam mode";
             } else {
