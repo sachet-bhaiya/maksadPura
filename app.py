@@ -178,9 +178,9 @@ def spam():
 	global spamMode
 	state = str(request.data.decode('utf-8'))
 	if state == "true":
-		spamMode = True
-	else:
 		spamMode = False
+	else:
+		spamMode = True
 	return None
 
 @app.route("/delete-task", methods=["POST", "GET"])
