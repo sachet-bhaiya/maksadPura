@@ -513,7 +513,7 @@ display: none;
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
-
+}
 .sidebar-content {
     display: flex;
     flex-direction: column;
