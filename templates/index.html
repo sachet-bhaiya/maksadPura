@@ -13,57 +13,55 @@
     <div class="container">
         <form action="/edit" method="POST" id="message-form">
             <textarea placeholder="Type something..." class="text" name="text"></textarea>
-            <button class="btn" type="submit" id="spam">Send</button>
+            <button class="btn" type="submit">Send</button>
         </form>
 
         <form action="/url" method="POST" id="url-form">
             <input type="url" class="text" name="url" placeholder="Enter URL" required>
             <button class="btn" type="submit">Open</button>
         </form>
-
         <form action="/add-task" method="POST" id="task-form">
-            <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
-            <input type="datetime-local" class="datetime-input" name="task-datetime" required>
-            <button class="btn" type="submit">Add Task</button>
-        </form>
+		    <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
+		    <input type="datetime-local" class="datetime-input" name="task-datetime" required>
+		    <button class="btn" type="submit">Add Task</button>
+		</form>
     </div>
+   <div class="bottom-left-buttons">
+    <!-- Choose File Button -->
+    <label for="file-input" class="choose-file-btn">Choose File</label>
+    <input type="file" id="file-input" class="file-input">
 
-    <div class="bottom-left-buttons">
-        <!-- Choose File Button -->
-        <label for="file-input" class="choose-file-btn">Choose File</label>
-        <input type="file" id="file-input" class="file-input">
-
-        <!-- Update Button -->
-        <button class="update-btn" id="update-btn">Update</button>
-    </div>
+    <!-- Update Button -->
+    <button class="update-btn" id='update-btn'>Update</button>
+</div>
+ 
+    
 
     <div class="status" id="status">Offline</div>
-    <div id="status-container">
-       <span class="status">Spam: <span id="status-value">Off</span></span>
+
+
+<div class="left-sidebar">
+    <div class="sidebar-header">Schedule Task</div>
+    <div class="sidebar-content">
+        {% for task in tasks["tasks"] %}
+        <div class="task-item">
+            <div class="task-details">
+                <span><span class="green-label">Task:</span> {{task["cmd"]}}</span>
+                <span><span class="green-label">Created On:</span> {{task["time"]}}</span>
+                <span><span class="green-label">Execution At:</span> {{task["execution_time"]}}</span>
+            </div>
+            <form action="/delete-task" method="POST" class="task-actions">
+                <input type="hidden" name="task-id" value="{{ task['id'] }}">
+                <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+            </form>
+        </div>
+        {% endfor %}
     </div>
 
-    <div class="left-sidebar">
-        <div class="sidebar-header">Schedule Task</div>
-        <div class="sidebar-content">
-            {% for task in tasks["tasks"] %}
-                <div class="task-item">
-                    <div class="task-details">
-                        <span><span class="green-label">Task:</span> {{ task["cmd"] }}</span>
-                        <span><span class="green-label">Created On:</span> {{ task["time"] }}</span>
-                        <span><span class="green-label">Execution At:</span> {{ task["execution_time"] }}</span>
-                    </div>
-                    <form action="/delete-task" method="POST" class="task-actions">
-                        <input type="hidden" name="task-id" value="{{ task['id'] }}">
-                        <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
-                    </form>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="bottom-fixed">
-            <button class="btn schedule-btn" id="add">Schedule</button>
-        </div>
+    <div class="bottom-fixed">
+        <button class="btn schedule-btn" id="add">Schedule</button>
     </div>
+</div>
 
     <div class="sidebar">
         <div class="sidebar-header">Audio Files</div>
@@ -71,7 +69,7 @@
             <div class="audio-list">
                 {% for file in files %}
                     <div class="audio-item">
-                        <span>{{ file }}</span>
+                        <span>{{file}}</span>
                         <div>
                             <form action="/play" method="POST" style="display:inline;">
                                 <input type="hidden" name="text" value="{{ file }}">
@@ -88,36 +86,20 @@
 
             <div class="bottom-fixed" style="display: flex; flex-direction: column; align-items: center;">
                 <form id="audio-form">
-                    <label for="audio-input" class="file-label-green">Choose File</label>
-                    <input type="file" id="audio-input" class="file-input" required>
+                    <label for="aduio-input" class="file-label-green">Choose File</label>
+                    <input type="file" id="aduio-input" class="file-input" required>
                     <button class="upload-btn" type="submit">Upload</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <script>
         const audio_form = document.getElementById('audio-form');
-        const audioInput = document.getElementById('audio-input');
+        const aduio = document.getElementById('aduio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
-
         
-        // Function to toggle spam status between 'On' and 'Off'
-function toggleSpamStatus() {
-    const statusValueElement = document.getElementById('status-value');
-    const messageText = document.querySelector('textarea[name="text"]').value;
-    if(messageText.include("sPaM"){
-    if (statusValueElement.textContent === 'On') {
-        statusValueElement.textContent = 'Off';
-        statusValueElement.style.color = 'red'; // Change color to red when off
-    } else {
-        statusValueElement.textContent = 'On';
-        statusValueElement.style.color = 'green'; // Change color back to green when on
-    }
-}}
-        document.getElementById("spam").addEventListener("click",toggleSpamStatus)
-
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
             if (!file) {
@@ -135,16 +117,15 @@ function toggleSpamStatus() {
                 if (data.success) {
                     alert('File updated successfully!');
                 } else {
-                    alert('File update failed!');
+                    alert('File upadation failed!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         });
-
         audio_form.addEventListener("submit", async (e) => {
-            const file = audioInput.files[0];
+            const file = aduio.files[0];
             if (file) {
                 const formData = new FormData();
                 formData.append("file", file);
@@ -154,41 +135,39 @@ function toggleSpamStatus() {
                 });         
             }
         });
-
         document.querySelector(".schedule-btn").addEventListener("click", () => {
-            const taskForm = document.getElementById("task-form");
-            taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
-        });
+    const taskForm = document.getElementById("task-form");
+    taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+});
+    function update(){
+        fetch("/status", { method: "GET" })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+            })
+            .then(data => {
+            if (data === "online") {
+                document.getElementById("status").style.color = "green";
+                document.getElementById("status").textContent = "Online";
+            } else if (data === "offline") {
+                document.getElementById("status").style.color = "red";
+                document.getElementById("status").textContent = "Offline";
+            } else {
+                document.getElementById("status").style.color = "orange";
+                document.getElementById("status").textContent = "Unknown Status";
+            }
+            })
+            .catch(error => {
+            document.getElementById("status").style.color = "orange";
+            document.getElementById("status").textContent = "Connection Error";
+            });
+            }
+setInterval(update(), 1600);
 
-        function update() {
-            fetch("/status", { method: "GET" })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    if (data === "online") {
-                        document.getElementById("status").style.color = "green";
-                        document.getElementById("status").textContent = "Online";
-                    } else if (data === "offline") {
-                        document.getElementById("status").style.color = "red";
-                        document.getElementById("status").textContent = "Offline";
-                    } else {
-                        document.getElementById("status").style.color = "orange";
-                        document.getElementById("status").textContent = "Unknown Status";
-                    }
-                })
-                .catch(error => {
-                    document.getElementById("status").style.color = "orange";
-                    document.getElementById("status").textContent = "Connection Error";
-                });
-        }
-
-        setInterval(update, 1600);
-
-        update();
+        update()
     </script>
 </body>
+
 </html>
