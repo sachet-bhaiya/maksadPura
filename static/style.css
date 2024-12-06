@@ -513,4 +513,21 @@ display: none;
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
+}.audio-list {
+    max-height: calc(100vh - 200px); /* Adjust 200px based on the total height of header, padding, and buttons */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    flex-grow: 1;
 }
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Full height of the sidebar */
+}
+
+.audio-list {
+    flex-grow: 1; /* Take up remaining space */
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
