@@ -508,3 +508,9 @@ background-color: #0056b3;
 .file-input {
 display: none;
 }
+.audio-list {
+    max-height: calc(100% - 130px); /* Adjusted to decrease by 30px */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
