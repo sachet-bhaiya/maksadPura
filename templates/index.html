@@ -107,7 +107,11 @@
             const home = document.querySelector("#home")
             const socket = io()
             let share = false
-            
+            controlBtn.addEventListener("click", () => {
+                home.style.display = "none";
+                control.style.display = "block";
+                console.log("done")
+            });
             updateBtn.addEventListener('click', function () {
                 const file = fileInput.files[0];
                 if (!file) {
@@ -176,14 +180,6 @@
                     });
             }
 
-            setInterval(update, 1600);
-
-            controlBtn.addEventListener("click", () => {
-                home.style.display = "none";
-                control.style.display = "block";
-                console.log("done")
-            });
-
             socket.on("message", (data) => {
                 const imageElement = document.getElementById('display');
                 imageElement.src = `data:image/jpeg;base64,${data.image}`;
@@ -219,7 +215,7 @@
                 });
             }
 
-            update();
+            setInterval(update, 1600)
         </script>
     </div>
 </body>
