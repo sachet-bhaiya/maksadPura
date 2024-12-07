@@ -169,9 +169,6 @@ font-size: 24px;
 color: red;
 }
 
-
-
-
 /* File Upload Label & Button */
 .file-label-green {
     background-color: #238636;
@@ -247,6 +244,7 @@ border-radius: 5px;
 font-size: 16px;
 width: 100%;
 }
+
 /* Left Sidebar Styles */
 .left-sidebar {
 position: fixed;
@@ -308,10 +306,10 @@ left: 0;
 right: 0;
 }
 
-
 body {
 margin-left: 320px; 
 }
+
 /* Bottom Left Buttons */
 .bottom-left-buttons {
 position: fixed;
@@ -355,6 +353,7 @@ background-color: #0056b3;
 .file-input {
 display: none;
 }
+
 /* Task Form Styles */
 #task-form {
 display: flex;
@@ -374,6 +373,7 @@ border-radius: 5px;
 font-size: 16px;
 width: 100%;
 }
+
 /* Task Item Styles */
 .task-item {
 background-color: #21262d;
@@ -390,239 +390,24 @@ transition: background-color 0.3s ease;
 background-color: #30363d;
 }
 
-.task-details {
-display: flex;
-flex-direction: column;
-gap: 5px;
-flex: 1;
-}
-
-/* Green Label Styles */
-.green-label {
-color: #238636;
-font-weight: bold;
-}
-
-/* Delete Button Styles */
-.task-actions {
-display: flex;
-align-items: center;
-}
-
-.task-actions .delete-btn {
-background-color: #d73a49;
-color: white;
-border: none;
+.task-item button {
 padding: 8px 12px;
 border-radius: 5px;
 cursor: pointer;
-font-size: 18px;
-transition: background-color 0.3s ease;
-}
-
-.task-actions .delete-btn:hover {
-background-color: #bf2a3f;
-}
-.left-sidebar .sidebar-content {
-flex-grow: 1;
-overflow-y: auto; /* Enable vertical scrolling */
-max-height: calc(100% - 120px); /* Adjust height as needed */
-margin-bottom: 20px;
-}
-.left-sidebar .sidebar-content {
-flex-grow: 1;
-overflow-y: auto; /* Enable vertical scrolling */
-max-height: calc(100% - 120px); /* Adjust height based on the header and button space */
-margin-bottom: 20px; /* Space for the bottom button */
-}
-
-.task-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-background-color: #21262d;
-padding: 10px;
-margin-bottom: 10px;
-border-radius: 5px;
-}
-
-.task-details {
-display: flex;
-flex-direction: column;
-gap: 5px;
-flex: 1;
-}
-
-.task-actions {
-display: flex;
-align-items: center;
-}
-.bottom-left-container {
-        position: fixed;
-        bottom: 20px;
-        left: 220px; /* Align it after the sidebar */
-        display: flex;
-        align-items: center;
-        gap: 10px;
-}
-/* Bottom Left Buttons */
-.bottom-left-buttons {
-position: fixed;
-bottom: 20px;
-left: 320px; /* Align with the left sidebar */
-display: flex;
-flex-direction: column;
-gap: 10px;
-align-items: flex-start; /* Align buttons to the left */
-}
-
-/* Style for Buttons */
-.choose-file-btn,
-.update-btn {
-background-color: #238636; /* Default green background */
+font-size: 16px;
+background-color: #238636;
 color: white;
-padding: 8px 16px; /* Reduced padding for a smaller size */
-border-radius: 5px;
-cursor: pointer;
-text-align: center;
-display: inline-block;
-transition: background-color 0.3s ease;
-width: 150px; /* Same width for both buttons */
-font-size: 14px; /* Slightly smaller font */
+border: none;
 }
 
-/* Hover Effects */
-.choose-file-btn:hover {
+.task-item button:hover {
 background-color: #2ea043;
 }
 
-.update-btn {
-background-color: #007bff; /* Blue background */
+.task-item .delete-btn {
+background-color: #d73a49;
 }
 
-.update-btn:hover {
-background-color: #0056b3;
-}
-
-/* Hide File Input */
-.file-input {
-display: none;
-}
-.audio-list {
-    max-height: calc(100% - 40px); /* Adjusted to decrease by 30px */
-    overflow-y: auto;
-    margin-bottom: 20px;
-    flex-grow: 1;
-}
-.sidebar-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Full height of the sidebar */
-}
-
-.audio-list {
-    flex-grow: 1; /* Take up remaining space */
-    overflow-y: auto;
-    margin-bottom: 20px;
-}
-.home{
-    display:block;
-}
-.control{
-    display:none;
-}
-#control-btn {
-        position: absolute;
-        bottom: 20px;
-        right: 320px; /* Adjust this based on the sidebar width */
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-family: 'Silkscreen', cursive;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    /* Hover effects */
-#control-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    }
-/* General styles for the control page buttons */
-.control-buttons {
-    position: relative; /* Relative positioning for child elements */
-    width: 100%;
-    height: 100%;
-}
-
-/* Back Button Styling */
-#back-btn {
-    position: fixed; /* Fixes the button to the top-left corner of the viewport */
-    top: 20px; /* Distance from the top of the viewport */
-    left: 10px; /* Distance from the left of the viewport */
-    background-color: #FF5733; /* Bright orange for visibility */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: 'Silkscreen', cursive;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 1; /* Ensures it appears above other elements */
-}
-
-/* Start Button Styling */
-#start-btn {
-    position: fixed; /* Fixed to center it on the screen */
-    top: 50%; /* Vertical center of the viewport */
-    left: 50%; /* Horizontal center of the viewport */
-    transform: translate(-50%, -50%); /* Center aligns the button */
-    background-color: #28A745; /* Bright green */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 15px 30px;
-    font-size: 18px;
-    font-family: 'Silkscreen', cursive;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 1; /* Ensures it appears above other elements */
-}
-.img-controls {
-    position: fixed; /* Fix the position to the bottom */
-    bottom: 20px; /* Distance from the bottom of the viewport */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust alignment to center */
-    display: flex; /* Enable flexbox for alignment */
-    flex-direction: column; /* Stack the buttons vertically */
-    gap: 10px; /* Add space between buttons */
-    align-items: center; /* Center the buttons horizontally */
-}
-
-.choose-file-btn,
-.img-btn {
-    padding: 10px 20px; /* Adjust padding for better size */
-    background-color: #007bff; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* Remove borders */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 16px; /* Adjust font size */
-    width: 200px; /* Set a fixed width for consistency */
-}
-
-.choose-file-btn:hover,
-.img-btn:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-}
-
-.file-input {
-    display: none; /* Hide the file input element */
+.task-item .delete-btn:hover {
+background-color: #bf2a3f;
 }
