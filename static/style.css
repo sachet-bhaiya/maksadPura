@@ -534,7 +534,7 @@ display: none;
 #control-btn {
         position: absolute;
         bottom: 20px;
-        right: 270px; /* Adjust this based on the sidebar width */
+        right: 290px; /* Adjust this based on the sidebar width */
         background-color: #007BFF;
         color: white;
         border: none;
