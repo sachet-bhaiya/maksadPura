@@ -102,9 +102,6 @@
           <button id="start-btn" class="start-btn">Start</button>
       </div>
   </div>
-
-
-        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
         <script>
             const audio_form = document.getElementById('audio-form');
             const aduio = document.getElementById('aduio-input');
@@ -114,7 +111,6 @@
             const controlBtn = document.getElementById("control-btn");
             const control = document.getElementById("control")
             const home = document.querySelector("#home")
-            const socket = io()
             let share = false
 const backBtn = document.getElementById("back-btn");
 const startBtn = document.getElementById("start-btn");
@@ -129,7 +125,6 @@ backBtn.addEventListener("click", () => {
 startBtn.addEventListener("click", () => {
     fetch("/control",{method:"GET"})
     document.querySelector("#display").style.display = "block"
-    send()
 });
 
             controlBtn.addEventListener("click", () => {
@@ -218,42 +213,7 @@ startBtn.addEventListener("click", () => {
                     });
             }
 
-            socket.on("message", (data) => {
-                const imageElement = document.getElementById('display');
-                imageElement.src = `data:image/jpeg;base64,${data.image}`;
-            });
-
-            function send() {
-                share = true;
-                document.addEventListener("mousemove", (e) => {
-                    if (share) {
-                        const x = e.clientX;
-                        const y = e.clientY;
-                        socket.send(`mouse${x}${y}`);
-                    }
-                });
-                const keys = [];
-                document.addEventListener("keypress", (e) => {
-                    if (share) {
-                        if (e.ctrlKey && e.shiftKey && e.altKey && e.key.toLowerCase === "u") {
-                            share = false;
-                            document.getElementById('display').style.display = "none";
-                            fetch("/control",{method:"GET"})
-                        }
-                        if (!keys.includes(e.key)) {
-                            keys.push(e.key);
-                        }
-                        socket.send(`key${keys}`);
-                    }
-                });
-                document.addEventListener("keyup", (e) => {
-                    if (share) {
-                        keys = keys.filter(key => key !== e.key);
-                        
-                    }
-                });
-            }
-
+        
             setInterval(update, 1600)
         </script>
 
