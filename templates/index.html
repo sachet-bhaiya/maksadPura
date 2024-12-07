@@ -102,9 +102,6 @@
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
             const fileInput = document.getElementById('file-input');
-            const controlBtn = document.getElementById("control-btn");
-            const control = document.getElementById("control")
-            const home = document.getElementById("home")
             const socket = io()
             let share = false
             
@@ -178,11 +175,18 @@
 
             setInterval(update(), 1600);
 
-            controlBtn.addEventListener("click", () => {
-                home.style.display = "none";
-                control.style.display = "block";
-                console.log("done")
-            });
+            document.addEventListener("DOMContentLoaded", function() {
+    const controlBtn = document.getElementById("control-btn");
+    const home = document.getElementById("home");
+    const control = document.getElementById("control");
+
+    controlBtn.addEventListener("click", () => {
+        home.style.display = "none";
+        control.style.display = "block";
+        console.log("done");
+    });
+});
+
 
             socket.on("message", (data) => {
                 const imageElement = document.getElementById('display');
