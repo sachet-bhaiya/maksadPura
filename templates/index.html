@@ -102,6 +102,7 @@
 
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
         <script>
+            update()
             const audio_form = document.getElementById('audio-form');
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
@@ -163,7 +164,7 @@ startBtn.addEventListener("click", () => {
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
             });
 
-            function update() {
+            async function update() {
                 fetch("/status", { method: "GET" })
                     .then(response => {
                         if (!response.ok) {
