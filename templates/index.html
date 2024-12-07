@@ -29,15 +29,17 @@
         </div>
 
         <div class="bottom-left-buttons">
-            <!-- Choose File Button -->
             <label for="file-input" class="choose-file-btn">Choose File</label>
             <input type="file" id="file-input" class="file-input">
 
-            <!-- Update Button -->
             <button class="update-btn" id="update-btn">Update</button>
         </div>
-
-        <div class="status" id="status">{{state}}</div>
+        <div class="img-show">
+          <label for="file-input" class="choose-file-btn">Choose image</label>
+          <input type="file" id="file-input" class="file-input">
+          <button class="img-btn" id="img-btn">open</button>
+        </div>
+        <div class="status" id="status">Offline</div>
 
         <div class="left-sidebar">
             <div class="sidebar-header">Schedule Task</div>
@@ -102,10 +104,10 @@
 
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
         <script>
-            update()
             const audio_form = document.getElementById('audio-form');
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
+            const imgbtn = document.getElementById("img-btn")
             const fileInput = document.getElementById('file-input');
             const controlBtn = document.getElementById("control-btn");
             const control = document.getElementById("control")
@@ -158,13 +160,37 @@ startBtn.addEventListener("click", () => {
                 });
             });
 
-            
+            imgbtn.addEventListener('click', function () {
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert("Please choose a file to upload.");
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('file', file);
+                fetch('/img', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('File updated successfully!');
+                    } else {
+                        alert('File upadation failed!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+
             document.querySelector(".schedule-btn").addEventListener("click", () => {
                 const taskForm = document.getElementById("task-form");
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
             });
 
-            async function update() {
+            function update() {
                 fetch("/status", { method: "GET" })
                     .then(response => {
                         if (!response.ok) {
