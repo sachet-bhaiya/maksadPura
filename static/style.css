@@ -526,7 +526,7 @@ display: none;
     margin-bottom: 20px;
 }
 .home{
-    display:none;
+    display:block;
 }
 .control{
     display:none;
