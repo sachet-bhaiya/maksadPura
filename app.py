@@ -202,10 +202,7 @@ def delete_task():
                 json.dump(new_task, file, indent=4)
     return redirect("/")
 
-@app.route("/control",methods=["GET"])
-def control():
-	with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-		file.write("cOnTrOl")
+
 @app.route("/img", methods=["GET", "POST"])
 def img():
     if request.method == "POST":
