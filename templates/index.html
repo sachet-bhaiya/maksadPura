@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MS32</title>
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
@@ -90,14 +90,14 @@
                 
             </div>
         </div>
-<div class="control" id="control" style="display: none;">
-    <img class="screen" id="display" style="display:none; max-width: 100%; height: auto;">
-    mua7ma
-    <div class="control-buttons">
-        <button id="back-btn" class="back-btn">Back</button>
-        <button id="start-btn" class="start-btn">Start</button>
-    </div>
-</div>
+    </div>    
+    <div class="control" id="control" style="display: none;">
+      <img class="screen" id="display" style="display:none; max-width: 100%; height: auto;">
+      <div class="control-buttons">
+          <button id="back-btn" class="back-btn">Back</button>
+          <button id="start-btn" class="start-btn">Start</button>
+      </div>
+  </div>
 
 
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
@@ -129,7 +129,7 @@ startBtn.addEventListener("click", () => {
             controlBtn.addEventListener("click", () => {
                 home.style.display = "none";
                 control.style.display = "block";
-                console.log("done")
+                console.log(control.style.display)
             });
             updateBtn.addEventListener('click', function () {
                 const file = fileInput.files[0];
@@ -225,6 +225,6 @@ startBtn.addEventListener("click", () => {
 
             setInterval(update, 1600)
         </script>
-    </div>
+
 </body>
 </html>
