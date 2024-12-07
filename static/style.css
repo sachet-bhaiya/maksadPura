@@ -610,6 +610,7 @@ font-size: 14px;
 .img-show{
   position: fixed;
 bottom: 20px;
+    z-index:1000;
 left: 400px;
 display: flex;
 flex-direction: column;
