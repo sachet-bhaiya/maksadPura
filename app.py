@@ -24,13 +24,17 @@ if not os.path.exists(UPLOAD_FOLDER):
 def terminal():
     files = os.listdir(UPLOAD_FOLDER)
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
+    if time() - startTime >= 4:
+    	state = "online"
+    else:
+    	state = "Offline"
     if os.path.exists(tasks_file):
         with open(tasks_file, "r") as file:
             data = json.load(file)
     else:
         data = {"tasks": []}
 
-    return render_template("index.html", files=files, tasks=data)
+    return render_template("index.html", files=files, tasks=data,state=state)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
