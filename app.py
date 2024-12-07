@@ -213,4 +213,4 @@ def img():
                 a.write("iMaGe " + file.filename)
     return redirect("/")
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
