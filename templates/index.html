@@ -87,43 +87,14 @@
             </div>
         </div>
     </div>    
-    <div class="control" id="control" style="display: none;">
-      <img class="screen" id="display" style="display:none; max-width: 100%; height: auto;">
-      <div class="control-buttons">
-          <button id="back-btn" class="back-btn">Back</button>
-          <button id="start-btn" class="start-btn">Start</button>
-      </div>
-  </div>
+
         <script>
             const audio_form = document.getElementById('audio-form');
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
             const imgbtn = document.getElementById("img-btn")
             const fileInput = document.getElementById('file-input');
-            const controlBtn = document.getElementById("control-btn");
-            const control = document.getElementById("control")
-            const home = document.querySelector("#home")
-            let share = false
-const backBtn = document.getElementById("back-btn");
-const startBtn = document.getElementById("start-btn");
 
-backBtn.addEventListener("click", () => {
-    control.style.display = "none"; 
-    home.style.display = "block"; 
-    console.log("Navigated back to Home");
-});
-
-// Handle Start button click
-startBtn.addEventListener("click", () => {
-    fetch("/control",{method:"GET"})
-    document.querySelector("#display").style.display = "block"
-});
-
-            controlBtn.addEventListener("click", () => {
-                home.style.display = "none";
-                control.style.display = "block";
-                console.log(control.style.display)
-            });
             updateBtn.addEventListener('click', function () {
                 const file = fileInput.files[0];
                 if (!file) {
