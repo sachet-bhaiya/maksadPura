@@ -533,6 +533,7 @@ display: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    over-flow:hidden;
     position: absolute;
     top: 0;
     left: 0;
