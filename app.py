@@ -1,13 +1,11 @@
 import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify
-from flask_socketio import SocketIO, send
 from datetime import datetime
 import json
 from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
-socket = SocketIO(app)
 
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
@@ -219,9 +217,5 @@ def img():
     return redirect("/")
 
 	
-socket.on("message")
-def message(msg):
-	send(msg,broadcast=True)
-	
-if __name__ == "__main__":
-    socket.run(app)
+
+
