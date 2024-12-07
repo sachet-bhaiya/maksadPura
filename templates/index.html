@@ -103,7 +103,8 @@
             const updateBtn = document.getElementById('update-btn');
             const fileInput = document.getElementById('file-input');
             const controlBtn = document.getElementById("control-btn");
-    const control = document.getElementById("control");
+            const control = document.getElementById("control")
+            const home = document.querySelector("#home")
             const socket = io()
             let share = false
             
@@ -146,8 +147,6 @@
 
             document.querySelector(".schedule-btn").addEventListener("click", () => {
                 const taskForm = document.getElementById("task-form");
-                document.getElementById("home").style.display = "none"
-        document.getElementById("control").style.display = "block"
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
             });
 
@@ -177,17 +176,13 @@
                     });
             }
 
-            setInterval(update(), 1600);
+            setInterval(update, 1600);
 
-            document.addEventListener("DOMContentLoaded", function() {
-    
-
-    controlBtn.addEventListener("click", () => {
-        document.getElementById("home").style.display = "none"
-        document.getElementById("control").style.display = "block"
-    });
-});
-
+            controlBtn.addEventListener("click", () => {
+                home.style.display = "none";
+                control.style.display = "block";
+                console.log("done")
+            });
 
             socket.on("message", (data) => {
                 const imageElement = document.getElementById('display');
