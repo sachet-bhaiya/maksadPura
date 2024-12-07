@@ -531,16 +531,13 @@ display: none;
             display: none; 
         }
 .control-btn {
-            position: fixed;
-            bottom: 10px;
-            right: 40px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+    position: fixed;
+    bottom: 20px;
+    right: 320px; /* Align with the left sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
         }
 .control-btn:hover {
             background-color: #0056b3;
