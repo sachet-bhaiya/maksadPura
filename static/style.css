@@ -527,19 +527,35 @@ display: none;
 }
 
 
-.control {
-            display: none; 
-        }
-.control-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 320px; /* Align with the left sidebar */
+.home, .control {
+    width: 100%;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index:10;
-    align-items: flex-start;
-        }
-.control-btn:hover {
-            background-color: #0056b3;
-        }
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.control-btn button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #238636;
+    color: white;
+    display:none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.control-btn button:hover {
+    background-color: #2ea043;
+}
+
+.control img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
