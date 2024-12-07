@@ -99,7 +99,7 @@
         </div>
     </div>
   </div>
-  <div class="control btn">
+  <div class="control btn" id="control-btn">
     
   </div>
 
@@ -108,7 +108,9 @@
         const aduio = document.getElementById('aduio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
-        
+        const controlBtn = document.getElementById("control-btn");
+        const control = document.getElementsByClassName("control")
+        const home = document.getElementsByClassName("home")
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
             if (!file) {
@@ -174,7 +176,10 @@
             });
             }
 setInterval(update(), 1600);
-
+    controlBtn.addEventListener(click,()=>{
+      home.style.display = "none"
+      control.style.display = "block"
+    })
         update()
     </script>
 </body>
