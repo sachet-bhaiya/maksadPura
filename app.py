@@ -1,11 +1,13 @@
 import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify
+from flask_socketio import SocketIO, send
 from datetime import datetime
 import json
 from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
+socket = SocketIO(app)
 
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
@@ -48,21 +50,17 @@ def command():
         cmd = ""
         message_file = os.path.join(STATIC_FOLDER, "message.txt")
         tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
-        
-        # Read the message from the file
+
         if os.path.exists(message_file):
             with open(message_file, "r") as file:
                 cmd = file.read()
 
-        # Check for spam commands, make case-insensitive
         if "sPaM on" in cmd:
             spam = True
             return "none"
         elif "sPaM off" in cmd:
             spam = False
             return "none"
-
-        # If no command found in message file, handle task execution
         if cmd == "":
             if os.path.exists(tasks_file):
                 with open(tasks_file, "r") as file:
@@ -158,7 +156,6 @@ def schedule():
         cmd = request.form["task"]
         current_time = datetime.now(timezone).strftime("%d-%m-%Y %H:%M")
         try:
-            # Adjust the parsing to support ISO 8601 format
             execution_time = datetime.strptime(request.form["task-datetime"], "%Y-%m-%dT%H:%M")
         except ValueError as e:
             return f"Invalid datetime format: {e}", 400
@@ -203,5 +200,14 @@ def delete_task():
                 json.dump(new_task, file, indent=4)
     return redirect("/")
 
+@app.route("/control",methods=["GET"])
+def control():
+	with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+		file.write("cOnTrOl")
+
+socket.on("message")
+def message(msg):
+	send(msg,broadcast=True)
+	
 if __name__ == "__main__":
-    app.run()
+    socket.run(app)
