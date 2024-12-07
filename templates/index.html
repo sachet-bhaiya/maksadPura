@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="home">
+    <div class="home" id="home">
         <div class="container">
             <form action="/edit" method="POST" id="message-form">
                 <textarea placeholder="Type something..." class="text" name="text"></textarea>
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-    <div class="control btn" id="control-btn">
+    <div class="control btn" id="control">
       <img class="screen" id="display" style="max-width: 100%; height: auto;">
     </div>
 
@@ -102,8 +102,8 @@
             const updateBtn = document.getElementById('update-btn');
             const fileInput = document.getElementById('file-input');
             const controlBtn = document.getElementById("control-btn");
-            const control = document.getElementsByClassName("control")
-            const home = document.getElementsByClassName("home")
+            const control = document.getElementById("control")
+            const home = document.getElementById("home")
             const socket = io()
             let share = false
             
