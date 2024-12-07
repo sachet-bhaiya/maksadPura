@@ -601,8 +601,9 @@ display: none;
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Adjust alignment to center */
     display: flex; /* Enable flexbox for alignment */
+    flex-direction: column; /* Stack the buttons vertically */
     gap: 10px; /* Add space between buttons */
-    align-items: center; /* Vertically align items */
+    align-items: center; /* Center the buttons horizontally */
 }
 
 .choose-file-btn,
@@ -614,6 +615,7 @@ display: none;
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 16px; /* Adjust font size */
+    width: 200px; /* Set a fixed width for consistency */
 }
 
 .choose-file-btn:hover,
