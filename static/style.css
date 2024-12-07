@@ -595,3 +595,24 @@ display: none;
     transition: transform 0.2s, box-shadow 0.2s;
     z-index: 1; /* Ensures it appears above other elements */
 }
+.img-btn{
+  background-color: #238636; /* Default green background */
+color: white;
+padding: 8px 16px; /* Reduced padding for a smaller size */
+border-radius: 5px;
+cursor: pointer;
+text-align: center;
+display: inline-block;
+transition: background-color 0.3s ease;
+width: 150px;
+font-size: 14px;
+}
+.img-show{
+  position: fixed;
+bottom: 20px;
+left: 400px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+align-items: flex-start;
+}
