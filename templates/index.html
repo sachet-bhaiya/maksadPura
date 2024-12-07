@@ -99,10 +99,10 @@
         </div>
     </div>
   </div>
-  <div class="control btn" id="control-btn">
-    
+  <div class="control" id="control">
+    <img id="control-image">
   </div>
-
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         const audio_form = document.getElementById('audio-form');
         const aduio = document.getElementById('aduio-input');
@@ -111,6 +111,8 @@
         const controlBtn = document.getElementById("control-btn");
         const control = document.getElementsByClassName("control")
         const home = document.getElementsByClassName("home")
+        const socket = io()
+        
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
             if (!file) {
@@ -176,10 +178,18 @@
             });
             }
 setInterval(update(), 1600);
-    controlBtn.addEventListener("click",()=>{
+    controlBtn.addEventListener(click,()=>{
       home.style.display = "none"
       control.style.display = "block"
     })
+    socket.on("message",(data)=>{
+      const imageElement = document.getElementById('control-image');
+      imageElement.src = `data:image/jpeg;base64,${data.image}`;
+    })
+    function send(){
+      
+    }
+    
         update()
     </script>
 </body>
