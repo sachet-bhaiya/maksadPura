@@ -539,18 +539,18 @@ display: none;
     left: 0;
 }
 
-.control-btn button {
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #238636;
+.control-button {
+    position: fixed; /* Fix the button to the viewport */
+    bottom: 20px; /* Distance from the bottom of the viewport */
+    right: calc(20px + 300px); /* Adjust for right sidebar width */
+    z-index: 10; /* Ensure it appears above other elements */
+    padding: 10px 15px;
+    background-color: #007BFF; /* Button color */
     color: white;
-    display:none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
-
 .control-btn button:hover {
     background-color: #2ea043;
 }
@@ -558,5 +558,7 @@ display: none;
 .control img {
     width: 100%;
     height: 100%;
+    display:none;
+    z-index:10;
     object-fit: cover;
 }
