@@ -90,11 +90,14 @@
                 
             </div>
         </div>
-
-    <div class="control btn" id="control">
-      <img class="screen" id="display" style="max-width: 100%; height: auto;">
-        ibusuiusb
+<div class="control" id="control" style="display: none;">
+    <img class="screen" id="display" style="max-width: 100%; height: auto;">
+    <div class="control-buttons">
+        <button id="back-btn" class="back-btn">Back</button>
+        <button id="start-btn" class="start-btn">Start</button>
     </div>
+</div>
+
 
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
         <script>
@@ -107,6 +110,21 @@
             const home = document.querySelector("#home")
             const socket = io()
             let share = false
+const backBtn = document.getElementById("back-btn");
+const startBtn = document.getElementById("start-btn");
+
+backBtn.addEventListener("click", () => {
+    control.style.display = "none"; 
+    home.style.display = "block"; 
+    console.log("Navigated back to Home");
+});
+
+// Handle Start button click
+startBtn.addEventListener("click", () => {
+    alert("Start button clicked!");
+    // Add functionality for starting actions here
+});
+
             controlBtn.addEventListener("click", () => {
                 home.style.display = "none";
                 control.style.display = "block";
