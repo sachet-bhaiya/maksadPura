@@ -525,3 +525,9 @@ display: none;
     overflow-y: auto;
     margin-bottom: 20px;
 }
+.home{
+    display:block
+}
+.control{
+    display:none;
+}
