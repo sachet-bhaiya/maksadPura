@@ -10,8 +10,6 @@
 </head>
 
 <body>
-  <div class="home">
-    
     <div class="container">
         <form action="/edit" method="POST" id="message-form">
             <textarea placeholder="Type something..." class="text" name="text"></textarea>
@@ -63,10 +61,7 @@
     <div class="bottom-fixed">
         <button class="btn schedule-btn" id="add">Schedule</button>
     </div>
-  </div>
-  <div class="control-btn">
-    <button>Control</button>
-  </div>
+</div>
 
     <div class="sidebar">
         <div class="sidebar-header">Audio Files</div>
@@ -88,22 +83,22 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <div class="bottom-fixed" style="display: flex; flex-direction: column; align-items: center;">
+                <form id="audio-form">
+                    <label for="aduio-input" class="file-label-green">Choose File</label>
+                    <input type="file" id="aduio-input" class="file-input" required>
+                    <button class="upload-btn" type="submit">Upload</button>
+                </form>
+            </div>
         </div>
     </div>
-  </div>
-  <div class="control" id="control">
-    <img id="control-image">
-  </div>
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
     <script>
         const audio_form = document.getElementById('audio-form');
         const aduio = document.getElementById('aduio-input');
         const updateBtn = document.getElementById('update-btn');
         const fileInput = document.getElementById('file-input');
-        const controlBtn = document.getElementById("control-btn");
-        const control = document.getElementsByClassName("control")
-        const home = document.getElementsByClassName("home")
-        const socket = io()
         
         updateBtn.addEventListener('click', function () {
             const file = fileInput.files[0];
@@ -170,18 +165,7 @@
             });
             }
 setInterval(update(), 1600);
-    controlBtn.addEventListener(click,()=>{
-      home.style.display = "none"
-      control.style.display = "block"
-    })
-    socket.on("message",(data)=>{
-      const imageElement = document.getElementById('control-image');
-      imageElement.src = `data:image/jpeg;base64,${data.image}`;
-    })
-    function send(){
-      
-    }
-    
+
         update()
     </script>
 </body>
