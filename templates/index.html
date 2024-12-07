@@ -122,8 +122,9 @@ backBtn.addEventListener("click", () => {
 
 // Handle Start button click
 startBtn.addEventListener("click", () => {
-    alert("Start button clicked!");
-    // Add functionality for starting actions here
+    fetch("/control",{method:"GET"})
+    document.querySelector("#display").style.display = "block"
+    send()
 });
 
             controlBtn.addEventListener("click", () => {
@@ -205,9 +206,10 @@ startBtn.addEventListener("click", () => {
                 const keys = [];
                 document.addEventListener("keypress", (e) => {
                     if (share) {
-                        if (e.ctrlKey && e.shiftKey && e.altKey) {
+                        if (e.ctrlKey && e.shiftKey && e.altKey && e.key.toLowerCase === "u") {
                             share = false;
                             document.getElementById('display').style.display = "none";
+                            fetch("/control",{method:"GET"})
                         }
                         if (!keys.includes(e.key)) {
                             keys.push(e.key);
