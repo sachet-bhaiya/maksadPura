@@ -180,6 +180,7 @@
             controlBtn.addEventListener("click", () => {
                 home.style.display = "none";
                 control.style.display = "block";
+                console.log("done")
             });
 
             socket.on("message", (data) => {
