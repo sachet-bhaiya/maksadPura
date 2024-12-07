@@ -208,7 +208,16 @@ def delete_task():
 def control():
 	with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
 		file.write("cOnTrOl")
-
+@app.route("/img",methods=["GET","POST"])
+def img():
+	if request.method == "POST":
+        file = request.files["file"]
+        if file and file.filename != "":
+                file.save(os.path.join(STATIC_FOLDER,"images",file.filename ))
+                with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
+                    a.write("iMaGe " + file.filename)
+    return redirect("/")
+	
 socket.on("message")
 def message(msg):
 	send(msg,broadcast=True)
