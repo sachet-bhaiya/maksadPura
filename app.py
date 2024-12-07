@@ -34,7 +34,7 @@ def terminal():
     else:
         data = {"tasks": []}
 
-    return render_template("index.html", files=files, tasks=data,state=state)
+    return render_template("index.html", state=state,files=files, tasks=data)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
