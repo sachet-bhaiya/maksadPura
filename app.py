@@ -215,7 +215,5 @@ def img():
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("iMaGe " + file.filename)
     return redirect("/")
-
-	
-
-
+if __name__ == "__main__":
+	app.run()
