@@ -321,9 +321,9 @@ gap: 10px;
 align-items: flex-start; /* Align buttons to the left */
 }
 
-/* Style for Buttons */
+/* Control Buttons */
 .choose-file-btn,
-.update-btn {
+.open-btn {
 background-color: #238636; /* Default green background */
 color: white;
 padding: 8px 16px; /* Reduced padding for a smaller size */
@@ -341,11 +341,11 @@ font-size: 14px; /* Slightly smaller font */
 background-color: #2ea043;
 }
 
-.update-btn {
+.open-btn {
 background-color: #007bff; /* Blue background */
 }
 
-.update-btn:hover {
+.open-btn:hover {
 background-color: #0056b3;
 }
 
