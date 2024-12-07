@@ -137,18 +137,7 @@
                 });
             });
 
-            audio_form.addEventListener("submit", async (e) => {
-                const file = aduio.files[0];
-                if (file) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    const response = await fetch("/audio", {
-                        method: "POST",
-                        body: formData
-                    });         
-                }
-            });
-
+            
             document.querySelector(".schedule-btn").addEventListener("click", () => {
                 const taskForm = document.getElementById("task-form");
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
