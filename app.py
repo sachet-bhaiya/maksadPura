@@ -39,7 +39,10 @@ def edit():
     if request.method == "POST":
         message = request.form["text"]
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            file.write("sPeAk" + message)
+            if not spam and ("pLaY" not in message or "oPeN" not in message):	
+           	 file.write("sPeAk" + message)
+            else:
+            	file.write(message)
         return redirect("/")
     return "message updated"
 
