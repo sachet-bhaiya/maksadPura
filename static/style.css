@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap');
 
 *,
 html {
@@ -8,7 +8,7 @@ html {
 }
 
 body {
-    font-family: 'Silkscreen', monospace;
+    font-family: 'VT323', monospace;
     background-color: #0d1117;
     color: #c9d1d9;
     overflow-y: scroll;
@@ -35,6 +35,7 @@ body {
 
 .sidebar-header {
     font-size: 1.8em;
+    font-family: 'VT323', monospace;
     text-align: center;
     border-bottom: 2px solid #c9d1d9;
     padding-bottom: 10px;
@@ -45,6 +46,7 @@ body {
 .audio-item {
     background-color: #21262d;
     padding: 10px;
+    font-family: 'VT323', monospace;
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
@@ -58,6 +60,7 @@ body {
 .audio-item span {
     flex: 1 1 auto;
     word-wrap: break-word;
+    font-family: 'VT323', monospace;
     margin-right: 10px;
     min-width: 0;
 }
@@ -96,6 +99,7 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+    font-family: 'VT323', monospace;
     transform: translate(-50%, -50%);
     width: 400px;
     text-align: center;
@@ -135,6 +139,7 @@ button.btn,
     background-color: #007bff;
     color: white;
     width: 200px;
+    font-family: 'VT323', monospace;
     margin-bottom: 10px;
 }
 
@@ -154,6 +159,7 @@ button.btn,
 
 /* File Input Hidden */
 input.file-input {
+    font-family: 'VT323', monospace;
     display: none;
 }
 
@@ -167,6 +173,7 @@ top: 20px; /* 20px from the top of the container */
 left: 320px; /* Same as the width of the left sidebar */
 font-size: 24px;
 color: red;
+font-family: 'VT323', monospace;
 }
 
 
@@ -178,6 +185,7 @@ color: red;
     color: white;
     padding: 10px 20px;
     display: block;
+    font-family: 'VT323', monospace;
     text-align: center;
     border-radius: 5px;
     width: 200px;
@@ -207,6 +215,7 @@ color: red;
 .container form {
 display: flex;
 flex-direction: column;
+font-family: 'VT323', monospace;
 gap: 15px; /* Add gap between form elements */
 }
 
@@ -218,6 +227,7 @@ background-color: #0d1117;
 color: #f0f6fc;
 border: 1px solid #30363d;
 border-radius: 5px;
+font-family: 'VT323', monospace;
 resize: none;
 }
 #message-form {
@@ -228,6 +238,7 @@ padding: 10px 20px;
 border: none;
 border-radius: 5px;
 font-size: 16px;
+font-family: 'VT323', monospace;
 cursor: pointer;
 transition: background-color 0.3s ease;
 background-color: #238636;
@@ -243,6 +254,7 @@ padding: 10px;
 border: 1px solid #30363d;
 background-color: #0d1117;
 color: #f0f6fc;
+font-family: 'VT323', monospace;
 border-radius: 5px;
 font-size: 16px;
 width: 100%;
@@ -269,6 +281,7 @@ padding-bottom: 100px;
 font-size: 1.8em;
 text-align: center;
 border-bottom: 2px solid #c9d1d9;
+font-family: 'VT323', monospace;
 padding-bottom: 10px;
 margin-bottom: 20px;
 }
@@ -291,6 +304,7 @@ padding: 10px 20px;
 border: none;
 border-radius: 5px;
 font-size: 16px;
+font-family: 'VT323', monospace;
 cursor: pointer;
 transition: background-color 0.3s ease;
 background-color: #238636;
@@ -360,6 +374,7 @@ display: none;
 display: flex;
 display:none;
 flex-direction: column;
+font-family: 'VT323', monospace;
 gap: 15px; /* Add spacing between form elements */
 margin-top: 20px; /* Add space between this form and the previous form */
 }
@@ -380,6 +395,7 @@ background-color: #21262d;
 padding: 10px;
 border-radius: 5px;
 margin-bottom: 10px;
+font-family: 'VT323', monospace;
 display: flex;
 justify-content: space-between;
 align-items: center;
@@ -527,6 +543,7 @@ display: none;
 }
 .home{
     display:block;
+    font-family: 'VT323', monospace;
 }
 .control{
     display:none;
