@@ -14,13 +14,22 @@ body {
     overflow-y: scroll;
     height: 100%;
 }
+/* Center the heading in the viewport */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #111; /* Dark background for hacker look */
+}
+
+/* Styling the heading */
 .site-heading {
-    text-align: center;
     font-size: 36px;
     font-family: 'Silkscreen', sans-serif;
-    margin-top: 20px;
-    color: #00FF00; /* Green color */
-    text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00; /* Glow effect */
+    color: #00FF00; /* Hacker green */
+    text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00; /* Reduced glow effect */
     letter-spacing: 2px;
 }
 
