@@ -24,7 +24,7 @@ def terminal():
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     if time() - startTime >= 4:
     	state = "Online"
-    else:
+    elif time() - startTime < 4:
     	state = "Offline"
     if os.path.exists(tasks_file):
         with open(tasks_file, "r") as file:
