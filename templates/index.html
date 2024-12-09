@@ -11,8 +11,6 @@
 
 <body>
     <h1 class="site-heading"><pre>Project ms32               </pre></h1>
-    <button class="toggle-btn left">☰</button>
-    <button class="toggle-btn right">☰</button>
     <div class="home" id="home">
         <div class="container">
             <form action="/edit" method="POST" id="message-form">
@@ -73,7 +71,7 @@
                         <div class="audio-item">
                             <span>{{file}}</span>
                             <div>
-                                <form action="/play" method="POST" style="display:inline;">
+                                <form action="/play" method="POST" style="display:inline">
                                     <input type="hidden" name="text" value="{{ file }}">
                                     <button class="play-btn"><i class="fas fa-play"></i></button>
                                 </form>
@@ -97,18 +95,6 @@
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
             const fileInput = document.getElementById('file-input');
-          const leftSidebar = document.querySelector('.left-sidebar');
-        const leftToggleBtn = document.querySelector('.toggle-btn.left');
-        leftToggleBtn.addEventListener('click', () => {
-            leftSidebar.classList.toggle('open');
-        });
-
-        // Handle right sidebar toggle
-        const rightSidebar = document.querySelector('.right-sidebar');
-        const rightToggleBtn = document.querySelector('.toggle-btn.right');
-        rightToggleBtn.addEventListener('click', () => {
-            rightSidebar.classList.toggle('open');
-        });
             document.querySelector(".schedule-btn").addEventListener("click", () => {
                 const taskForm = document.getElementById("task-form");
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
