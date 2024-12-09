@@ -35,7 +35,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data)
+    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data, color="green" if state=="online" else "red")
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
