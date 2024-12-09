@@ -24,18 +24,21 @@ def terminal():
     files = os.listdir(UPLOAD_FOLDER)
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     state = None
+    color = "red"
     if not firstReload:
      	if time() - startTime <= 4:
      		state = "Online"
+     		color = "green"
      	elif time() - startTime > 4:
      		state = "Offline"
+     		color = "red"
     if os.path.exists(tasks_file):
         with open(tasks_file, "r") as file:
             data = json.load(file)
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data, color="green" if state=="online" else "red")
+    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data, color=color)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
