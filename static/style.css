@@ -14,16 +14,15 @@ body {
     overflow-y: hidden;
     height: 100%;
 }
-
 .site-heading {
     text-align: center;
     font-size: 36px;
     margin-top: 20px;
-    color: #196b28;
+    color: #196b28; /* Green color */
+    
     letter-spacing: 2px;
 }
-
-pre {
+pre{
     font-family: 'Silkscreen', monospace;
 }
 
@@ -53,6 +52,7 @@ pre {
     margin-bottom: 20px;
 }
 
+/* Audio Item Styles */
 .audio-item {
     background-color: #21262d;
     padding: 10px;
@@ -93,6 +93,7 @@ pre {
     margin-right: 10px;
 }
 
+/* Change delete button to red */
 .audio-item .delete-btn {
     background-color: #d73a49;
 }
@@ -101,6 +102,7 @@ pre {
     background-color: #bf2a3f;
 }
 
+/* Centered Container Styles */
 .container {
     position: absolute;
     top: 50%;
@@ -113,6 +115,7 @@ pre {
     gap: 20px;
 }
 
+/* Textarea Styles */
 textarea.text {
     width: 100%;
     height: 100px;
@@ -125,6 +128,7 @@ textarea.text {
     resize: none;
 }
 
+/* Button Styles */
 button.btn,
 .file-label-green,
 .upload-btn,
@@ -137,6 +141,7 @@ button.btn,
     transition: background-color 0.3s ease;
 }
 
+/* Upload Button Styles */
 .upload-btn {
     background-color: #007bff;
     color: white;
@@ -148,6 +153,7 @@ button.btn,
     background-color: #0056b3;
 }
 
+/* Update Button Styles */
 .update-btn {
     background-color: #238636;
     color: white;
@@ -157,18 +163,27 @@ button.btn,
     background-color: #2ea043;
 }
 
+/* File Input Hidden */
 input.file-input {
     display: none;
 }
 
+/* Bottom Left Position for Buttons */
+
+
+/* Status Style */
 .status {
-    position: absolute;
-    top: 20px;
-    left: 320px;
-    font-size: 24px;
-    color: red;
+position: absolute;
+top: 20px; /* 20px from the top of the container */
+left: 320px; /* Same as the width of the left sidebar */
+font-size: 24px;
+color: red;
 }
 
+
+
+
+/* File Upload Label & Button */
 .file-label-green {
     background-color: #238636;
     color: white;
@@ -184,221 +199,360 @@ input.file-input {
     background-color: #2ea043;
 }
 
+/* Make Audio List Scrollable and fill available space */
 .audio-list {
-    max-height: calc(100% - 120px);
+    max-height: calc(100% - 120px); /* Adjust based on other elements height */
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
 }
 
+/* Keep the sidebar content fixed */
 .sidebar-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
     flex-grow: 1;
 }
-
+/* Add space between each form element in the container */
 .container form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+display: flex;
+flex-direction: column;
+gap: 15px; /* Add gap between form elements */
 }
 
 .text {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #0d1117;
-    color: #f0f6fc;
-    border: 1px solid #30363d;
-    border-radius: 5px;
-    resize: none;
+width: 100%;
+padding: 10px;
+font-size: 16px;
+background-color: #0d1117;
+color: #f0f6fc;
+border: 1px solid #30363d;
+border-radius: 5px;
+resize: none;
 }
-
 #message-form {
-    margin-bottom: 30px;
+margin-bottom: 30px; /* Add more space after the message form */
 }
-
 button.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    background-color: #238636;
-    color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+background-color: #238636;
+color: white;
 }
 
 button.btn:hover {
-    background-color: #2ea043;
+background-color: #2ea043;
 }
 
 input[type="url"] {
-    padding: 10px;
-    border: 1px solid #30363d;
-    background-color: #0d1117;
-    color: #f0f6fc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
+padding: 10px;
+border: 1px solid #30363d;
+background-color: #0d1117;
+color: #f0f6fc;
+border-radius: 5px;
+font-size: 16px;
+width: 100%;
 }
-
+/* Left Sidebar Styles */
 .left-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: 100%;
-    background-color: #161b22;
-    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    color: #f0f6fc;
-    overflow-y: hidden;
-    padding-bottom: 100px;
+position: fixed;
+top: 0;
+left: 0; /* Position to the left side */
+width: 300px;
+height: 100%;
+background-color: #161b22;
+box-shadow: 5px 0 10px rgba(0, 0, 0, 0.7);
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+color: #f0f6fc;
+overflow-y: hidden;
+padding-bottom: 100px;
 }
 
 .left-sidebar .sidebar-header {
-    font-size: 1.8em;
-    text-align: center;
-    border-bottom: 2px solid #c9d1d9;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+font-size: 1.8em;
+text-align: center;
+border-bottom: 2px solid #c9d1d9;
+padding-bottom: 10px;
+margin-bottom: 20px;
 }
 
-.left-sidebar .sidebar-content {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: calc(100% - 120px);
-    margin-bottom: 20px;
+/* Bottom Fixed for Schedule Button */
+.bottom-fixed {
+position: absolute;
+bottom: 20px;
+left: 20px;
+right: 20px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+align-items: center;
 }
 
+.schedule-btn {
+width: auto;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+background-color: #238636;
+color: white;
+text-align: center;
+}
+
+.bottom-fixed {
+display: flex;
+justify-content: center;
+align-items: center;
+position: absolute;
+bottom: 20px;
+left: 0;
+right: 0;
+}
+
+
+body {
+margin-left: 320px; 
+}
+/* Bottom Left Buttons */
 .bottom-left-buttons {
-    position: fixed;
-    bottom: 20px;
-    left: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+position: fixed;
+bottom: 20px;
+left: 320px; /* Align with the left sidebar */
+display: flex;
+flex-direction: column;
+gap: 10px;
+align-items: flex-start; /* Align buttons to the left */
 }
 
+/* Style for Buttons */
 .choose-file-btn,
 .update-btn {
-    background-color: #238636;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-    width: 150px;
-    font-size: 14px;
+background-color: #238636; /* Default green background */
+color: white;
+padding: 8px 16px; /* Reduced padding for a smaller size */
+border-radius: 5px;
+cursor: pointer;
+text-align: center;
+display: inline-block;
+transition: background-color 0.3s ease;
+width: 150px; /* Same width for both buttons */
+font-size: 14px; /* Slightly smaller font */
 }
 
+/* Hover Effects */
 .choose-file-btn:hover {
-    background-color: #2ea043;
+background-color: #2ea043;
 }
 
 .update-btn {
-    background-color: #007bff;
+background-color: #007bff; /* Blue background */
 }
 
 .update-btn:hover {
-    background-color: #0056b3;
+background-color: #0056b3;
 }
 
+/* Hide File Input */
 .file-input {
-    display: none;
+display: none;
 }
-
+/* Task Form Styles */
 #task-form {
-    display: flex;
-    display: none;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
+display: flex;
+display:none;
+flex-direction: column;
+gap: 15px; /* Add spacing between form elements */
+margin-top: 20px; /* Add space between this form and the previous form */
 }
 
+/* Date-Time Input Styles */
 .datetime-input {
-    padding: 10px;
-    border: 1px solid #30363d;
-    background-color: #0d1117;
-    color: #f0f6fc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
+padding: 10px;
+border: 1px solid #30363d;
+background-color: #0d1117;
+color: #f0f6fc;
+border-radius: 5px;
+font-size: 16px;
+width: 100%;
 }
-
+/* Task Item Styles */
 .task-item {
-    background-color: #21262d;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.3s ease;
+background-color: #21262d;
+padding: 10px;
+border-radius: 5px;
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: background-color 0.3s ease;
 }
 
 .task-item:hover {
-    background-color: #30363d;
+background-color: #30363d;
 }
 
 .task-details {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    flex: 1;
+display: flex;
+flex-direction: column;
+gap: 5px;
+flex: 1;
 }
 
+/* Green Label Styles */
 .green-label {
-    color: #238636;
-    font-weight: bold;
+color: #238636;
+font-weight: bold;
 }
 
+/* Delete Button Styles */
 .task-actions {
-    display: flex;
-    align-items: center;
+display: flex;
+align-items: center;
 }
 
 .task-actions .delete-btn {
-    background-color: #d73a49;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
+background-color: #d73a49;
+color: white;
+border: none;
+padding: 8px 12px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 18px;
+transition: background-color 0.3s ease;
 }
 
 .task-actions .delete-btn:hover {
-    background-color: #bf2a3f;
+background-color: #bf2a3f;
 }
+.left-sidebar .sidebar-content {
+flex-grow: 1;
+overflow-y: auto; /* Enable vertical scrolling */
+max-height: calc(100% - 120px); /* Adjust height as needed */
+margin-bottom: 20px;
+}
+.left-sidebar .sidebar-content {
+flex-grow: 1;
+overflow-y: auto; /* Enable vertical scrolling */
+max-height: calc(100% - 120px); /* Adjust height based on the header and button space */
+margin-bottom: 20px; /* Space for the bottom button */
+}
+
+.task-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: #21262d;
+padding: 10px;
+margin-bottom: 10px;
+border-radius: 5px;
+}
+
+.task-details {
+display: flex;
+flex-direction: column;
+gap: 5px;
+flex: 1;
+}
+
+.task-actions {
+display: flex;
+align-items: center;
+}
+.bottom-left-container {
+        position: fixed;
+        bottom: 20px;
+        left: 220px; /* Align it after the sidebar */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+}
+/* Bottom Left Buttons */
+.bottom-left-buttons {
+position: fixed;
+bottom: 20px;
+left: 320px; /* Align with the left sidebar */
+display: flex;
+flex-direction: column;
+gap: 10px;
+align-items: flex-start; /* Align buttons to the left */
+}
+
+/* Style for Buttons */
+.choose-file-btn,
+.update-btn {
+background-color: #238636; /* Default green background */
+color: white;
+padding: 8px 16px; /* Reduced padding for a smaller size */
+border-radius: 5px;
+cursor: pointer;
+text-align: center;
+display: inline-block;
+transition: background-color 0.3s ease;
+width: 150px; /* Same width for both buttons */
+font-size: 14px; /* Slightly smaller font */
+}
+
+/* Hover Effects */
+.choose-file-btn:hover {
+background-color: #2ea043;
+}
+
+.update-btn {
+background-color: #007bff; /* Blue background */
+}
+
+.update-btn:hover {
+background-color: #0056b3;
+}
+
+/* Hide File Input */
+.file-input {
+display: none;
+}
+.audio-list {
+    max-height: calc(100% - 50px); /* Adjusted to decrease by 30px */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Full height of the sidebar */
+}
+
+.audio-list {
+    flex-grow: 1; /* Take up remaining space */
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
 
 .control {
-    display: none;
-}
-
+            display: none; 
+        }
 .control-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #238636;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
+            position: fixed;
+            bottom: 10px;
+            right: 40px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 .control-btn:hover {
-    background-color: #2ea043;
-}
-
+            background-color: #0056b3;
+}  
