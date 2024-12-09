@@ -538,21 +538,110 @@ display: none;
 }
 
 
-.control {
-            display: none; 
-        }
-.control-btn {
-            position: fixed;
-            bottom: 10px;
-            right: 40px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-.control-btn:hover {
-            background-color: #0056b3;
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.home {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.left-sidebar, .right-sidebar {
+    width: 300px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 10px;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.container {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .left-sidebar, .right-sidebar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        z-index: 1000;
+        height: 100vh;
+    }
+
+    .right-sidebar {
+        transform: translateX(100%);
+    }
+
+    .left-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .right-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .toggle-btn {
+        display: block;
+        position: fixed;
+        top: 10px;
+        z-index: 1100;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .toggle-btn.left {
+        left: 10px;
+    }
+
+    .toggle-btn.right {
+        right: 10px;
+    }
+}
+
+@media (min-width: 769px) {
+    .toggle-btn {
+        display: none;
+    }
+
+    .left-sidebar, .right-sidebar {
+        position: relative;
+        transform: translateX(0);
+        height: auto;
+    }
+}
+
+.site-heading {
+    text-align: center;
+    background: #007bff;
+    color: white;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.text, .btn, .choose-file-btn, .delete-btn {
+    margin: 10px 0;
+    display: block;
+}
+
+.sidebar-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.sidebar-content {
+    margin-bottom: 20px;
 }
