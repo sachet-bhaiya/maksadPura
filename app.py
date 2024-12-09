@@ -26,10 +26,10 @@ def terminal():
     state = None
     color = "red"
     if not firstReload:
-     	if time() - startTime <= 4:
+     	if time() - startTime <= 2.5:
      		state = "Online"
      		color = "green"
-     	elif time() - startTime > 4:
+     	elif time() - startTime > 2.5:
      		state = "Offline"
      		color = "red"
     if os.path.exists(tasks_file):
@@ -153,7 +153,7 @@ def url():
 def status():
     if request.method == "GET":
         deltaTime = time() - startTime
-        if deltaTime >= 4:
+        if deltaTime >= 2.5:
             redirect("/")
             return "offline"
         else:
