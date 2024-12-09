@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
 
 *,
 html {
@@ -8,7 +8,7 @@ html {
 }
 
 body {
-    font-family: 'VT323', monospace;
+    font-family: 'Silkscreen', monospace;
     background-color: #0d1117;
     color: #c9d1d9;
     overflow-y: scroll;
@@ -35,7 +35,6 @@ body {
 
 .sidebar-header {
     font-size: 1.8em;
-    font-family: 'VT323', monospace;
     text-align: center;
     border-bottom: 2px solid #c9d1d9;
     padding-bottom: 10px;
@@ -46,7 +45,6 @@ body {
 .audio-item {
     background-color: #21262d;
     padding: 10px;
-    font-family: 'VT323', monospace;
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
@@ -60,7 +58,6 @@ body {
 .audio-item span {
     flex: 1 1 auto;
     word-wrap: break-word;
-    font-family: 'VT323', monospace;
     margin-right: 10px;
     min-width: 0;
 }
@@ -99,7 +96,6 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    font-family: 'VT323', monospace;
     transform: translate(-50%, -50%);
     width: 400px;
     text-align: center;
@@ -139,7 +135,6 @@ button.btn,
     background-color: #007bff;
     color: white;
     width: 200px;
-    font-family: 'VT323', monospace;
     margin-bottom: 10px;
 }
 
@@ -159,7 +154,6 @@ button.btn,
 
 /* File Input Hidden */
 input.file-input {
-    font-family: 'VT323', monospace;
     display: none;
 }
 
@@ -173,7 +167,6 @@ top: 20px; /* 20px from the top of the container */
 left: 320px; /* Same as the width of the left sidebar */
 font-size: 24px;
 color: red;
-font-family: 'VT323', monospace;
 }
 
 
@@ -185,7 +178,6 @@ font-family: 'VT323', monospace;
     color: white;
     padding: 10px 20px;
     display: block;
-    font-family: 'VT323', monospace;
     text-align: center;
     border-radius: 5px;
     width: 200px;
@@ -215,7 +207,6 @@ font-family: 'VT323', monospace;
 .container form {
 display: flex;
 flex-direction: column;
-font-family: 'VT323', monospace;
 gap: 15px; /* Add gap between form elements */
 }
 
@@ -227,7 +218,6 @@ background-color: #0d1117;
 color: #f0f6fc;
 border: 1px solid #30363d;
 border-radius: 5px;
-font-family: 'VT323', monospace;
 resize: none;
 }
 #message-form {
@@ -238,7 +228,6 @@ padding: 10px 20px;
 border: none;
 border-radius: 5px;
 font-size: 16px;
-font-family: 'VT323', monospace;
 cursor: pointer;
 transition: background-color 0.3s ease;
 background-color: #238636;
@@ -254,7 +243,6 @@ padding: 10px;
 border: 1px solid #30363d;
 background-color: #0d1117;
 color: #f0f6fc;
-font-family: 'VT323', monospace;
 border-radius: 5px;
 font-size: 16px;
 width: 100%;
@@ -281,7 +269,6 @@ padding-bottom: 100px;
 font-size: 1.8em;
 text-align: center;
 border-bottom: 2px solid #c9d1d9;
-font-family: 'VT323', monospace;
 padding-bottom: 10px;
 margin-bottom: 20px;
 }
@@ -304,7 +291,6 @@ padding: 10px 20px;
 border: none;
 border-radius: 5px;
 font-size: 16px;
-font-family: 'VT323', monospace;
 cursor: pointer;
 transition: background-color 0.3s ease;
 background-color: #238636;
@@ -374,7 +360,6 @@ display: none;
 display: flex;
 display:none;
 flex-direction: column;
-font-family: 'VT323', monospace;
 gap: 15px; /* Add spacing between form elements */
 margin-top: 20px; /* Add space between this form and the previous form */
 }
@@ -395,7 +380,6 @@ background-color: #21262d;
 padding: 10px;
 border-radius: 5px;
 margin-bottom: 10px;
-font-family: 'VT323', monospace;
 display: flex;
 justify-content: space-between;
 align-items: center;
@@ -525,7 +509,7 @@ background-color: #0056b3;
 display: none;
 }
 .audio-list {
-    max-height: calc(100% - 40px); /* Adjusted to decrease by 30px */
+    max-height: calc(100% - 180px); /* Adjusted to decrease by 30px */
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
@@ -541,95 +525,23 @@ display: none;
     overflow-y: auto;
     margin-bottom: 20px;
 }
-.home{
-    display:block;
-    font-family: 'VT323', monospace;
-}
-.control{
-    display:none;
-}
-#control-btn {
-        position: absolute;
-        bottom: 20px;
-        right: 320px; /* Adjust this based on the sidebar width */
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-family: 'Silkscreen', cursive;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
 
-    /* Hover effects */
-#control-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    }
-/* General styles for the control page buttons */
-.control-buttons {
-    position: relative; /* Relative positioning for child elements */
-    width: 100%;
-    height: 100%;
-}
 
-/* Back Button Styling */
-#back-btn {
-    position: fixed; /* Fixes the button to the top-left corner of the viewport */
-    top: 20px; /* Distance from the top of the viewport */
-    left: 10px; /* Distance from the left of the viewport */
-    background-color: #FF5733; /* Bright orange for visibility */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: 'Silkscreen', cursive;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 1; /* Ensures it appears above other elements */
-}
-
-/* Start Button Styling */
-#start-btn {
-    position: fixed; /* Fixed to center it on the screen */
-    top: 50%; /* Vertical center of the viewport */
-    left: 50%; /* Horizontal center of the viewport */
-    transform: translate(-50%, -50%); /* Center aligns the button */
-    background-color: #28A745; /* Bright green */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 15px 30px;
-    font-size: 18px;
-    font-family: 'Silkscreen', cursive;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 1; /* Ensures it appears above other elements */
-}
-.img-btn{
-  background-color: #238636; /* Default green background */
-color: white;
-padding: 8px 16px; /* Reduced padding for a smaller size */
-border-radius: 5px;
-cursor: pointer;
-text-align: center;
-display: inline-block;
-transition: background-color 0.3s ease;
-width: 150px;
-font-size: 14px;
-}
-.img-show{
-  position: fixed;
-bottom: 20px;
-left: 400px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-align-items: flex-start;
+.control {
+            display: none; 
+        }
+.control-btn {
+            position: fixed;
+            bottom: 10px;
+            right: 40px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+.control-btn:hover {
+            background-color: #0056b3;
 }
