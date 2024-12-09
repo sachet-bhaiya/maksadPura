@@ -13,16 +13,16 @@
     <h1 class="site-heading"><pre>Project ms32               </pre></h1>
     <div class="home" id="home">
         <div class="container">
-            <form action="/edit" method="POST" id="message-form">
+            <form id="message-form">
                 <textarea placeholder="Type something..." class="text" name="text"></textarea>
                 <button class="btn" type="submit">Send</button>
             </form>
 
-            <form action="/url" method="POST" id="url-form">
+            <form id="url-form">
                 <input type="url" class="text" name="url" placeholder="Enter URL" required>
                 <button class="btn" type="submit">Open</button>
             </form>
-            <form action="/add-task" method="POST" id="task-form">
+            <form id="task-form">
                 <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
                 <input type="datetime-local" class="datetime-input" name="task-datetime" required>
                 <button class="btn" type="submit">Add Task</button>
@@ -36,7 +36,6 @@
             <button class="update-btn" id="update-btn">Update</button>
         </div>
 
-
         <div class="status" id="status" style="color:{{color}};">{{state}}</div>
 
         <div class="left-sidebar">
@@ -49,8 +48,7 @@
                             <span><span class="green-label">Created On:</span> {{task["time"]}}</span>
                             <span><span class="green-label">Execution At:</span> {{task["execution_time"]}}</span>
                         </div>
-                        <form action="/delete-task" method="POST" class="task-actions">
-                            <input type="hidden" name="task-id" value="{{ task['id'] }}">
+                        <form class="task-actions delete-task-form" data-task-id="{{task['id']}}">
                             <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </div>
@@ -71,102 +69,146 @@
                         <div class="audio-item">
                             <span>{{file}}</span>
                             <div>
-                                <form action="/play" method="POST" style="display:inline;">
-                                    <input type="hidden" name="text" value="{{ file }}">
+                                <form class="play-audio-form" data-file="{{file}}">
                                     <button class="play-btn"><i class="fas fa-play"></i></button>
                                 </form>
-                                <form action="/delete" method="POST" style="display:inline;">
-                                    <input type="hidden" name="text" value="{{ file }}">
+                                <form class="delete-audio-form" data-file="{{file}}">
                                     <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
-
-                
             </div>
         </div>
     </div>    
 
-        <script>
-            update()
-            const audio_form = document.getElementById('audio-form');
-            const aduio = document.getElementById('aduio-input');
-            const updateBtn = document.getElementById('update-btn');
-            const fileInput = document.getElementById('file-input');
-            document.querySelector(".schedule-btn").addEventListener("click", () => {
-                const taskForm = document.getElementById("task-form");
-                taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("message-form").addEventListener("submit", handleMessageSubmit);
+            document.getElementById("url-form").addEventListener("submit", handleUrlSubmit);
+            document.getElementById("task-form").addEventListener("submit", handleTaskSubmit);
+            document.getElementById("update-btn").addEventListener("click", handleUpdate);
+
+
+            document.querySelectorAll('.delete-task-form').forEach(form => {
+                form.addEventListener("submit", handleDeleteTask);
             });
-            updateBtn.addEventListener('click', function () {
-                const file = fileInput.files[0];
-                if (!file) {
-                    alert("Please choose a file to upload.");
-                    return;
+
+
+            document.querySelectorAll('.play-audio-form').forEach(form => {
+                form.addEventListener("submit", handlePlayAudio);
+            });
+            document.querySelectorAll('.delete-audio-form').forEach(form => {
+                form.addEventListener("submit", handleDeleteAudio);
+            });
+        });
+
+        async function handleMessageSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/edit', {
+                method: 'POST',
+                body: formData
+            });
+            
+        }
+
+        async function handleUrlSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/url', {
+                method: 'POST',
+                body: formData
+            });
+            
+        }
+
+        async function handleTaskSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/add-task', {
+                method: 'POST',
+                body: formData
+            });
+            
+        }
+
+        async function handleUpdate() {
+            const file = document.getElementById("file-input").files[0];
+            if (!file) {
+                alert("Please choose a file to upload.");
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await fetch('/update', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                alert('File updated successfully!');
+            } else {
+                alert('File update failed!');
+            }
+        }
+
+        async function handleDeleteTask(event) {
+            event.preventDefault();
+            const taskId = event.target.dataset.taskId;
+            const response = await fetch('/delete-task', {
+                method: 'POST',
+                body: JSON.stringify({ "task-id": taskId }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+        }
+
+        async function handlePlayAudio(event) {
+            event.preventDefault();
+            const fileName = event.target.dataset.file;
+            const response = await fetch('/play', {
+                method: 'POST',
+                body: JSON.stringify({ "text": fileName }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+        }
+
+        async function handleDeleteAudio(event) {
+            event.preventDefault();
+            const fileName = event.target.dataset.file;
+            const response = await fetch('/delete', {
+                method: 'POST',
+                body: JSON.stringify({ "text": fileName }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+        }
+
+        async function update() {
+            try {
+                const response = await fetch("/status", { method: "GET" });
+                const status = await response.text();
+                const statusElement = document.getElementById("status");
+
+                if (status === "online") {
+                    statusElement.style.color = "green";
+                    statusElement.textContent = "Online";
+                } else if (status === "offline") {
+                    statusElement.style.color = "red";
+                    statusElement.textContent = "Offline";
+                } else {
+                    statusElement.style.color = "orange";
+                    statusElement.textContent = "Unknown Status";
                 }
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/update', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('File updated successfully!');
-                    } else {
-                        alert('File upadation failed!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });         
-
-            let isUpdating = false;
-
-async function update() {
-    if (isUpdating) return; 
-
-    isUpdating = true;
-
-    try {
-        const response = await fetch("/status", { method: "GET" });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+            } catch (error) {
+                console.error('Error in update function:', error);
+            }
         }
 
-        const data = await response.text();
-        console.log('Status:', data);
-
-        const statusElement = document.getElementById("status");
-
-        if (data === "online") {
-            statusElement.style.color = "green";
-            statusElement.textContent = "Online";
-        } else if (data === "offline") {
-            statusElement.style.color = "red";
-            statusElement.textContent = "Offline";
-        } else {
-            statusElement.style.color = "orange";
-            statusElement.textContent = "Unknown Status";
-        }
-    } catch (error) {
-        console.error('Error in update function:', error);
-
-        const statusElement = document.getElementById("status");
-        statusElement.style.color = "orange";
-        statusElement.textContent = "Connection Error";
-    } finally {
-        isUpdating = false;
-    }
-}
-            setInterval(update,500)
-
-
-        </script>
+        setInterval(update, 500); 
+    </script>
 
 </body>
 </html>
