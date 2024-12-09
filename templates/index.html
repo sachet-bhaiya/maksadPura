@@ -151,35 +151,38 @@
 
             
 
-            function update() {
-                fetch("/status", { method: "GET" })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.text();
-                    })
-                    .then(data => {
-                        alert(data)
-                        if (data === "online") {
-                            document.getElementById("status").style.color = "green";
-                            document.getElementById("status").textContent = "Online";
-                            
-                        } else if (data === "offline") {
-                            document.getElementById("status").style.color = "red";
-                            document.getElementById("status").textContent = "Offline";
-                        } else {
-                            document.getElementById("status").style.color = "orange";
-                            document.getElementById("status").textContent = "Unknown Status";
-                        }
-                    })
-                    .catch(error => {
-                        document.getElementById("status").style.color = "orange";
-                        document.getElementById("status").textContent = "Connection Error";
-                    });
-            }
+            async function update() {
+    try {
+        const response = await fetch("/status", { method: "GET" });
 
-        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.text();
+        console.log('Status:', data); 
+
+        const statusElement = document.getElementById("status");
+
+        if (data === "online") {
+            statusElement.style.color = "green";
+            statusElement.textContent = "Online";
+        } else if (data === "offline") {
+            statusElement.style.color = "red";
+            statusElement.textContent = "Offline";
+        } else {
+            statusElement.style.color = "orange";
+            statusElement.textContent = "Unknown Status";
+        }
+    } catch (error) {
+        console.error('Error in update function:', error);
+
+        const statusElement = document.getElementById("status");
+        statusElement.style.color = "orange";
+        statusElement.textContent = "Connection Error";
+    }
+}
+
             setInterval(update, 1200)
         </script>
 
