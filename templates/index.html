@@ -159,6 +159,7 @@
                         return response.text();
                     })
                     .then(data => {
+                        alert(data)
                         if (data === "online") {
                             document.getElementById("status").style.color = "green";
                             document.getElementById("status").textContent = "Online";
