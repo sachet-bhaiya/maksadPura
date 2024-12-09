@@ -509,7 +509,7 @@ background-color: #0056b3;
 display: none;
 }
 .audio-list {
-    max-height: calc(100% - 120px); /* Adjusted to decrease by 30px */
+    max-height: calc(100% - 100px); /* Adjusted to decrease by 30px */
     overflow-y: auto;
     margin-bottom: 20px;
     flex-grow: 1;
