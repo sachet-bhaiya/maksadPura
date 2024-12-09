@@ -159,7 +159,6 @@
                         return response.text();
                     })
                     .then(data => {
-                        alert(data)
                         if (data === "online") {
                             document.getElementById("status").style.color = "green";
                             document.getElementById("status").textContent = "Online";
@@ -179,7 +178,7 @@
             }
 
         
-            setInterval(update, 500)
+            setInterval(update, 1200)
         </script>
 
 </body>
