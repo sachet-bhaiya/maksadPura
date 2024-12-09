@@ -15,13 +15,15 @@ body {
     height: 100%;
 }
 .site-heading {
-    font-family: 'Silkscreen', monospace;
     text-align: center;
     font-size: 36px;
     margin-top: 20px;
     color: #196b28; /* Green color */
     
     letter-spacing: 2px;
+}
+pre{
+    font-family: 'Silkscreen', monospace;
 }
 
 /* Sidebar Styles */
