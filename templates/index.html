@@ -188,13 +188,10 @@ async function update() {
         statusElement.textContent = "Connection Error";
     } finally {
         isUpdating = false;
+        setTimeout(update,500)
     }
 }
-
-setInterval(()=>{
-    update()
-    alert("updating")
-}, 1200);
+update()
 
         </script>
 
