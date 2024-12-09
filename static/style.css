@@ -20,7 +20,7 @@ body {
     font-family: 'Silkscreen', sans-serif;
     margin-top: 20px;
     color: #00FF00; /* Green color */
-    text-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00; /* Glow effect */
+    
     letter-spacing: 2px;
 }
 
