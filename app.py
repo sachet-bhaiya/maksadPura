@@ -6,7 +6,7 @@ import json
 from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
-
+firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
@@ -20,19 +20,22 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 @app.route("/")
 def terminal():
+    global firstReload
     files = os.listdir(UPLOAD_FOLDER)
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
-    if time() - startTime >= 4:
-    	state = "Online"
-    elif time() - startTime < 4:
-    	state = "Offline"
+    state = None
+    if not firstReload:
+     	if time() - startTime >= 4:
+     		state = "Online"
+     	elif time() - startTime < 4:
+     		state = "Offline"
     if os.path.exists(tasks_file):
         with open(tasks_file, "r") as file:
             data = json.load(file)
     else:
         data = {"tasks": []}
-
-    return render_template("index.html", state=state,files=files, tasks=data)
+    firstReload = False       
+    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
