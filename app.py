@@ -27,11 +27,11 @@ def terminal():
     color = "red"
     if not firstReload:
      	if time() - startTime <= 2.5:
-     		state = "Online"
-     		color = "green"
-     	elif time() - startTime > 2.5:
-     		state = "Offline"
-     		color = "red"
+            state = "Online"
+            color = "green"
+        elif time() - startTime > 2.5:
+            state = "Offline"
+            color = "red"
     if os.path.exists(tasks_file):
         with open(tasks_file, "r") as file:
             data = json.load(file)
@@ -46,9 +46,9 @@ def edit():
         message = request.form["text"]
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             if not spam and ("pLaY" not in message or "oPeN" not in message):	
-           	 file.write("sPeAk" + message)
+                file.write("sPeAk" + message)
             else:
-            	file.write(message)
+                file.write(message)
         return redirect("/")
     return "message updated"
 
