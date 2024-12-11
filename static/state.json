@@ -1,0 +1,10 @@
+{
+  "hideToggleState": {
+    "state": "on",
+    "color": "green"
+  },
+  "spamToggleState": {
+    "state": "on",
+    "color": "green"
+  }
+}
