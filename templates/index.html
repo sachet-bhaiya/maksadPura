@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MS32</title>
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
-    <h1 class="site-heading"><pre>Project ms32               </pre></h1>
+    <h1 class="site-heading">
+        <pre>Project ms32               </pre>
+    </h1>
     <div class="home" id="home">
         <div class="container">
             <form action="/edit" method="POST" id="message-form">
@@ -24,6 +26,7 @@
                 <input type="url" class="text" name="url" placeholder="Enter URL" required>
                 <button class="btn" type="submit">Open</button>
             </form>
+
             <form action="/add-task" method="POST" id="task-form">
                 <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
                 <input type="datetime-local" class="datetime-input" name="task-datetime" required>
@@ -34,10 +37,8 @@
         <div class="bottom-left-buttons">
             <label for="file-input" class="choose-file-btn">Choose File</label>
             <input type="file" id="file-input" class="file-input">
-
             <button class="update-btn" id="update-btn">Update</button>
         </div>
-
 
         <div class="status" id="status" style="color:{{color}};">{{state}}</div>
 
@@ -45,17 +46,17 @@
             <div class="sidebar-header">Schedule Task</div>
             <div class="sidebar-content">
                 {% for task in tasks["tasks"] %}
-                    <div class="task-item">
-                        <div class="task-details">
-                            <span><span class="green-label">Task:</span> {{task["cmd"]}}</span>
-                            <span><span class="green-label">Created On:</span> {{task["time"]}}</span>
-                            <span><span class="green-label">Execution At:</span> {{task["execution_time"]}}</span>
-                        </div>
-                        <form action="/delete-task" method="POST" class="task-actions">
-                            <input type="hidden" name="task-id" value="{{ task['id'] }}">
-                            <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
-                        </form>
+                <div class="task-item">
+                    <div class="task-details">
+                        <span><span class="green-label">Task:</span> {{task["cmd"]}}</span>
+                        <span><span class="green-label">Created On:</span> {{task["time"]}}</span>
+                        <span><span class="green-label">Execution At:</span> {{task["execution_time"]}}</span>
                     </div>
+                    <form action="/delete-task" method="POST" class="task-actions">
+                        <input type="hidden" name="task-id" value="{{ task['id'] }}">
+                        <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
                 {% endfor %}
             </div>
 
@@ -64,134 +65,173 @@
             </div>
         </div>
 
-        
         <div class="sidebar">
             <div class="sidebar-header">Audio Files</div>
             <div class="sidebar-content">
                 <div class="audio-list">
                     {% for file in files %}
-                        <div class="audio-item">
-                            <span>{{file}}</span>
-                            <div>
-                                <form action="/play" method="POST" style="display:inline">
-                                    <input type="hidden" name="text" value="{{ file }}">
-                                    <button class="play-btn"><i class="fas fa-play"></i></button>
-                                </form>
-                                <form action="/delete" method="POST" style="display:inline;">
-                                    <input type="hidden" name="text" value="{{ file }}">
-                                    <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
-                                </form>
-                            </div>
+                    <div class="audio-item">
+                        <span>{{file}}</span>
+                        <div>
+                            <form action="/play" method="POST" style="display:inline">
+                                <input type="hidden" name="text" value="{{ file }}">
+                                <button class="play-btn"><i class="fas fa-play"></i></button>
+                            </form>
+                            <form action="/delete" method="POST" style="display:inline;">
+                                <input type="hidden" name="text" value="{{ file }}">
+                                <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </form>
                         </div>
+                    </div>
                     {% endfor %}
                 </div>
-
-                
             </div>
+
             <div class="bottom-right-buttons">
                 <label for="image-upload" class="upload-image-btn">Upload Image</label>
                 <input type="file" id="image-upload" class="file-input">
-                
                 <button class="open-btn" id="open-btn">Open</button>
             </div>
-
         </div>
-    </div>    
 
-        <script>
-            update()
-            const audio_form = document.getElementById('audio-form');
-            const aduio = document.getElementById('aduio-input');
-            const updateBtn = document.getElementById('update-btn');
-            const fileInput = document.getElementById('file-input');
-            const imgInput = document.getElementById("image-upload");
-            const openbtn = document.getElementById("open-btn")
-            
-            document.querySelector(".schedule-btn").addEventListener("click", () => {
-                const taskForm = document.getElementById("task-form");
-                taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+        <div class="right-toggle-buttons">
+            <button id="hide-toggle">Hide: On</button>
+            <button id="spam-toggle">Spam: On</button>
+        </div>
+    </div>
+
+    <script>
+        update();
+        const audio_form = document.getElementById('audio-form');
+        const audio = document.getElementById('audio-input');
+        const updateBtn = document.getElementById('update-btn');
+        const fileInput = document.getElementById('file-input');
+        const imgInput = document.getElementById("image-upload");
+        const openbtn = document.getElementById("open-btn");
+
+        // Initialize toggle buttons
+        function initializeToggleButton(buttonId, defaultText) {
+            const button = document.getElementById(buttonId);
+            const savedState = localStorage.getItem(buttonId);
+
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                button.dataset.state = state.state;
+                button.style.backgroundColor = state.color;
+                button.textContent = `${defaultText}: ${state.state === 'on' ? 'On' : 'Off'}`;
+            } else {
+                button.dataset.state = 'on';
+                button.style.backgroundColor = 'green';
+                button.textContent = `${defaultText}: On`;
+            }
+
+            button.addEventListener('click', function () {
+                if (button.dataset.state === 'on') {
+                    button.dataset.state = 'off';
+                    button.style.backgroundColor = 'red';
+                    button.textContent = `${defaultText}: Off`;
+                } else {
+                    button.dataset.state = 'on';
+                    button.style.backgroundColor = 'green';
+                    button.textContent = `${defaultText}: On`;
+                }
+
+                localStorage.setItem(buttonId, JSON.stringify({
+                    state: button.dataset.state,
+                    color: button.style.backgroundColor
+                }));
             });
-            openbtn.addEventListener('click', function() {
-              const file = imgInput.files[0];
-              if (!file) {
+        }
+
+        initializeToggleButton('hide-toggle', 'Hide');
+        initializeToggleButton('spam-toggle', 'Spam');
+
+        document.querySelector(".schedule-btn").addEventListener("click", () => {
+            const taskForm = document.getElementById("task-form");
+            taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+        });
+
+        openbtn.addEventListener('click', function () {
+            const file = imgInput.files[0];
+            if (!file) {
                 alert("Please choose a file to upload.");
                 return;
-              }
-              const formData = new FormData();
-              formData.append('file', file);
-              fetch('/image', {
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/image', {
                 method: 'POST',
                 body: formData,
-              })
-              
-            updateBtn.addEventListener('click', function () {
-                const file = fileInput.files[0];
-                if (!file) {
-                    alert("Please choose a file to upload.");
-                    return;
+            });
+        });
+
+        updateBtn.addEventListener('click', function () {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please choose a file to upload.");
+                return;
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/update', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('File updated successfully!');
+                } else {
+                    alert('File update failed!');
                 }
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/update', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('File updated successfully!');
-                    } else {
-                        alert('File upadation failed!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });         
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
 
-            let isUpdating = false;
+        let isUpdating = false;
 
-async function update() {
-    if (isUpdating) return; 
+        async function update() {
+            if (isUpdating) return;
 
-    isUpdating = true;
+            isUpdating = true;
 
-    try {
-        const response = await fetch("/status", { method: "GET" });
+            try {
+                const response = await fetch("/status", { method: "GET" });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.text();
+                console.log('Status:', data);
+
+                const statusElement = document.getElementById("status");
+
+                if (data === "online") {
+                    statusElement.style.color = "green";
+                    statusElement.textContent = "Online";
+                } else if (data === "offline") {
+                    statusElement.style.color = "red";
+                    statusElement.textContent = "Offline";
+                } else {
+                    statusElement.style.color = "orange";
+                    statusElement.textContent = "Unknown Status";
+                }
+            } catch (error) {
+                console.error('Error in update function:', error);
+
+                const statusElement = document.getElementById("status");
+                statusElement.style.color = "orange";
+                statusElement.textContent = "Connection Error";
+            } finally {
+                isUpdating = false;
+            }
         }
 
-        const data = await response.text();
-        console.log('Status:', data);
-
-        const statusElement = document.getElementById("status");
-
-        if (data === "online") {
-            statusElement.style.color = "green";
-            statusElement.textContent = "Online";
-        } else if (data === "offline") {
-            statusElement.style.color = "red";
-            statusElement.textContent = "Offline";
-        } else {
-            statusElement.style.color = "orange";
-            statusElement.textContent = "Unknown Status";
-        }
-    } catch (error) {
-        console.error('Error in update function:', error);
-
-        const statusElement = document.getElementById("status");
-        statusElement.style.color = "orange";
-        statusElement.textContent = "Connection Error";
-    } finally {
-        isUpdating = false;
-    }
-}
-            setInterval(update,500)
-
-
-        </script>
-
+        setInterval(update, 500);
+    </script>
 </body>
+
 </html>
