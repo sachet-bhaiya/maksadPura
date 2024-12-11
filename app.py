@@ -212,7 +212,7 @@ def delete_task():
     return redirect("/")
 
 
-@app.route("/img", methods=["GET", "POST"])
+@app.route("/image", methods=["GET", "POST"])
 def img():
     if request.method == "POST":
         file = request.files["file"]
