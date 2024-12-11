@@ -28,7 +28,7 @@ def terminal():
     color = "red"
     data1= None
     with open(state_file, "r") as file:
-    	data1 = json.load(file)
+        data1 = json.load(file)
     hs = data1["hideToggleState"]["state"]
     hc = data1["hideToggleState"]["color"]
     ss = data1["spamToggleState"]["state"]
