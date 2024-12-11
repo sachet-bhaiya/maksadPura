@@ -1,91 +1,69 @@
-import tkinter as tk
 import cv2
-from PIL import Image, ImageTk
+import time
 
-# Function to close the window after a delay
-def close_window():
-    root.quit()
+def play_media(file_path):
+    # OpenCV window setup
+    cv2.namedWindow("Fullscreen Media Player", cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty("Fullscreen Media Player", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-# Function to display the video frame-by-frame
-def show_video_frame():
-    global video_capture, label, video_ended
+    if file_path.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):  # For video files
+        video_capture = cv2.VideoCapture(file_path)
 
-    # Read the next frame from the video
-    ret, frame = video_capture.read()
+        if not video_capture.isOpened():
+            print("Error: Cannot open video file.")
+            return
 
-    if ret:  # If there are frames left
-        # Resize the frame to fit the window size
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame = cv2.resize(frame, (root.winfo_width(), root.winfo_height()))  # Resize to fill the window
+        # Get the video's frame rate
+        fps = video_capture.get(cv2.CAP_PROP_FPS)
+        if fps == 0:  # Fallback in case FPS isn't read properly
+            fps = 30
+        frame_delay = int(530 / fps)  # Adjust frame delay
 
-        # Convert frame to ImageTk format for displaying in Tkinter
-        frame_image = ImageTk.PhotoImage(image=Image.fromarray(frame))
+        while True:
+            ret, frame = video_capture.read()
+            if not ret:  # Video ends
+                break
 
-        # Update the label with the new frame
-        label.config(image=frame_image)
-        label.image = frame_image  # Keep a reference to avoid garbage collection
+            # Resize frame to fill screen
+            screen_width = cv2.getWindowImageRect("Fullscreen Media Player")[2]
+            screen_height = cv2.getWindowImageRect("Fullscreen Media Player")[3]
+            frame = cv2.resize(frame, (screen_width, screen_height))
 
-        # Schedule the next frame update
-        root.after(10, show_video_frame)
+            # Display the frame
+            cv2.imshow("Fullscreen Media Player", frame)
+
+            # Wait for the appropriate delay
+            cv2.waitKey(frame_delay)
+
+        video_capture.release()
+
+        # Pause for 1.5 seconds after the video ends
+        time.sleep(1.5)
+
+    elif file_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):  # For image files
+        image = cv2.imread(file_path)
+
+        if image is None:
+            print("Error: Cannot open image file.")
+            return
+
+        # Resize image to fit the screen
+        screen_width = cv2.getWindowImageRect("Fullscreen Media Player")[2]
+        screen_height = cv2.getWindowImageRect("Fullscreen Media Player")[3]
+        image = cv2.resize(image, (screen_width, screen_height))
+
+        # Display the image
+        cv2.imshow("Fullscreen Media Player", image)
+
+        # Wait indefinitely without closing due to any key press
+        cv2.waitKey(1)  # This means the window waits forever until the media ends or manual closure
+        time.sleep(8)
     else:
-        # If video ends, mark as ended and wait 3 seconds before closing
-        if not video_ended:
-            video_ended = True
-            root.after(3000, close_window)  # Wait 3 seconds after video ends
+        print("Unsupported file type. Only videos and images are supported.")
 
-# Function to handle image files (JPEG, PNG)
-def show_image(image_path):
-    image = Image.open(image_path)
-    
-    # Resize the image to fit the window size
-    image = image.resize((root.winfo_width(), root.winfo_height()), Image.Resampling.LANCZOS)
-    
-    # Convert to Tkinter-compatible photo object
-    photo = ImageTk.PhotoImage(image)
+    # Close the window after all media finishes
+    cv2.destroyAllWindows()
 
-    # Update the label to display the image
-    label.config(image=photo)
-    label.image = photo
-    
-    # Wait 8 seconds before closing the window
-    root.after(8000, close_window)
-
-# Create the main window
-root = tk.Tk()
-
-# Set the window title
-root.title("Fullscreen Keep On Top Window")
-
-# Set the "keep on top" feature
-root.attributes('-topmost', 1)
-
-# Set the window to fullscreen
-root.attributes('-fullscreen', True)
-
-# Remove the window decorations (close, minimize, etc.)
-root.overrideredirect(True)
-
-# Set the background color of the window to black
-root.configure(bg='black')
-
-# Create a label for displaying images or video frames
-label = tk.Label(root, bg='black')  # Set label background to black
-label.place(x=0, y=0, relwidth=1, relheight=1)
-
-# Set this flag to detect if video has ended
-video_ended = False
-
-# Path to the file (change this path to your file)
-file_path = "remoteside/sample2.jpg"  # Replace with your file path
-
-# Check if the file is a video or image
-if file_path.lower().endswith(('mp4', 'avi', 'mov')):
-    # If it's a video file
-    video_capture = cv2.VideoCapture(file_path)
-    show_video_frame()
-else:
-    # If it's an image file
-    show_image(file_path)
-
-# Run the Tkinter event loop
-root.mainloop()
+# Replace with the path to your media file
+file_path = "remoteside/sample2.jpg"  # Change to your file
+play_media(file_path)
