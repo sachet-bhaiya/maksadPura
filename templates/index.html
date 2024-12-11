@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MS32</title>
+  <title>ms32</title>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -102,18 +102,20 @@
 
   <script>
     update();
+    fetchButtonState()
     const audio_form = document.getElementById('audio-form');
     const audio = document.getElementById('audio-input');
     const updateBtn = document.getElementById('update-btn');
     const fileInput = document.getElementById('file-input');
     const imgInput = document.getElementById("image-upload");
     const openbtn = document.getElementById("open-btn");
+    let isadded = false
     let cmd
     let state
 
     async function fetchButtonState() {
       try {
-        const response = await fetch('/static/state.json');  
+        const response = await fetch('/static/state.json');
         const data = await response.json();
 
         initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
@@ -125,11 +127,13 @@
 
     function initializeToggleButton(buttonId, defaultText, initialState) {
       const button = document.getElementById(buttonId);
-      
+
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-
+      if(!isadded){
+        isadded = true;
+      }
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
@@ -156,7 +160,7 @@
           },
           body: JSON.stringify({ cmd: cmd, state: state })
         });
-      });
+      });}
     }
 
     fetchButtonState();
@@ -245,6 +249,7 @@
     }
 
     setInterval(update, 500);
+    setInterval(fetchButtonState,500)
   </script>
 </body>
 
