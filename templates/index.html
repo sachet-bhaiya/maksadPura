@@ -116,8 +116,8 @@
         const response = await fetch('/static/state.json');  path
         const data = await response.json();
 
-        initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState);
-        initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState);
+        initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state);
+        initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state);
       } catch (error) {
         console.error('Error fetching button state:', error);
       }
