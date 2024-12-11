@@ -49,6 +49,8 @@ def playfunc(fp):
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = interface.QueryInterface(IAudioEndpointVolume)
     
+    if volume.GetMute():
+        volume.SetMute(0, None)
     vmin, vmax, _ = volume.GetVolumeRange()
     target = vmin + (95 / 100.0) * (vmax - vmin)
     target = max(min(target, vmax), vmin)
