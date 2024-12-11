@@ -42,10 +42,17 @@ def terminal():
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
+    global spam
     if request.method == "POST":
         message = request.form["text"]
+        if "sPaM on" in message:
+            spam = True
+            return "none"
+        elif "sPaM off" in message:
+            spam = False
+            return "none"
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if not spam and ("pLaY" not in message or "oPeN" not in message):	
+            if not spam and ("pLaY" not in message and "oPeN" not in message and "hIdE" not in message):	
            	 file.write("sPeAk" + message)
             else:
             	file.write(message)
@@ -66,12 +73,6 @@ def command():
             with open(message_file, "r") as file:
                 cmd = file.read()
 
-        if "sPaM on" in cmd:
-            spam = True
-            return "none"
-        elif "sPaM off" in cmd:
-            spam = False
-            return "none"
         if cmd == "":
             if os.path.exists(tasks_file):
                 with open(tasks_file, "r") as file:
