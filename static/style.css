@@ -568,11 +568,6 @@ display: none;
 .update-image-btn{
     background-color:#238636;
 }
-/* Hover Effects */
-.upload-image-btn:hover,
-.open-btn:hover {
-    background-color: #2ea043;
-}
 
 /* File Input Hidden */
 .file-input {
