@@ -91,40 +91,108 @@
         </div>
     </div>    
 
-        <script>
-            update()
-            const audio_form = document.getElementById('audio-form');
-            const aduio = document.getElementById('aduio-input');
-            const updateBtn = document.getElementById('update-btn');
-            const fileInput = document.getElementById('file-input');
-            document.querySelector(".schedule-btn").addEventListener("click", () => {
-                const taskForm = document.getElementById("task-form");
-                taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
-            });
-            updateBtn.addEventListener('click', function () {
-                const file = fileInput.files[0];
-                if (!file) {
-                    alert("Please choose a file to upload.");
-                    return;
-                }
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/update', {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('File updated successfully!');
-                    } else {
-                        alert('File upadation failed!');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });         
+  <script>
+    update();
+    const audio_form = document.getElementById('audio-form');
+    const audio = document.getElementById('audio-input');
+    const updateBtn = document.getElementById('update-btn');
+    const fileInput = document.getElementById('file-input');
+    const imgInput = document.getElementById("image-upload");
+    const openbtn = document.getElementById("open-btn");
+    let cmd
+    let state
+
+    function initializeToggleButton(buttonId, defaultText) {
+      const button = document.getElementById(buttonId);
+      const savedState = localStorage.getItem(buttonId);
+      
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        button.dataset.state = state.state;
+        button.style.backgroundColor = state.color;
+        button.textContent = `${defaultText}: ${state.state === 'on' ? 'On' : 'Off'}`;
+
+      } else {
+        button.dataset.state = 'on';
+        button.style.backgroundColor = '#238636';
+        button.textContent = `${defaultText}: On`;
+      }
+
+      button.addEventListener('click', function() {
+        if (defaultText === "Hide") {
+          cmd = "hIdE"
+        }
+        else {
+          cmd = "sPaM"
+        }
+        if (button.dataset.state === 'on') {
+          button.dataset.state = 'off';
+          button.style.backgroundColor = 'red';
+          button.textContent = `${defaultText}: Off`;
+          state = "on"
+        } else {
+          button.dataset.state = 'on';
+          button.style.backgroundColor = '#238636';
+          button.textContent = `${defaultText}: On`;
+          state = "off"
+        }
+        fetch("/edit",{
+          method:"POST",
+          body : `${cmd} ${state}`
+        })
+        localStorage.setItem(buttonId, JSON.stringify({
+          state: button.dataset.state,
+          color: button.style.backgroundColor
+        }));
+      });
+    }
+
+    initializeToggleButton('hide-toggle', 'Hide');
+    initializeToggleButton('spam-toggle', 'Spam');
+
+    document.querySelector(".schedule-btn").addEventListener("click", () => {
+      const taskForm = document.getElementById("task-form");
+      taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+    });
+
+    openbtn.addEventListener('click', function() {
+      const file = imgInput.files[0];
+      if (!file) {
+        alert("Please choose a file to upload.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      fetch('/image', {
+        method: 'POST',
+        body: formData,
+      });
+    });
+
+    updateBtn.addEventListener('click', function() {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please choose a file to upload.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      fetch('/update', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('File updated successfully!');
+          } else {
+            alert('File update failed!');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
 
             let isUpdating = false;
 
