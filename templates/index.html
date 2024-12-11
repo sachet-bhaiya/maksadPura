@@ -92,7 +92,7 @@
                 <label for="image-upload" class="upload-image-btn">Upload Image</label>
                 <input type="file" id="image-upload" class="file-input">
                 
-                <button class="open-btn">Open</button>
+                <button class="open-btn" id="open-btn">Open</button>
             </div>
 
         </div>
@@ -104,10 +104,26 @@
             const aduio = document.getElementById('aduio-input');
             const updateBtn = document.getElementById('update-btn');
             const fileInput = document.getElementById('file-input');
+            const imgInput = document.getElementById("image-upload");
+            const openbtn = document.getElementById("open-btn")
+            
             document.querySelector(".schedule-btn").addEventListener("click", () => {
                 const taskForm = document.getElementById("task-form");
                 taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
             });
+            openbtn.addEventListener('click', function() {
+              const file = imgInput.files[0];
+              if (!file) {
+                alert("Please choose a file to upload.");
+                return;
+              }
+              const formData = new FormData();
+              formData.append('file', file);
+              fetch('/image', {
+                method: 'POST',
+                body: formData,
+              })
+              
             updateBtn.addEventListener('click', function () {
                 const file = fileInput.files[0];
                 if (!file) {
