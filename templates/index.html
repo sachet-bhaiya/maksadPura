@@ -131,7 +131,7 @@
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      if(!isadded){
+      if (!isadded) {
         isadded = true;
       }
       button.addEventListener('click', function() {
@@ -160,8 +160,9 @@
           },
           body: JSON.stringify({ cmd: cmd, state: state })
         });
-      });}
+      });
     }
+    
 
     fetchButtonState();
     document.querySelector(".schedule-btn").addEventListener("click", () => {
