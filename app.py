@@ -32,7 +32,7 @@ def terminal():
     hs = data1["hideToggleState"]["state"]
     hc = data1["hideToggleState"]["color"]
     ss = data1["spamToggleState"]["state"]
-    sc = data1["scToggleState"]["color"]
+    sc = data1["spamToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
