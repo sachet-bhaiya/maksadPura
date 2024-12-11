@@ -613,12 +613,12 @@ display: none;
   border-radius: 5px;
   border: 1px solid #ccc;
   background-color: #f9f9f9;
-  width: 200px;
+  width: 120px;
 }
 
 /* Optional: Style for label */
 .dropdown-container label {
-  font-size: 18px;
+  font-size: 15px;
   margin-bottom: 10px;
   display: block;
 }
