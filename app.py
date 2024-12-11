@@ -26,7 +26,7 @@ def terminal():
     state = None
     color = "red"
     if not firstReload:
-     	if time() - startTime <= 2.5:
+        if time() - startTime <= 2.5:
             state = "Online"
             color = "green"
         elif time() - startTime > 2.5:
@@ -38,14 +38,14 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline",files=files, tasks=data, color=color)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
     if request.method == "POST":
         message = request.form["text"]
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if not spam and ("pLaY" not in message or "oPeN" not in message):	
+            if not spam and ("pLaY" not in message or "oPeN" not in message):    
                 file.write("sPeAk" + message)
             else:
                 file.write(message)
@@ -96,7 +96,6 @@ def command():
                 file.write("")
 
         return cmd if cmd else "none"
-
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -221,5 +220,6 @@ def img():
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("iMaGe " + file.filename)
     return redirect("/")
+
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)
