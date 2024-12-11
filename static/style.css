@@ -575,7 +575,7 @@ display: none;
 }
 .right-toggle-buttons {
     position: fixed; /* Keeps the buttons fixed on the screen */
-    top: 0%; /* Adjust to control vertical positioning */
+    top: 10%; /* Adjust to control vertical positioning */
     right: 315px; /* Adjust for horizontal distance from the right edge */
     display: flex;
     flex-direction: column;
