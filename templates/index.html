@@ -131,9 +131,9 @@
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      if(!isadded){
+      if (!isadded) {
         isadded = true;
-      }
+      
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
@@ -161,6 +161,7 @@
           body: JSON.stringify({ cmd: cmd, state: state })
         });
       });}
+    }
     }
 
     fetchButtonState();
@@ -249,7 +250,7 @@
     }
 
     setInterval(update, 500);
-    setInterval(fetchButtonState,500)
+    setInterval(fetchButtonState, 500)
   </script>
 </body>
 
