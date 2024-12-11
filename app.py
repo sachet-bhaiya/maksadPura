@@ -44,7 +44,7 @@ def terminal():
 def edit():
     global spam
     if request.method == "POST":
-        message = request.form["text"]
+        message = request.form["text"] or request.data.decode('utf-8')
         if "sPaM on" in message:
             spam = True
             return "none"
