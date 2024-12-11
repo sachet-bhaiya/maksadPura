@@ -552,7 +552,6 @@ display: none;
 /* Button Styles */
 .upload-image-btn,
 .open-btn {
-    background-color: #238636; /* Default green background */
     color: white;
     padding: 8px 16px; /* Adjust padding for size */
     border-radius: 5px;
@@ -565,6 +564,9 @@ display: none;
 }
 .open-btn{
     background-color: #007bff;
+}
+.update-image-btn{
+    background-color:#238636;
 }
 /* Hover Effects */
 .upload-image-btn:hover,
