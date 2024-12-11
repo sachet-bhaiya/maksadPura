@@ -573,4 +573,26 @@ display: none;
 .file-input {
     display: none;
 }
+.right-toggle-buttons {
+    position: fixed; /* Keeps the buttons fixed on the screen */
+    top: 0%; /* Adjust to control vertical positioning */
+    right: 315px; /* Adjust for horizontal distance from the right edge */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+}
 
+.right-toggle-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    background-color: green; /* Default color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.right-toggle-buttons button:hover {
+    opacity: 0.9;
+}
