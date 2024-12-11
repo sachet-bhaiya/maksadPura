@@ -538,21 +538,40 @@ display: none;
 }
 
 
-.control {
-            display: none; 
-        }
-.control-btn {
-            position: fixed;
-            bottom: 10px;
-            right: 40px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-.control-btn:hover {
-            background-color: #0056b3;
-}  
+/* Bottom Right Buttons */
+.bottom-right-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 320px; /* Align with the sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end; /* Align buttons to the right */
+}
+
+/* Button Styles */
+.upload-image-btn,
+.open-btn {
+    background-color: #238636; /* Default green background */
+    color: white;
+    padding: 8px 16px; /* Adjust padding for size */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    width: 150px; /* Keep consistent width */
+    font-size: 14px; /* Slightly smaller font */
+}
+
+/* Hover Effects */
+.upload-image-btn:hover,
+.open-btn:hover {
+    background-color: #2ea043;
+}
+
+/* File Input Hidden */
+.file-input {
+    display: none;
+}
+
