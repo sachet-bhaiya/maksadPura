@@ -596,3 +596,29 @@ display: none;
 .right-toggle-buttons button:hover {
     opacity: 0.9;
 }
+/* Add a margin to create space between status and dropdown */
+#status {
+  margin-bottom: 20px; /* Adjust as needed */
+}
+
+/* Style for the dropdown container */
+.dropdown-container {
+  margin-top: 20px;  /* Gap between status and dropdown */
+}
+
+/* Style for the dropdown */
+.dropdown {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  width: 200px;
+}
+
+/* Optional: Style for label */
+.dropdown-container label {
+  font-size: 18px;
+  margin-bottom: 10px;
+  display: block;
+}
