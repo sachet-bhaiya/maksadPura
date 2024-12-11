@@ -21,10 +21,18 @@ if not os.path.exists(UPLOAD_FOLDER):
 @app.route("/")
 def terminal():
     global firstReload
+    state_file = os.path.join(STATIC_FOLDER, "state.json")
     files = os.listdir(UPLOAD_FOLDER)
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     state = None
     color = "red"
+    data1= None
+    with open(state_file, "r") as file:
+    	data1 = json.load(file)
+    hs = data1["hideToggleState"]["state"]
+    hc = data1["hideToggleState"]["color"]
+    ss = data1["spamToggleState"]["state"]
+    sc = data1["scToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -38,7 +46,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
