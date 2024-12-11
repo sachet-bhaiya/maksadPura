@@ -44,15 +44,9 @@ def terminal():
 def edit():
     global spam
     if request.method == "POST":
-        message = request.form["text"]
-        if "sPaM on" in message:
-            spam = True
-            return "none"
-        elif "sPaM off" in message:
-            spam = False
-            return "none"
+        message = request.form["text"]   
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if not spam and ("pLaY" not in message and "oPeN" not in message and "hIdE" not in message):    
+            if not spam and ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
             else:
                 file.write(message)
@@ -212,7 +206,18 @@ def delete_task():
                 json.dump(new_task, file, indent=4)
     return redirect("/")
 
-
+@app.route("/toggle",methods=["POST"])
+def togfle():
+	global spam
+	if request.method == "POST":
+		data = request.get_json()
+		cmd = data.get("cmd")
+		state = data.get("state")
+		if cmd=="hIdE":
+			with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+				file.write(f"{cmd} {state}")
+		elif cmd == "sPaM":
+			spam = True if state == "on" else False
 @app.route("/image", methods=["GET", "POST"])
 def img():
     if request.method == "POST":
