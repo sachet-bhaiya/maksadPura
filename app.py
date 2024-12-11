@@ -47,7 +47,9 @@ def terminal():
         data = {"tasks": []}
     firstReload = False       
     return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc)
-
+@app.route("/ip",methods=["GET"])
+def ip():
+	return request.remote_addr
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
     global spam
