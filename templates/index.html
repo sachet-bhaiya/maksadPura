@@ -111,58 +111,55 @@
     let cmd
     let state
 
-    function initializeToggleButton(buttonId, defaultText) {
-      const button = document.getElementById(buttonId);
-      const savedState = localStorage.getItem(buttonId);
-      
-      if (savedState) {
-        const state = JSON.parse(savedState);
-        button.dataset.state = state.state;
-        button.style.backgroundColor = state.color;
-        button.textContent = `${defaultText}: ${state.state === 'on' ? 'On' : 'Off'}`;
+    async function fetchButtonState() {
+      try {
+        const response = await fetch('/static/state.json');  path
+        const data = await response.json();
 
-      } else {
-        button.dataset.state = 'on';
-        button.style.backgroundColor = 'green';
-        button.textContent = `${defaultText}: On`;
+        initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState);
+        initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState);
+      } catch (error) {
+        console.error('Error fetching button state:', error);
       }
+    }
+
+    function initializeToggleButton(buttonId, defaultText, initialState) {
+      const button = document.getElementById(buttonId);
+      
+      button.dataset.state = initialState.state;
+      button.style.backgroundColor = initialState.state === 'on' ? 'green' : 'red';
+      button.textContent = `${defaultText}: ${initialState.state === 'on' ? 'On' : 'Off'}`;
 
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
-          cmd = "hIdE"
+          cmd = "hIdE";
+        } else {
+          cmd = "sPaM";
         }
-        else {
-          cmd = "sPaM"
-        }
+
         if (button.dataset.state === 'on') {
           button.dataset.state = 'off';
           button.style.backgroundColor = 'red';
           button.textContent = `${defaultText}: Off`;
-          state = "on"
+          state = "off";
         } else {
           button.dataset.state = 'on';
           button.style.backgroundColor = 'green';
           button.textContent = `${defaultText}: On`;
-          state = "off"
+          state = "on";
         }
+
         fetch("/toggle", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ cmd: cmd, state: state })
-        })
-
-        localStorage.setItem(buttonId, JSON.stringify({
-          state: button.dataset.state,
-          color: button.style.backgroundColor
-        }));
+        });
       });
     }
 
-    initializeToggleButton('hide-toggle', 'Hide');
-    initializeToggleButton('spam-toggle', 'Spam');
-
+    fetchButtonState();
     document.querySelector(".schedule-btn").addEventListener("click", () => {
       const taskForm = document.getElementById("task-form");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
