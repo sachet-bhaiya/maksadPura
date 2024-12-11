@@ -26,7 +26,7 @@ def terminal():
     state = None
     color = "red"
     if not firstReload:
-     	if time() - startTime <= 2.5:
+        if time() - startTime <= 2.5:
             state = "Online"
             color = "green"
         elif time() - startTime > 2.5:
