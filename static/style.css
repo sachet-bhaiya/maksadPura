@@ -563,7 +563,9 @@ display: none;
     width: 150px; /* Keep consistent width */
     font-size: 14px; /* Slightly smaller font */
 }
-
+.upload-image-btn{
+    background-color: #007bff;
+}
 /* Hover Effects */
 .upload-image-btn:hover,
 .open-btn:hover {
