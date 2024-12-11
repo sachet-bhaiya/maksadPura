@@ -113,7 +113,7 @@
 
     async function fetchButtonState() {
       try {
-        const response = await fetch('/static/state.json');  path
+        const response = await fetch('/static/state.json');  
         const data = await response.json();
 
         initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state);
