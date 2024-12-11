@@ -92,7 +92,6 @@ def command():
 
         return cmd if cmd else "none"
 
-
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
     if request.method == "POST":
@@ -207,17 +206,37 @@ def delete_task():
     return redirect("/")
 
 @app.route("/toggle",methods=["POST"])
-def togfle():
-	global spam
-	if request.method == "POST":
-		data = request.get_json()
-		cmd = data.get("cmd")
-		state = data.get("state")
-		if cmd=="hIdE":
-			with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-				file.write(f"{cmd} {state}")
-		elif cmd == "sPaM":
-			spam = True if state == "on" else False
+def toggle():
+    global spam
+    if request.method == "POST":
+        data = request.get_json()
+        cmd = data.get("cmd")
+        state = data.get("state")
+        color = "green" if state == "on" else "red"
+        
+        state_file = os.path.join(STATIC_FOLDER, "state.json")
+        
+        if os.path.exists(state_file):
+            with open(state_file, "r") as file:
+                data = json.load(file)
+        
+            if cmd == "hIdE":
+                data["hideToggleState"]["state"] = state
+                data["hideToggleState"]["color"] = color
+            elif cmd == "sPaM":
+                data["spamToggleState"]["state"] = state
+                data["spamToggleState"]["color"] = color
+        
+            with open(state_file, "w") as file:
+                json.dump(data, file, indent=4)
+        
+        if cmd == "hIdE":
+            with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+                file.write(f"{cmd} {state}")
+        elif cmd == "sPaM":
+            spam = True if state == "on" else False
+    return redirect("/")
+
 @app.route("/image", methods=["GET", "POST"])
 def img():
     if request.method == "POST":
