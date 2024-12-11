@@ -102,7 +102,7 @@
 
   <script>
     update();
-    /*fetchButtonState()*/
+    fetchButtonState()
     const audio_form = document.getElementById('audio-form');
     const audio = document.getElementById('audio-input');
     const updateBtn = document.getElementById('update-btn');
@@ -164,7 +164,7 @@
     }
     
 
-    fetchButtonState();
+    /*fetchButtonState();*/
     document.querySelector(".schedule-btn").addEventListener("click", () => {
       const taskForm = document.getElementById("task-form");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
@@ -250,7 +250,7 @@
     }
 
     setInterval(update, 500);
-    /*setInterval(fetchButtonState,500)*/
+    setInterval(fetchButtonState,500)
   </script>
 </body>
 
