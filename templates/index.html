@@ -44,8 +44,11 @@
     <div class="dropdown-container">
   <label for="myDropdown">Select User</label>
   <select id="myDropdown" class="dropdown">
+    <option value="{{selected}}">{{selected}}</option>
     {% for user in users %}
+    {% if user != selected%}
     <option value="{{user}}">{{user}}</option>
+    {% endif %}
     {% endfor %}
   </select>
 </div>
@@ -107,21 +110,19 @@
       <button id="spam-toggle" style="background-color:{{sc}}">Spam: {{ss}}</button>
     </div>
   </div>
-
+  
   <script>
+    let isadded = false
+    let isUpdating = false;
     update();
     fetchButtonState()
     const dropbox = document.querySelector(".dropdown")
-    const option = dropbox.querySelector('option[value="{{select}}"]');
-    option.selected = true;
-    console.log("{{selected}}")
     const audio_form = document.getElementById('audio-form');
     const audio = document.getElementById('audio-input');
     const updateBtn = document.getElementById('update-btn');
     const fileInput = document.getElementById('file-input');
     const imgInput = document.getElementById("image-upload");
     const openbtn = document.getElementById("open-btn");
-    let isadded = false
     let cmd
     let state
 
@@ -135,6 +136,7 @@
         body: JSON.stringify({ user : dropbox.value })
 
       })
+      console.log("cjevfue")
     })
     async function fetchButtonState() {
       try {
@@ -186,8 +188,6 @@
       });
     }
     
-
-    /*fetchButtonState();*/
     document.querySelector(".schedule-btn").addEventListener("click", () => {
       const taskForm = document.getElementById("task-form");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
@@ -232,7 +232,6 @@
         });
     });
 
-    let isUpdating = false;
 
     async function update() {
       if (isUpdating) return;

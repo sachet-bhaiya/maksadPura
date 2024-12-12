@@ -59,7 +59,7 @@ def edit():
     if request.method == "POST":
         message = request.form["text"]   
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if not spam and ("pLaY" not in message and "oPeN" not in message):    
+            if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
             else:
                 file.write(message)
@@ -261,6 +261,7 @@ def change_user():
     data = request.get_json()
     user = data.get("user")
     selected_user = str(user)
+    print(selected_user)
     with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
         target = json.load(file)
     target["selected"] = selected_user
