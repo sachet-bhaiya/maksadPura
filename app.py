@@ -8,10 +8,15 @@ from zoneinfo import ZoneInfo
 app = Flask(__name__)
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
-startTime = time()
+startTime = {}
 spam = False
 selected_user = "93"
+TARGETS = None
 STATIC_FOLDER = os.path.join("static")
+with open(os.path.join(STATIC_FOLDER,"users.json"),"r") as file:
+	TARGETS = json.load(file)
+for TARGET in TARGETS:
+	startTime[TARGET] = time()
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
 
@@ -72,10 +77,10 @@ def command():
     global selected_user
     global spam
     if request.method == "POST":
+        startTime[user] = time()
         user = request.get_json()
         user = user.get("user")
-        if selected_user == user:
-            startTime = time()
+        if selected_user == user:          
             cmd = ""
             message_file = os.path.join(STATIC_FOLDER, "message.txt")
             tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
@@ -162,14 +167,21 @@ def url():
 
 @app.route("/status", methods=["POST", "GET"])
 def status():
+    global TARGET
+    global selected_user
     if request.method == "GET":
-        deltaTime = time() - startTime
-        if deltaTime >= 2.5:
-            redirect("/")
-            return "offline"
+        data = {}
+        if time() - startTime[selected_user] >= 2.5:
+        	data[selected_user] = "offline"
         else:
-            redirect("/")
-            return "online"
+        	data[selected_user] = "online"
+        for target in TARGETS:
+	        deltaTime = time() - startTime[target]
+	        if deltaTime >= 2.5:
+	            data[target] = "offline"
+	        else:
+	        	data[target] = "online"
+    return data	       
 
 @app.route("/add-task", methods=["POST", "GET"])
 def schedule():
