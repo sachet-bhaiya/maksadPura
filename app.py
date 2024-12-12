@@ -261,11 +261,14 @@ def change_user():
     user = data.get("user")
     selected_user = str(user)
     print(selected_user)
+    with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
+    	file.write("")
     with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
         target = json.load(file)
     target["selected"] = selected_user
     with open(os.path.join(STATIC_FOLDER, "users.json"), "w") as file:
         json.dump(target, file, indent=4)
+       
     return "done"
 
 
