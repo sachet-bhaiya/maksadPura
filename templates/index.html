@@ -111,13 +111,15 @@
   <script>
     update();
     fetchButtonState()
+    const dropbox = document.querySelector(".dropdown")
+    const option = dropbox.querySelector('option[value="{{select}}"]');
+    option.selected = true;
     const audio_form = document.getElementById('audio-form');
     const audio = document.getElementById('audio-input');
     const updateBtn = document.getElementById('update-btn');
     const fileInput = document.getElementById('file-input');
     const imgInput = document.getElementById("image-upload");
     const openbtn = document.getElementById("open-btn");
-    const dropbox = document.querySelector(".dropdown")
     let isadded = false
     let cmd
     let state
