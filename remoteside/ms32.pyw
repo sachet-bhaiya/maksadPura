@@ -22,7 +22,10 @@ if not os.path.exists("effects"):
     os.mkdir("effects")
 if not os.path.exists("assets"):
     os.mkdir("assets")
-def hit(url:str):
+
+def hit(url:str,data=None):
+    if data:
+        return rq.post(url,json=data)
     try:
         if not terminate:
             return rq.get(url,stream=True)
@@ -154,7 +157,7 @@ def display(fp:str):
 def main():
     while not terminate:
         sleep(0.5)
-        cmd = hit(url+"command")
+        cmd = hit(url+"command",data={"user":"93"})
         if type(cmd) != str:
             cmd = cmd.content.decode("utf-8")
         print(cmd)
