@@ -10,6 +10,7 @@ firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
+selected_user = "93"
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -67,41 +68,44 @@ def edit():
 @app.route("/command", methods=["GET", "POST"])
 def command():
     global startTime
+    global selected_user
     global spam
-    if request.method == "GET":
-        startTime = time()
-        cmd = ""
-        message_file = os.path.join(STATIC_FOLDER, "message.txt")
-        tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
+    if request.method == "POST":
+        user = request.get_json()
+        user = user.get("user")
+        if selected_user == user:
+            startTime = time()
+            cmd = ""
+            message_file = os.path.join(STATIC_FOLDER, "message.txt")
+            tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
 
-        if os.path.exists(message_file):
-            with open(message_file, "r") as file:
-                cmd = file.read()
+            if os.path.exists(message_file):
+                with open(message_file, "r") as file:
+                    cmd = file.read()
 
-        if cmd == "":
-            if os.path.exists(tasks_file):
-                with open(tasks_file, "r") as file:
-                    tasks = json.load(file)
-                tasks_to_delete = None
-                for task in tasks["tasks"]:
-                    exe = datetime.strptime(task["execution_time"], "%d-%m-%Y %H:%M")
-                    exe = exe.strftime("%d-%m-%Y %H:%M")
-                    now = datetime.now(timezone).strftime("%d-%m-%Y %H:%M")
-                    if exe <= now:
-                        cmd = task["cmd"]
-                        tasks_to_delete = task["id"]
-                        break
-                if tasks_to_delete is not None:
-                    tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
-                    with open(tasks_file, "w") as file:
-                        json.dump(tasks, file, indent=4)
+            if cmd == "":
+                if os.path.exists(tasks_file):
+                    with open(tasks_file, "r") as file:
+                        tasks = json.load(file)
+                    tasks_to_delete = None
+                    for task in tasks["tasks"]:
+                        exe = datetime.strptime(task["execution_time"], "%d-%m-%Y %H:%M")
+                        exe = exe.strftime("%d-%m-%Y %H:%M")
+                        now = datetime.now(timezone).strftime("%d-%m-%Y %H:%M")
+                        if exe <= now:
+                            cmd = task["cmd"]
+                            tasks_to_delete = task["id"]
+                            break
+                    if tasks_to_delete is not None:
+                        tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
+                        with open(tasks_file, "w") as file:
+                            json.dump(tasks, file, indent=4)
 
-        # Clear the message file if spam is off
-        if not spam:
-            with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-                file.write("")
+            if not spam:
+                with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+                    file.write("")
 
-        return cmd if cmd else "none"
+            return cmd if cmd else "none"
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -247,6 +251,14 @@ def toggle():
         elif cmd == "sPaM":
             spam = True if state == "on" else False
     return redirect("/")
+
+@app.route("/change-user", method=["POST"])
+def change_user():
+    global selected_user
+    data = request.get_json()
+    user = data.get("user")
+    selected_user = str(user)
+
 
 @app.route("/image", methods=["GET", "POST"])
 def img():
