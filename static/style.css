@@ -559,14 +559,14 @@ display: none;
     text-align: center;
     display: inline-block;
     transition: background-color 0.3s ease;
-    width: 150px; /* Keep consistent width */
+    width: 160px; /* Keep consistent width */
     font-size: 14px; /* Slightly smaller font */
 }
 .open-btn{
     background-color: #007bff;
 }
 .upload-image-btn {
-    width: 150px; /* Keep consistent width */
+    width: 160px; /* Keep consistent width */
     font-size: 14px; /* Slightly smaller font */
     background-color: #238636; /* Green */
     color: white;
