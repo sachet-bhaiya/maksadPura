@@ -596,29 +596,35 @@ display: none;
 .right-toggle-buttons button:hover {
     opacity: 0.9;
 }
-/* Add a margin to create space between status and dropdown */
 #status {
-  margin-bottom: 20px; /* Adjust as needed */
+  margin-bottom: 20px; 
 }
-
-/* Style for the dropdown container */
 .dropdown-container {
-  margin-top: 20px;  /* Gap between status and dropdown */
+    margin-top: 20px; 
+  }
+  
+.dropdown {
+padding: 10px;
+font-size: 16px;
+border-radius: 5px;
+border: 2px solid #196b28; /* Green outline */
+background-color: #161b22; /* Same as the sidebar background color */
+color: #f0f6fc; /* Text color matching sidebar */
+width: 120px;
+transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Style for the dropdown */
-.dropdown {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  width: 120px;
+/* Optional: Hover and Focus Effects */
+.dropdown:hover,
+.dropdown:focus {
+border-color: #2ea043; /* Brighter green on hover or focus */
+box-shadow: 0 0 5px #2ea043; /* Add a glowing effect */
 }
 
 /* Optional: Style for label */
 .dropdown-container label {
-  font-size: 15px;
-  margin-bottom: 10px;
-  display: block;
+font-size: 15px;
+margin-bottom: 10px;
+display: block;
+color: #f0f6fc; /* Match text color */
 }
