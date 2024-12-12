@@ -642,8 +642,9 @@ display: block;
 color: #f0f6fc; /* Match text color */
 }
 #progress-container {
-            width: 100%;
-            background-color: #f3f3f3;
+    width: 80%;
+    display:none
+    background-color: #f3f3f3;
         }
 #progress-bar {
             width: 0%;
