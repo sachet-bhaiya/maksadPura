@@ -78,9 +78,10 @@ def command():
     global selected_user
     global spam
     if request.method == "POST":
-        startTime[user] = time()
+        
         user = request.get_json()
         user = user.get("user")
+        startTime[user] = time()
         if selected_user == user:          
             cmd = ""
             message_file = os.path.join(STATIC_FOLDER, "message.txt")
