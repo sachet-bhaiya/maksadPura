@@ -2,7 +2,10 @@ import cv2
 import time
 import ctypes
 import os 
-
+data = os.listdir("assets")
+if not data:
+    exit()
+file_path = "assets/"+data[0]
 window_name = "HECKBOI"
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
