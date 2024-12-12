@@ -252,7 +252,7 @@ def toggle():
             spam = True if state == "on" else False
     return redirect("/")
 
-@app.route("/change-user", method=["POST"])
+@app.route("/change-user", methods=["POST"])
 def change_user():
     global selected_user
     data = request.get_json()
