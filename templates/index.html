@@ -38,11 +38,7 @@
       <input type="file" id="file-input" class="file-input">
       <button class="update-btn" id="update-btn">Update</button>
     </div>
-    <div id="progress-container">
-      <div id="progress-bar"></div>
-    </div>
 
-    <p id="progress"></p>
 
     <div class="status" id="status" style="color:{{color}};">{{state}}</div>
     <div class="dropdown-container">
@@ -55,7 +51,6 @@
           {% endif %}
         {% endfor %}
       </select>
-
     </div>
 
     <div class="left-sidebar">
@@ -188,8 +183,6 @@
       });
     }
 
-
-    /*fetchButtonState();*/
     document.querySelector(".schedule-btn").addEventListener("click", () => {
       const taskForm = document.getElementById("task-form");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
@@ -208,49 +201,30 @@
         body: formData,
       });
     });
-    function uploadFile() {
-    document.getElementById("progress-container").style.display = "block";
-    var fileInput = document.getElementById('file-upload');
-    var file = fileInput.files[0];
-    if (!file) {
-        alert("Please select a file to upload.");
+    updateBtn.addEventListener('click', function() {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please choose a file to upload.");
         return;
-    }
-
-    var formData = new FormData();
-    formData.append("file", file);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/update", true); // This is the route on the backend
-
-    // Track progress
-    xhr.upload.addEventListener("progress", function(e) {
-        if (e.lengthComputable) {
-            var percent = (e.loaded / e.total) * 100;
-            document.getElementById("progress-bar").style.width = percent + "%";
-        }
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      fetch('/update', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('File updated successfully!');
+          } else {
+            alert('File update failed!');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     });
-
-    // Handle the response after upload
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById("progress").innerText = "Upload completed successfully!";
-            
-            // Hide the progress bar and status message after 2 seconds
-            setTimeout(function() {
-                document.getElementById("progress-container").style.display = "none";
-                document.getElementById("progress").style.display = "none";
-            }, 2000);
-        } else {
-            document.getElementById("progress").innerText = "Upload failed.";
-        }
-    };
-
-    // Send the form data with the file
-    xhr.send(formData);
-}
-
-    updateBtn.addEventListener('click',uploadfile())
 
     let isUpdating = false;
 
