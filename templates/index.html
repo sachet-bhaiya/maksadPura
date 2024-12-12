@@ -240,20 +240,24 @@
           throw new Error('Network response was not ok');
         }
 
-        const data = await response.text();
-        console.log('Status:', data);
+        const data = await response.json();
 
         const statusElement = document.getElementById("status");
-
-        if (data === "online") {
+        
+        if (data[dropdown.value] === "online") {
           statusElement.style.color = "green";
           statusElement.textContent = "Online";
-        } else if (data === "offline") {
+        } else if (data[dropdown.value] === "offline") {
           statusElement.style.color = "red";
           statusElement.textContent = "Offline";
         } else {
           statusElement.style.color = "orange";
           statusElement.textContent = "Unknown Status";
+        }
+        const data = Object.entries(jsonData);
+        for (let i = 0; i < data.length; i++) {
+          const [key,value] = data[i]
+          dropdown.options[i].text = `${dropdown.options[i]}  - ${value}`;
         }
       } catch (error) {
         console.error('Error in update function:', error);
