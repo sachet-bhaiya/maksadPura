@@ -566,6 +566,8 @@ display: none;
     background-color: #007bff;
 }
 .upload-image-btn {
+    width: 150px; /* Keep consistent width */
+    font-size: 14px; /* Slightly smaller font */
     background-color: #238636; /* Green */
     color: white;
     padding: 10px 20px;
