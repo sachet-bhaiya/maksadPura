@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,14 +41,17 @@
 
     <div class="status" id="status" style="color:{{color}};">{{state}}</div>
     <div class="dropdown-container">
-  <label for="myDropdown">Choose an option:</label>
-  <select id="myDropdown" class="dropdown">
-    <option value="Option 1">Option 1</option>
-    <option value="Option 2">Option 2</option>
-    <option value="Option 3">Option 3</option>
-    <option value="Option 4">Option 4</option>
-  </select>
-</div>
+      <label for="Dropdown">Select Target</label>
+      <select id="Dropdown" class="dropdown">
+        <option value="{{selected}}">{{selected}}</option>
+        {% for user in users %}
+          {% if user != selected %}
+            <option value="{{user}}">{{user}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+
+    </div>
 
     <div class="left-sidebar">
       <div class="sidebar-header">Schedule Task</div>
@@ -118,10 +120,19 @@
     const fileInput = document.getElementById('file-input');
     const imgInput = document.getElementById("image-upload");
     const openbtn = document.getElementById("open-btn");
+    const dropdown = document.getElementById("Dropdown")
     let isadded = false
     let cmd
     let state
-
+    dropdown.addEventListener("change",()=>{
+      fetch("/change-user",{
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user : dropdown.value })
+      })
+    })
     async function fetchButtonState() {
       try {
         const response = await fetch('/static/state.json');
@@ -171,7 +182,7 @@
         });
       });
     }
-    
+
 
     /*fetchButtonState();*/
     document.querySelector(".schedule-btn").addEventListener("click", () => {
