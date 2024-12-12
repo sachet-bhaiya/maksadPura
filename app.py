@@ -17,6 +17,7 @@ with open(os.path.join(STATIC_FOLDER,"users.json"),"r") as file:
 	TARGETS = json.load(file)
 for TARGET in TARGETS:
 	startTime[TARGET] = time()
+print(startTime)
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
 
