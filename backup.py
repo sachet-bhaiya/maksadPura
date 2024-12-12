@@ -106,7 +106,7 @@ def command():
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                     file.write("")
 
-            return cmd if cmd else "none"
+        return cmd if cmd else "none"
     return "none"
 
 @app.route("/audio", methods=["POST", "GET"])
