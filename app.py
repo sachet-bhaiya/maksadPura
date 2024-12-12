@@ -59,7 +59,7 @@ def edit():
     if request.method == "POST":
         message = request.form["text"]   
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-            if not spam and ("pLaY" not in message and "oPeN" not in message):    
+            if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
             else:
                 file.write(message)
