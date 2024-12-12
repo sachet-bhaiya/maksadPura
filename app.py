@@ -44,6 +44,7 @@ def terminal():
     ss = data1["spamToggleState"]["state"]
     sc = data1["spamToggleState"]["color"]
     if not firstReload:
+        print(startTime[selected_user])
         if time() - startTime[selected_user] <= 2.5:
             state = "Online"
             color = "green"
