@@ -261,6 +261,7 @@ def change_user():
     data = request.get_json()
     user = data.get("user")
     selected_user = str(user)
+    print(selected_user)
     with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
         target = json.load(file)
     target["selected"] = selected_user
