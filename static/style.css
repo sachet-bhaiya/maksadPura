@@ -550,7 +550,7 @@ display: none;
 }
 
 /* Button Styles */
-.upload-image-btn,
+
 .open-btn {
     color: white;
     padding: 8px 16px; /* Adjust padding for size */
@@ -565,8 +565,18 @@ display: none;
 .open-btn{
     background-color: #007bff;
 }
-.update-image-btn{
-    background-color: #ffffff;
+.upload-image-btn {
+    background-color: #238636; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block; /* Make it behave like a button */
+}
+
+.upload-image-btn:hover {
+    background-color: #2ea043; /* Lighter green for hover */
 }
 
 /* File Input Hidden */
