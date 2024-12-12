@@ -106,6 +106,7 @@ def command():
                     file.write("")
 
             return cmd if cmd else "none"
+    return "none"
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
