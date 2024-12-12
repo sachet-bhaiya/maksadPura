@@ -106,6 +106,7 @@ def command():
                     file.write("")
 
             return cmd if cmd else "none"
+    return "none"
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -252,7 +253,7 @@ def toggle():
             spam = True if state == "on" else False
     return redirect("/")
 
-@app.route("/change-user", method=["POST"])
+@app.route("/change-user", methods=["POST"])
 def change_user():
     global selected_user
     data = request.get_json()
