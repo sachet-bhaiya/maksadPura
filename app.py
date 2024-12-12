@@ -73,6 +73,7 @@ def command():
     if request.method == "POST":
         user = request.get_json()
         user = user.get("user")
+        print(user)
         if selected_user == user:
             startTime = time()
             cmd = ""
@@ -259,6 +260,7 @@ def change_user():
     data = request.get_json()
     user = data.get("user")
     selected_user = str(user)
+    return "done"
 
 
 @app.route("/image", methods=["GET", "POST"])
