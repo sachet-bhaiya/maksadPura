@@ -571,6 +571,7 @@ display: none;
     background-color: #238636; /* Green */
     color: white;
     padding: 10px 20px;
+    white-space: nowrap;   
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
