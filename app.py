@@ -27,6 +27,9 @@ def terminal():
     state = None
     color = "red"
     data1= None
+    with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
+        target = json.load(file)
+    users = target["users"]
     with open(state_file, "r") as file:
         data1 = json.load(file)
     hs = data1["hideToggleState"]["state"]
@@ -46,10 +49,8 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc)
-@app.route("/ip",methods=["GET"])
-def ip():
-	return request.headers.get("X-Forwarded-For")
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,users=users)
+
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
     global spam
