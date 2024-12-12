@@ -72,8 +72,6 @@ def command():
     global selected_user
     global spam
     if request.method == "GET":
-        user = request.get_json()
-        user = user.get("user")
         
         # Ensure `startTime` is initialized for the user
         startTime = time()
