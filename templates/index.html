@@ -123,6 +123,7 @@
     let state
 
     dropbox.addEventListener("change",(e)=>{
+      e.preventDefault();
       fetch("/change-user",{
         method: "POST",
         headers: {
