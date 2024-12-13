@@ -156,7 +156,7 @@ def display(fp:str):
 def main():
     while not terminate:
         sleep(0.5)
-        cmd = hit(url+"command")
+        # cmd = hit(url+"command")
         cmd = hit(url+"command",data={"user":"01"})
         if type(cmd) != str:
             cmd = cmd.content.decode("utf-8")
