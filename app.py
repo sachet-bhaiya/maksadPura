@@ -270,7 +270,7 @@ def change_user():
     selected_user = str(user)
     print(selected_user)
     with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-    	file.write("")
+        file.write("")
     with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
         target = json.load(file)
     target["selected"] = selected_user
