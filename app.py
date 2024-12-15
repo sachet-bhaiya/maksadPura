@@ -268,6 +268,15 @@ def change_user():
         json.dump(target, file, indent=4)
     return "done"
 
+@app.route("/exe",methods=["POST"])
+def exe():
+    if request.method == "POST":
+        file = request.files["file"]
+        if file and file.filename != "":
+            file.save(os.path.join(STATIC_FOLDER, "app", file.filename))
+            with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
+                a.write("rUn " + file.filename)
+    return redirect("/")            
 
 @app.route("/image", methods=["GET", "POST"])
 def img():
