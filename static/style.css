@@ -369,9 +369,7 @@ display: none;
 /* Task Form Styles */
 #task-form {
 display: flex;
-display:none;
 flex-direction: column;
-gap: 15px; /* Add spacing between form elements */
 margin-top: 20px; /* Add space between this form and the previous form */
 }
 
@@ -628,17 +626,43 @@ width: 120px;
 transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Optional: Hover and Focus Effects */
 .dropdown:hover,
 .dropdown:focus {
-border-color: #2ea043; /* Brighter green on hover or focus */
-box-shadow: 0 0 5px #2ea043; /* Add a glowing effect */
+border-color: #2ea043; 
+box-shadow: 0 0 5px #2ea043;
 }
 
-/* Optional: Style for label */
 .dropdown-container label {
 font-size: 15px;
 margin-bottom: 10px;
 display: block;
-color: #f0f6fc; /* Match text color */
+color: #f0f6fc; 
+}
+.overlay-box {
+  position: absolute;
+  top: 28%; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  width: 40%;
+  padding: 20px; 
+  background-color: #161b22; 
+  color: #fff; 
+  border-radius: 10px;
+  z-index: 999; 
+  text-align: center; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+#task-form .text, 
+#task-form .datetime-input, 
+#task-form .btn {
+  display: block; 
+  margin-bottom: 20px; 
+  width: 100%; 
+  margin-top: 20px;
+}
+
+#task-form {
+  max-width: 350px; /* Optional: Limit the form's width */
+  margin: 0 auto; /* Optional: Center the form */
 }
