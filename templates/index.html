@@ -42,7 +42,12 @@
       <input type="file" id="file-input" class="file-input">
       <button class="update-btn" id="update-btn">Update</button>
     </div>
-
+    
+    <div class="center-bottom-buttons">
+      <label for="center-file-input" class="btn">Choose File</label>
+      <input type="file" id="center-file-input" class="exe-input" style="display: none;">
+      <button class="btn" id="run-btn">Run</button>
+    </div>
 
     <div class="status" id="status" style="color:{{color}};">{{state}}</div>
     <div class="dropdown-container">
@@ -125,6 +130,8 @@
     const imgInput = document.getElementById("image-upload");
     const openbtn = document.getElementById("open-btn");
     const dropdown = document.getElementById("Dropdown")
+    const runbtn = document.getElementById("run-btn");
+    const exeInput = document.getAnimations("exe-input")
     let isadded = false
     let cmd
     let state
@@ -191,7 +198,19 @@
       const taskForm = document.getElementById("overlay-box");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
     });
-
+    runbtn.addEventListener('click', function() {
+      const file = exeInput.files[0];
+      if (!file) {
+        alert("Please choose a file to upload.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      fetch('/exe', {
+        method: 'POST',
+        body: formData,
+      });
+    });
     openbtn.addEventListener('click', function() {
       const file = imgInput.files[0];
       if (!file) {
