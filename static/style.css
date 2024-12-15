@@ -666,3 +666,33 @@ color: #f0f6fc;
   max-width: 350px; /* Optional: Limit the form's width */
   margin: 0 auto; /* Optional: Center the form */
 }
+.center-bottom-buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+.center-bottom-buttons .btn {
+background-color: #238636; /* Default green background */
+color: white;
+padding: 8px 16px; /* Reduced padding for a smaller size */
+border-radius: 5px;
+cursor: pointer;
+text-align: center;
+display: inline-block;
+transition: background-color 0.3s ease;
+width: 150px; /* Same width for both buttons */
+font-size: 14px; /* Slightly smaller font */
+}
+
+/* Hover Effects */
+.center-bottom-buttons .btn :hover {
+background-color: #2ea043;
+}
+#run-btn{
+  background-color: #007bff;
+}
