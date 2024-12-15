@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ms32</title>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
@@ -26,6 +26,10 @@
         <button class="btn" type="submit">Open</button>
       </form>
 
+      
+    </div>
+    
+    <div class="overlay-box">
       <form action="/add-task" method="POST" id="task-form">
         <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
         <input type="datetime-local" class="datetime-input" name="task-datetime" required>
@@ -184,7 +188,7 @@
     }
 
     document.querySelector(".schedule-btn").addEventListener("click", () => {
-      const taskForm = document.getElementById("task-form");
+      const taskForm = document.getElementById("overlay-box");
       taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
     });
 
