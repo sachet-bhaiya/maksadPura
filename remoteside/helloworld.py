@@ -1,7 +1,5 @@
-import keyboard
-import pyautogui
+import os
+import shutil
 
-while True:
-    if keyboard.is_pressed("alt+f4"):
-        print("pressed")
-        keyboard.press("win+d")
+if os.listdir("build"):
+    shutil.rmtree("build")

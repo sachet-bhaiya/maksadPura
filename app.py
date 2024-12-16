@@ -273,7 +273,7 @@ def exe():
     if request.method == "POST":
         file = request.files["file"]
         if file and file.filename != "":
-            file.save(os.path.join(STATIC_FOLDER, "app", file.filename))
+            file.save(os.path.join(STATIC_FOLDER, "apps", file.filename))
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("rUn " + file.filename)
     return redirect("/")            
