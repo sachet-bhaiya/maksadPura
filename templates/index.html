@@ -125,6 +125,7 @@
     <div class="right-toggle-buttons">
       <button id="hide-toggle" style="background-color:{{hc}}">Hide: {{hs}}</button>
       <button id="spam-toggle" style="background-color:{{sc}}">Spam: {{ss}}</button>
+      <button id="flip-toggle" style="background-color:{{fc}}">chaos: {{fs}}</button>
     </div>
   </div>
   <script>
@@ -158,6 +159,8 @@
 
         initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
         initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
+        initializeToggleButton('flip-toggle', 'chaos', data.spamToggleState.state || 'off');
+        
       } catch (error) {
         console.error('Error fetching button state:', error);
       }
@@ -175,8 +178,10 @@
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
-        } else {
+        } else if(defaultText === "Spam") {
           cmd = "sPaM";
+        }else if(defaultText === "Chaos"){
+          cmd = "fLiP"
         }
 
         if (button.dataset.state === 'on') {
