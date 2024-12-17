@@ -38,6 +38,8 @@ def terminal():
     hc = data1["hideToggleState"]["color"]
     ss = data1["spamToggleState"]["state"]
     sc = data1["spamToggleState"]["color"]
+    fs = data1["flipToggleState"]["state"]
+    fc = data1["flipToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -51,7 +53,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fc=fc,fs=fs,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -249,11 +251,13 @@ def toggle():
             elif cmd == "sPaM":
                 data["spamToggleState"]["state"] = state
                 data["spamToggleState"]["color"] = color
-        
+            elif cmd == "fLiP":
+            	data["flipToggleState"]["state"] = state
+            	data["flipToggleState"]["color"] = color	                   
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE":
+        if cmd == "hIdE" or "fLiP":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
