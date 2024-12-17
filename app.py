@@ -288,5 +288,20 @@ def img():
                 a.write("iMaGe " + file.filename)
     return redirect("/")
 
+@app.route("/output",methods=["POST","GET"])
+def output():
+    data = request.get_json()
+    err = data["err"]
+    user = data["user"]
+    log = f"""
+    user : {user}, 
+    log : {err}, 
+    time : {datetime.now()}
+[---------------------------------------------------]
+"""
+    with open(os.path.join(STATIC_FOLDER,"output.txt"),"a") as file:
+        file.write(log)
+    return log
+
 if __name__ == "__main__":
     app.run(debug=True)
