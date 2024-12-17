@@ -71,14 +71,9 @@ def command():
     global startTime
     global selected_user
     global spam
-    ip,_,_ = request.headers.get('X-Forwarded-For').split(",")
+    ip = request.headers.get('X-Forwarded-For')
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
         data = file.read()
-        _,count = data.split("|")
-        count = count[-1]
-        if ip in data:
-            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
-                file.write(f"\nip : {ip} | count : {count}\n[----------------------------------------------------------------]")
         if ip not in data:
             with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
                 file.write(f"\nip : {ip} | count : 0\n[----------------------------------------------------------------]")
