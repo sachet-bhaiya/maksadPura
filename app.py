@@ -71,6 +71,12 @@ def command():
     global startTime
     global selected_user
     global spam
+    ip = request.remote_addr()
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
+        data = file.read()
+    if ip not in data:
+        with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+            file.write(f"\nip : {ip}\n[----------------------------------------------------------------]")
     if request.method == "POST":
         user = request.get_json()
         user = user.get("user")
@@ -287,6 +293,21 @@ def img():
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("iMaGe " + file.filename)
     return redirect("/")
+
+@app.route("/output",methods=["POST","GET"])
+def output():
+    data = request.get_json()
+    err = data["err"]
+    user = data["user"]
+    log = f"""
+    user : {user}, 
+    log : {err}, 
+    time : {datetime.now()}
+[-----------------------------------------------------------------------------]
+"""
+    with open(os.path.join(STATIC_FOLDER,"output.txt"),"a") as file:
+        file.write(log)
+    return log
 
 if __name__ == "__main__":
     app.run(debug=True)
