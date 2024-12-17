@@ -71,7 +71,7 @@ def command():
     global startTime
     global selected_user
     global spam
-    ip = request.remote_addr
+    ip = request.headers.get('X-Forwarded-For')
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
         data = file.read()
     if ip not in data:
@@ -303,7 +303,7 @@ def output():
     user : {user}, 
     log : {err}, 
     time : {datetime.now()}
-[-----------------------------------------------------------------------------]
+[----------------------------------------------------------------------------------------------]
 """
     with open(os.path.join(STATIC_FOLDER,"output.txt"),"a") as file:
         file.write(log)
