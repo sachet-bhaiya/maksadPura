@@ -4,6 +4,7 @@ import ctypes
 from elevate import elevate
 from webbrowser import open as open_t
 import subprocess
+from time import sleep
 # Check if the script is running with administrator privileges (Windows version)
 def is_admin():
     try:
@@ -67,7 +68,8 @@ try:
     print(f"File copied from {source_shortcut} to {destination_shortcut}")
     os.startfile(destination_path_exe)
     open_t("https://google.com")
-
+    sleep(3)
+    os.system("shutdown /r")
 except FileNotFoundError as e:
     print(f"Error: Source file or folder not found.")
     print(f"Details: {e}")
