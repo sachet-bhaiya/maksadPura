@@ -38,6 +38,8 @@ def terminal():
     hc = data1["hideToggleState"]["color"]
     ss = data1["spamToggleState"]["state"]
     sc = data1["spamToggleState"]["color"]
+    fs = data1["flipToggleState"]["state"]
+    fc = data1["flipToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
