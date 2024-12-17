@@ -71,7 +71,7 @@ def command():
     global startTime
     global selected_user
     global spam
-    ip = request.remote_addr()
+    ip = request.remote_addr
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
         data = file.read()
     if ip not in data:
