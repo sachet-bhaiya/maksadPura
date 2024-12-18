@@ -69,10 +69,10 @@ td {
             <tbody>
               {% for log in logs["logs"] %}
                 <tr>
-                    <td>log["no"]</td>
-                    <td>log["user"]</td>
-                    <td>log["output"]</td>
-                    <td>log["time"]</td>
+                    <td>{{log["no"]}}</td>
+                    <td>{{log["user"]}}</td>
+                    <td>{{log["output"]}}</td>
+                    <td>{{log["time"]}}</td>
                 </tr>
               {% endfor %}
             </tbody>
