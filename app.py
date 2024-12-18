@@ -299,26 +299,44 @@ def img():
                 a.write("iMaGe " + file.filename)
     return redirect("/")
 
-@app.route("/output",methods=["POST","GET"])
+@app.route("/logs",methods=["GET","POST"])
+def logs():
+	with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
+		data = json.load(file)
+	return render_template("logs.html",logs=data)
+              
+
+@app.route("/output", methods=["POST", "GET"])
 def output():
     data = request.get_json()
     err = data["err"]
     user = data["user"]
-    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
-        ips = file.read().split("\n")
-        count = len(ips)
-        if count > 100:
-            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
-                file.write("")
-    log = f"""
-    user : {user}, 
-    log : {err}, 
-    time : {datetime.now()}
-[----------------------------------------------------------------------------------------------]
-"""
-    with open(os.path.join(STATIC_FOLDER,"output.txt"),"a") as file:
-        file.write(log)
+    logfile = os.path.join(STATIC_FOLDER, "log.json")
+    
+    try:
+        if os.path.exists(logfile):
+            with open(logfile, "r") as file:
+                data = json.load(file)
+    except Exception as e:
+        return f"Error reading log.json: {e}", 500
+
+    log = {
+        "no": len(data["logs"]) + 1, 
+        "output": err,
+        "time": datetime.now().strftime("%d-%m-%Y %H:%M"),
+        "user": user
+    }
+    
+    data["logs"].append(log)
+
+    try:
+        with open(logfile, "w") as file:
+            json.dump(data, file, indent=4)
+    except Exception as e:
+        return f"Error writing to log.json: {e}", 500    
+    
     return log
+
 @app.route("/clear",methods=["POST","GET"])
 def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
