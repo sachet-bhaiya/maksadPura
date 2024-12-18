@@ -312,7 +312,7 @@ def output():
     data = request.get_json()
     err = data["err"]
     user = data["user"]
-    logfile = os.path.join(STATIC_FOLDER, "log.json")
+    logfile = os.path.join(STATIC_FOLDER, "logs.json")
     
     try:
         if os.path.exists(logfile):
