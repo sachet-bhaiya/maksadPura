@@ -323,5 +323,6 @@ def output():
 def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
         file.write("")
+    return "clear"
 if __name__ == "__main__":
     app.run(debug=True)
