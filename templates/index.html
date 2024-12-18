@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ms32 is a website designed to for hacking school devices. This website is made by some professional hackers👽.NOTE : If you open this website then your device will also be hacked so open at your own risk. Anyone other than admin opens this website then a virus will also be injected to your device. insta: https://www.instagram.com/_shakti.ladke_?igsh=eDBzZnpncDZ3a2Nr
+    kisi ka baap se nahi darte 👽">
   <title>ms32</title>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
@@ -11,9 +13,15 @@
 </head>
 
 <body>
-  <h1 class="site-heading">
+  <h1 style="display:none;">ms32-sha2</h1>
+  <div style="display:none;">
+    About the website : 
+    ms32 is a website designed to for hacking school devices. This website is made by some professional hackers👽.NOTE : If you open this website then your device will also be hacked so open at your own risk. Anyone other than admin opens this website then a virus will also be injected to your device. insta: https://www.instagram.com/_shakti.ladke_?igsh=eDBzZnpncDZ3a2Nr
+    kisi ka baap se nahi darte 👽
+  </div>
+  <h2 class="site-heading">
     <pre>Project ms32               </pre>
-  </h1>
+  </h2>
   <div class="home" id="home">
     <div class="container">
       <form action="/edit" method="POST" id="message-form">
@@ -117,9 +125,9 @@
     <div class="right-toggle-buttons">
       <button id="hide-toggle" style="background-color:{{hc}}">Hide: {{hs}}</button>
       <button id="spam-toggle" style="background-color:{{sc}}">Spam: {{ss}}</button>
+      <button id="flip-toggle" style="background-color:{{fc}}">Chaos: {{fs}}</button>
     </div>
   </div>
-
   <script>
     update();
     fetchButtonState()
@@ -151,6 +159,8 @@
 
         initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
         initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
+        initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
+        
       } catch (error) {
         console.error('Error fetching button state:', error);
       }
@@ -168,8 +178,10 @@
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
-        } else {
+        } else if(defaultText === "Spam") {
           cmd = "sPaM";
+        }else if(defaultText === "Chaos"){
+          cmd = "fLiP"
         }
 
         if (button.dataset.state === 'on') {
