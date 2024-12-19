@@ -711,26 +711,3 @@ background-color: #2ea043;
     background-color: #4caf50;
     transition: width 0.3s ease;
   }
-  /* Dropdown styling */
-.dropdown {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dropdown option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px;
-}
-
-/* Circle styling */
-.circle {
-  width: 10px;
-  height: 10px;
-  background-color: green;
-  /* Black circle, you can change color */
-  border-radius: 50%;
-  margin-left: 10px;
-}
