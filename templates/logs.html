@@ -90,6 +90,7 @@ td {
     const logs = await response.json()
     const logsTableBody = document.querySelector("#logTable tbody");
     let color;
+    logsTableBody.innerHTML= ""
     logs.logs.forEach((log)=>{
       if(log.output.includes("SUCESS") || log.output.includes("ONLINE")){
         color = "green"
@@ -100,7 +101,7 @@ td {
       else{
         color = "orange";
       }
-       /* logsTableBody.innerHTML= ""*/
+    
     logsTableBody.innerHTML += `
         <tr>
           <td>${log.no}</td>
