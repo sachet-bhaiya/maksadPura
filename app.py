@@ -8,42 +8,18 @@ from zoneinfo import ZoneInfo
 app = Flask(__name__)
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
+startTime = time()
 spam = False
 selected_user = "93"
 prevlog = 0
 STATIC_FOLDER = os.path.join("static")
-state_file = os.path.join(STATIC_FOLDER, "state.json")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
 
 UPLOAD_FOLDER = os.path.join(STATIC_FOLDER, "sounds")
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-    
-with open(os.path.join(STATIC_FOLDER,"users.json")) as file:
-	data = json.load(file)
-users = data["users"]
-startTime = {}
-for user in users:
-	startTime[user] = time()
-with open(state_file,"w") as file:
-	states = {}
-	for user in users:
-	           states[str(user)] = {
-            "hideToggleState": {
-                "state": "off",
-                "color": "red"
-            },
-            "spamToggleState": {
-                "state": "off",
-                "color": "red"
-            },
-            "flipToggleState": {
-                "state": "off",
-                "color": "red"
-            }
-        }
-	json.dump(states, file, indent=4)			
+
 @app.route("/")
 def terminal():
     global firstReload
@@ -59,17 +35,17 @@ def terminal():
     selected = target["selected"]
     with open(state_file, "r") as file:
         data1 = json.load(file)
-    hs = data1[selected_user]["hideToggleState"]["state"]
-    hc = data1[selected_user]["hideToggleState"]["color"]
-    ss = data1[selected_user]["spamToggleState"]["state"]
-    sc = data1[selected_user]["spamToggleState"]["color"]
-    fs = data1[selected_user]["flipToggleState"]["state"]
-    fc = data1[selected_user]["flipToggleState"]["color"]
+    hs = data1["hideToggleState"]["state"]
+    hc = data1["hideToggleState"]["color"]
+    ss = data1["spamToggleState"]["state"]
+    sc = data1["spamToggleState"]["color"]
+    fs = data1["flipToggleState"]["state"]
+    fc = data1["flipToggleState"]["color"]
     if not firstReload:
-        if time() - startTime[selected_user] <= 2.5:
+        if time() - startTime <= 2.5:
             state = "Online"
             color = "green"
-        elif time() - startTime[selected_user] > 2.5:
+        elif time() - startTime > 2.5:
             state = "Offline"
             color = "red"
     if os.path.exists(tasks_file):
@@ -108,7 +84,7 @@ def command():
         user = request.get_json()
         user = user.get("user")
         if selected_user == user:
-            startTime[user] = time()
+            startTime = time()
             cmd = ""
             message_file = os.path.join(STATIC_FOLDER, "message.txt")
             tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
@@ -195,20 +171,15 @@ def url():
 
 @app.route("/status", methods=["POST", "GET"])
 def status():
-    global startTime
-    global users
     if request.method == "GET":
-        state = {}
-        if time() - startTime[selected_user] >= 2.5:
-        	state[selected_user] = "offline"
-        else: state[selected_user] = "online"
-        for user in users:
-        	deltaTime = time() - startTime[user]
-	        if deltaTime >= 2.5:
-	        	state[user] = "offline"
-	        else:
-	            state[user] = "online"
-        return jsonify(state)	            
+        deltaTime = time() - startTime
+        if deltaTime >= 2.5:
+            redirect("/")
+            return "offline"
+        else:
+            redirect("/")
+            return "online"
+
 @app.route("/add-task", methods=["POST", "GET"])
 def schedule():
     if request.method == "POST":
@@ -276,14 +247,14 @@ def toggle():
                 data = json.load(file)
         
             if cmd == "hIdE":
-                data[selected_user]["hideToggleState"]["state"] = state
-                data[selected_user]["hideToggleState"]["color"] = color
+                data["hideToggleState"]["state"] = state
+                data["hideToggleState"]["color"] = color
             elif cmd == "sPaM":
-                data[selected_user]["spamToggleState"]["state"] = state
-                data[selected_user]["spamToggleState"]["color"] = color
+                data["spamToggleState"]["state"] = state
+                data["spamToggleState"]["color"] = color
             elif cmd == "fLiP":
-                data[selected_user]["flipToggleState"]["state"] = state
-                data[selected_user]["flipToggleState"]["color"] = color
+                data["flipToggleState"]["state"] = state
+                data["flipToggleState"]["color"] = color
                 
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
