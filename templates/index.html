@@ -180,9 +180,7 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
   button.dataset.state = initialState;
   button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
   button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-  if(isadded){return}
-  else if (!isadded) {
-    isadded = true;
+  
   
 
   button.addEventListener('click', function () {
