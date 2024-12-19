@@ -15,7 +15,7 @@ prevlog = 0
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
-
+state_file = os.path.join(STATIC_FOLDER, "state.json")
 UPLOAD_FOLDER = os.path.join(STATIC_FOLDER, "sounds")
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
