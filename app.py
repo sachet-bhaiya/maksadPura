@@ -26,7 +26,7 @@ users = data["users"]
 startTime = {}
 for user in users:
 	startTime[user] = time()
-with open(state_file) as file:
+with open(state_file,"w") as file:
 	states = {}
 	for user in users:
 	           states[str(user)] = {
