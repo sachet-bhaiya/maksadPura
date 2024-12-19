@@ -154,6 +154,7 @@
         },
         body: JSON.stringify({ user : dropdown.value })
       })
+      fetchButtonState()
     })
     async function fetchButtonState() {
       try {
@@ -175,7 +176,8 @@
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      if (!isadded) {
+      if(isadded){return}
+      else if (!isadded) {
         isadded = true;
       }
       button.addEventListener('click', function() {
@@ -289,39 +291,49 @@
     
 
     async function update() {
+  try {
+    const response = await fetch("/status", { method: "GET" });
 
-      try {
-        const response = await fetch("/status", { method: "GET" });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+    const data = await response.json();
+    const selected = data[dropdown.value];
 
-        const data = await response.text();
-        console.log('Status:', data);
+    console.log('Status:', data);
 
-        const statusElement = document.getElementById("status");
+    const statusElement = document.getElementById("status");
+    if (selected === "online") {
+      statusElement.style.color = "green";
+      statusElement.textContent = "Online";
+    } else if (selected === "offline") {
+      statusElement.style.color = "red";
+      statusElement.textContent = "Offline";
+    } else {
+      statusElement.style.color = "orange";
+      statusElement.textContent = "Unknown Status";
+    }
+    for (let i = 0; i < dropdown.options.length; i++) {
+      const user = dropdown.options[i].value;
+      const userStatus = data[user];
 
-        if (data === "online") {
-          statusElement.style.color = "green";
-          statusElement.textContent = "Online";
-        } else if (data === "offline") {
-          statusElement.style.color = "red";
-          statusElement.textContent = "Offline";
-        } else {
-          statusElement.style.color = "orange";
-          statusElement.textContent = "Unknown Status";
-        }
-      } catch (error) {
-        console.error('Error in update function:', error);
-
-        const statusElement = document.getElementById("status");
-        statusElement.style.color = "orange";
-        statusElement.textContent = "Connection Error";
-      } finally {
-        isUpdating = false;
+      if (userStatus === "online") {
+        dropdown.options[i].text = `${user}     🟢`;
+      } else if (userStatus === "offline") {
+        dropdown.options[i].text = `${user}     🔴`;
+      } else {
+        dropdown.options[i].text = `${user}     ❓`; // For unknown status
       }
     }
+
+  } catch (error) {
+    console.error('Error in update function:', error);
+    const statusElement = document.getElementById("status");
+    statusElement.style.color = "orange";
+    statusElement.textContent = "Connection Error";
+  }
+}
 
     setInterval(update, 700);
     /*setInterval(fetchButtonState,1300)*/
