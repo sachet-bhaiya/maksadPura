@@ -13,6 +13,9 @@
 </head>
 
 <body>
+  <div class="progress-bar-container" style="display:none;">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
   <h1 style="display:none;">ms32-sha2</h1>
   <div style="display:none;">
     About the website : 
@@ -25,7 +28,7 @@
   <div class="home" id="home">
     <div class="container">
       <form action="/edit" method="POST" id="message-form">
-        <textarea placeholder="Type something..." class="text" name="text"></textarea>
+        <input placeholder="Type something..." class="text" name="text" required>
         <button class="btn" type="submit">Send</button>
       </form>
 
@@ -130,7 +133,6 @@
   </div>
   <script>
     update();
-    fetchButtonState()
     const audio_form = document.getElementById('audio-form');
     const audio = document.getElementById('audio-input');
     const updateBtn = document.getElementById('update-btn');
@@ -143,6 +145,7 @@
     let isadded = false
     let cmd
     let state
+    fetchButtonState()
     dropdown.addEventListener("change",()=>{
       fetch("/change-user",{
         method:"POST",
@@ -151,6 +154,7 @@
         },
         body: JSON.stringify({ user : dropdown.value })
       })
+      update()
     })
     async function fetchButtonState() {
       try {
@@ -172,9 +176,7 @@
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      if (!isadded) {
-        isadded = true;
-      }
+      
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
@@ -242,31 +244,50 @@
         alert("Please choose a file to upload.");
         return;
       }
+    
+      const progressBarContainer = document.querySelector(".progress-bar-container");
+      const progressBar = document.getElementById("progress-bar");
+      progressBarContainer.style.display = "block";
+      progressBar.style.width = "0%";
+    
       const formData = new FormData();
       formData.append('file', file);
-      fetch('/update', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
+    
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/update', true);
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percentage = Math.round((event.loaded / event.total) * 100);
+          progressBar.style.width = `${percentage}%`;
+        }
+      });
+    
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          if (response.success) {
             alert('File updated successfully!');
+            progressBarContainer.style.display = "none";
           } else {
             alert('File update failed!');
           }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+        } else {
+          alert('An error occurred while uploading the file.');
+        }
+    
+        progressBarContainer.style.display = "none";
+      };
+    
+      xhr.onerror = () => {
+        alert('An error occurred during the upload.');
+        progressBarContainer.style.display = "none";
+      };
+    
+      xhr.send(formData);
     });
-
-    let isUpdating = false;
+    
 
     async function update() {
-      if (isUpdating) return;
-
-      isUpdating = true;
 
       try {
         const response = await fetch("/status", { method: "GET" });
