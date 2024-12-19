@@ -23,9 +23,9 @@ with open(os.path.join(STATIC_FOLDER,"users.json")) as file:
 	data = json.load(file)
 users = data["users"]
 with open(state_file,"w") as file:
-	states = {}
-	for user in users:
-	           states[str(user)] = {
+    states = {}
+    for user in users:
+        states[str(user)] = {
             "hideToggleState": {
                 "state": "off",
                 "color": "red"
@@ -39,7 +39,7 @@ with open(state_file,"w") as file:
                 "color": "red"
             }
         }
-	json.dump(states, file, indent=4)			
+    json.dump(states, file, indent=4)			
 @app.route("/")
 def terminal():
     global firstReload
