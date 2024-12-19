@@ -157,12 +157,14 @@ dropdown.addEventListener("change", () => {
     },
     body: JSON.stringify({ user: dropdown.value })
   });
+  fetchButtonState()
 });
 
 async function fetchButtonState() {
   try {
     const response = await fetch('/static/state.json');
-    const data = await response.json();
+    const data1 = await response.json();
+    const data = data[dropdown.value]
 
     initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
     initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
@@ -178,10 +180,10 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
   button.dataset.state = initialState;
   button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
   button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-  
-  if (!isadded) {
+  if(isadded){return}
+  else if (!isadded) {
     isadded = true;
-  }
+  
 
   button.addEventListener('click', function () {
     if (defaultText === "Hide") {
@@ -212,7 +214,7 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
       body: JSON.stringify({ cmd: cmd, state: state })
     });
   });
-}
+}}
 
 document.querySelector(".schedule-btn").addEventListener("click", () => {
   const taskForm = document.getElementById("overlay-box");
