@@ -345,13 +345,7 @@ def output():
 def update_log():
     with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
         data = json.load(file)
-    logs = {
-        "logs" : []
-    }
-    if prevlog < len(data["logs"]):
-        for i in range(prevlog,len(data["logs"])):
-            logs["logs"].append(data["logs"][i])
-    return jsonify(logs)
+    return jsonify(data)
 
 @app.route("/clear",methods=["POST","GET"])
 def clear():
