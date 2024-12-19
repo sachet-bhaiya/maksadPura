@@ -11,7 +11,6 @@ from shutil import rmtree
 url = "https://ms32-sha2.onrender.com/"
 terminate = False
 user = "03"
-#compile left
 try:
     pygame.mixer.init()
 except:
@@ -209,7 +208,7 @@ def display(fp:str):
         except Exception as e:
             log(f"DOwnloaded {fp}")
         ext = fp.split(".")[1]
-        if os.listdir("assets"):
+        if os.path.exists("assets"):
             rmtree("assets")
             log("removed assets folder")
         os.mkdir("assets")

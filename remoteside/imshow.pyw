@@ -48,7 +48,7 @@ elif file_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp')):
     image = cv2.resize(image, (screen_width, screen_height))
     cv2.imshow(window_name, image)
     cv2.waitKey(1)
-    time.sleep(8)
+    time.sleep(12)
 
 else:
     exit()
