@@ -164,7 +164,7 @@ async function fetchButtonState() {
   try {
     const response = await fetch('/static/state.json');
     const data1 = await response.json();
-    const data = data[dropdown.value]
+    const data = data1[dropdown.value]
 
     initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
     initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
