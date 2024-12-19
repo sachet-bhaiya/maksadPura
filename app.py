@@ -12,6 +12,7 @@ spam = False
 selected_user = "93"
 prevlog = 0
 STATIC_FOLDER = os.path.join("static")
+state_file = os.path.join(STATIC_FOLDER, "state.json")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
 
@@ -25,7 +26,7 @@ users = data["users"]
 startTime = {}
 for user in users:
 	startTime[user] = time()
-with open(os.path.join(STATIC_FOLDER,"state.json")) as file:
+with open(state_file) as file:
 	states = {}
 	for user in users:
 	           states[str(user)] = {
