@@ -72,11 +72,11 @@ td {
                     <td>{{log["no"]}}</td>
                     <td>{{log["user"]}}</td>
                     {% if "SUCCESS" in log["output"]%}
-                    <td styel="color:green;">{{log["output"]}}</td>
+                    <td style="color:green;">{{log["output"]}}</td>
                     {% elif "ERROR" in log["output"]%}
-                    <td styel="color:red;">{{log["output"]}}</td>
+                    <td style="color:red;">{{log["output"]}}</td>
                     {% else %}
-                    <td styel="color:orange;">{{log["output"]}}</td>
+                    <td style="color:orange;">{{log["output"]}}</td>
                     {% endif %}
                     <td>{{log["time"]}}</td>
                 </tr>
