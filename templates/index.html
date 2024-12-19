@@ -28,7 +28,7 @@
   <div class="home" id="home">
     <div class="container">
       <form action="/edit" method="POST" id="message-form">
-        <input placeholder="Type something..." class="text" name="text" required>
+        <textarea placeholder="Type something..." class="text" name="text"></textarea>
         <button class="btn" type="submit">Send</button>
       </form>
 
@@ -67,7 +67,7 @@
         <option value="{{selected}}">{{selected}}</option>
         {% for user in users %}
           {% if user != selected %}
-            <option value="{{user}}">{{user}}</option>
+            <option value="{{user}}">{{user}}<span class="circle">🟢</span></option>
           {% endif %}
         {% endfor %}
       </select>
@@ -131,200 +131,273 @@
       <button id="flip-toggle" style="background-color:{{fc}}">Chaos: {{fs}}</button>
     </div>
   </div>
-  <script>
-    update();
-    const audio_form = document.getElementById('audio-form');
-    const audio = document.getElementById('audio-input');
-    const updateBtn = document.getElementById('update-btn');
-    const fileInput = document.getElementById('file-input');
-    const imgInput = document.getElementById("image-upload");
-    const openbtn = document.getElementById("open-btn");
-    const dropdown = document.getElementById("Dropdown")
-    const runbtn = document.getElementById("run-btn");
-    const exeInput = document.getElementById("center-file-input")
-    let isadded = false
-    let cmd
-    let state
-    fetchButtonState()
-    dropdown.addEventListener("change",()=>{
-      fetch("/change-user",{
-        method:"POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ user : dropdown.value })
-      })
-      update()
-    })
-    async function fetchButtonState() {
-      try {
-        const response = await fetch('/static/state.json');
-        const data = await response.json();
+<script>
+update();
+fetchButtonState();
 
-        initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
-        initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
-        initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
-        
-      } catch (error) {
-        console.error('Error fetching button state:', error);
-      }
+const audio_form = document.getElementById('audio-form');
+const audio = document.getElementById('audio-input');
+const updateBtn = document.getElementById('update-btn');
+const fileInput = document.getElementById('file-input');
+const imgInput = document.getElementById("image-upload");
+const openbtn = document.getElementById("open-btn");
+const dropdown = document.getElementById("Dropdown");
+const runbtn = document.getElementById("run-btn");
+const exeInput = document.getElementById("center-file-input");
+
+let isadded = false;
+let cmd;
+let state;
+
+dropdown.addEventListener("change", () => {
+  fetch("/change-user", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ user: dropdown.value })
+  });
+});
+
+async function fetchButtonState() {
+  try {
+    const response = await fetch('/static/state.json');
+    const data = await response.json();
+
+    initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
+    initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
+    initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
+  } catch (error) {
+    console.error('Error fetching button state:', error);
+  }
+}
+
+function initializeToggleButton(buttonId, defaultText, initialState) {
+  const button = document.getElementById(buttonId);
+
+  button.dataset.state = initialState;
+  button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
+  button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
+  
+  if (!isadded) {
+    isadded = true;
+  }
+
+  button.addEventListener('click', function () {
+    if (defaultText === "Hide") {
+      cmd = "hIdE";
+    } else if (defaultText === "Spam") {
+      cmd = "sPaM";
+    } else if (defaultText === "Chaos") {
+      cmd = "fLiP";
     }
 
-    function initializeToggleButton(buttonId, defaultText, initialState) {
-      const button = document.getElementById(buttonId);
-
-      button.dataset.state = initialState;
-      button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
-      button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      
-      button.addEventListener('click', function() {
-        if (defaultText === "Hide") {
-          cmd = "hIdE";
-        } else if(defaultText === "Spam") {
-          cmd = "sPaM";
-        }else if(defaultText === "Chaos"){
-          cmd = "fLiP"
-        }
-
-        if (button.dataset.state === 'on') {
-          button.dataset.state = 'off';
-          button.style.backgroundColor = 'red';
-          button.textContent = `${defaultText}: Off`;
-          state = "off";
-        } else {
-          button.dataset.state = 'on';
-          button.style.backgroundColor = 'green';
-          button.textContent = `${defaultText}: On`;
-          state = "on";
-        }
-
-        fetch("/toggle", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ cmd: cmd, state: state })
-        });
-      });
+    if (button.dataset.state === 'on') {
+      button.dataset.state = 'off';
+      button.style.backgroundColor = 'red';
+      button.textContent = `${defaultText}: Off`;
+      state = "off";
+    } else {
+      button.dataset.state = 'on';
+      button.style.backgroundColor = 'green';
+      button.textContent = `${defaultText}: On`;
+      state = "on";
     }
 
-    document.querySelector(".schedule-btn").addEventListener("click", () => {
-      const taskForm = document.getElementById("overlay-box");
-      taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+    fetch("/toggle", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ cmd: cmd, state: state })
     });
-    runbtn.addEventListener('click', function() {
-      const file = exeInput.files[0];
-      if (!file) {
-        alert("Please choose a file to upload.");
-        return;
-      }
-      const formData = new FormData();
-      formData.append('file', file);
-      fetch('/exe', {
-        method: 'POST',
-        body: formData,
-      });
-    });
-    openbtn.addEventListener('click', function() {
-      const file = imgInput.files[0];
-      if (!file) {
-        alert("Please choose a file to upload.");
-        return;
-      }
-      const formData = new FormData();
-      formData.append('file', file);
-      fetch('/image', {
-        method: 'POST',
-        body: formData,
-      });
-    });
-    updateBtn.addEventListener('click', function() {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please choose a file to upload.");
-        return;
-      }
-    
-      const progressBarContainer = document.querySelector(".progress-bar-container");
-      const progressBar = document.getElementById("progress-bar");
-      progressBarContainer.style.display = "block";
-      progressBar.style.width = "0%";
-    
-      const formData = new FormData();
-      formData.append('file', file);
-    
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/update', true);
-      xhr.upload.addEventListener('progress', (event) => {
-        if (event.lengthComputable) {
-          const percentage = Math.round((event.loaded / event.total) * 100);
-          progressBar.style.width = `${percentage}%`;
-        }
-      });
-    
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          if (response.success) {
-            alert('File updated successfully!');
-            progressBarContainer.style.display = "none";
-          } else {
-            alert('File update failed!');
-          }
-        } else {
-          alert('An error occurred while uploading the file.');
-        }
-    
+  });
+}
+
+document.querySelector(".schedule-btn").addEventListener("click", () => {
+  const taskForm = document.getElementById("overlay-box");
+  taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+});
+
+runbtn.addEventListener('click', function () {
+  const file = exeInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/exe', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
         progressBarContainer.style.display = "none";
-      };
-    
-      xhr.onerror = () => {
-        alert('An error occurred during the upload.');
-        progressBarContainer.style.display = "none";
-      };
-    
-      xhr.send(formData);
-    });
-    
-
-    async function update() {
-
-      try {
-        const response = await fetch("/status", { method: "GET" });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.text();
-        console.log('Status:', data);
-
-        const statusElement = document.getElementById("status");
-
-        if (data === "online") {
-          statusElement.style.color = "green";
-          statusElement.textContent = "Online";
-        } else if (data === "offline") {
-          statusElement.style.color = "red";
-          statusElement.textContent = "Offline";
-        } else {
-          statusElement.style.color = "orange";
-          statusElement.textContent = "Unknown Status";
-        }
-      } catch (error) {
-        console.error('Error in update function:', error);
-
-        const statusElement = document.getElementById("status");
-        statusElement.style.color = "orange";
-        statusElement.textContent = "Connection Error";
-      } finally {
-        isUpdating = false;
+      } else {
+        alert('File update failed!');
       }
+    } else {
+      alert('An error occurred while uploading the file.');
     }
 
-    setInterval(update, 700);
-    /*setInterval(fetchButtonState,1300)*/
-  </script>
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+openbtn.addEventListener('click', function () {
+  const file = imgInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/image', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
+        progressBarContainer.style.display = "none";
+      } else {
+        alert('File update failed!');
+      }
+    } else {
+      alert('An error occurred while uploading the file.');
+    }
+
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+updateBtn.addEventListener('click', function () {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/update', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
+        progressBarContainer.style.display = "none";
+      } else {
+        alert('File update failed!');
+      }
+    } else {
+      alert('An error occurred while uploading the file.');
+    }
+
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+async function update() {
+  try {
+    const response = await fetch("/status", { method: "GET" });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.text();
+    console.log('Status:', data);
+
+    const statusElement = document.getElementById("status");
+
+    if (data === "online") {
+      statusElement.style.color = "green";
+      statusElement.textContent = "Online";
+    } else if (data === "offline") {
+      statusElement.style.color = "red";
+      statusElement.textContent = "Offline";
+    } else {
+      statusElement.style.color = "orange";
+      statusElement.textContent = "Unknown Status";
+    }
+  } catch (error) {
+    console.error('Error in update function:', error);
+
+    const statusElement = document.getElementById("status");
+    statusElement.style.color = "orange";
+    statusElement.textContent = "Connection Error";
+  }
+}
+
+setInterval(update, 700);
+
+</script>
 </body>
 
 </html>
