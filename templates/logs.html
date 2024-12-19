@@ -78,5 +78,29 @@ td {
             </tbody>
         </table>
     </div>
+<script>
+  async function update(){
+    const response = await fetch("/update-log",{method:"GET"})
+    const logs = await response.json()
+    const tbody = document.querySelector("#logTable tbody");
+    logs["logs"].forEach(log => {
+      const row = document.createElement("tr");
+      const serialCell = document.createElement("td");
+      serialCell.textContent = log["no"];
+      row.appendChild(serialCell);
+      const userCell = document.createElement("td");
+      userCell.textContent = log["user"];
+      row.appendChild(userCell);
+      const logCell = document.createElement("td");
+      logCell.textContent = log["output"];
+      row.appendChild(logCell);
+      const timeCell = document.createElement("td");
+      timeCell.textContent = log["time"];
+      row.appendChild(timeCell);
+      tbody.appendChild(row);
+    });
+  }
+  setInterval(update,1100)
+</script>
 </body>
 </html>

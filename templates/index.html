@@ -287,12 +287,8 @@
       xhr.send(formData);
     });
     
-    let isUpdating = false;
 
     async function update() {
-      if (isUpdating) return;
-
-      isUpdating = true;
 
       try {
         const response = await fetch("/status", { method: "GET" });

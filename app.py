@@ -11,6 +11,7 @@ timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
 selected_user = "93"
+prevlog = 0
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -301,10 +302,12 @@ def img():
 
 @app.route("/logs",methods=["GET","POST"])
 def logs():
-	data = None
-	with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
-		data = json.load(file)
-	return render_template("logs.html",logs=data)
+    global prevlog
+    data = None
+    with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
+        data = json.load(file)
+    prevlog = len(data["logs"])
+    return render_template("logs.html",logs=data)
               
 
 @app.route("/output", methods=["POST", "GET"])
@@ -337,6 +340,18 @@ def output():
         return f"Error writing to log.json: {e}", 500    
     
     return log
+
+@app.route("/update-log",methods=["GET","POST"])
+def update_log():
+    with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
+        data = json.load(file)
+    logs = {
+        "logs" : []
+    }
+    if prevlog < len(data["logs"]):
+        for i in range(prevlog,len(data["logs"])):
+            logs["logs"].append(data["logs"][i])
+    return jsonify(logs)
 
 @app.route("/clear",methods=["POST","GET"])
 def clear():
