@@ -67,7 +67,7 @@
         <option value="{{selected}}">{{selected}}</option>
         {% for user in users %}
           {% if user != selected %}
-            <option value="{{user}}">{{user}}<span class="circle"></span></option>
+            <option value="{{user}}">{{user}}<span class="circle">🟢</span></option>
           {% endif %}
         {% endfor %}
       </select>
