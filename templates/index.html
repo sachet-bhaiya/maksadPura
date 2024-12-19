@@ -155,7 +155,6 @@
         body: JSON.stringify({ user : dropdown.value })
       })
       update()
-      fetchButtonState()
     })
     async function fetchButtonState() {
       try {
@@ -177,10 +176,7 @@
       button.dataset.state = initialState;
       button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
       button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
-      if (isadded) {
-        return
-      }
-      else{isadded = True}
+      
       button.addEventListener('click', function() {
         if (defaultText === "Hide") {
           cmd = "hIdE";
