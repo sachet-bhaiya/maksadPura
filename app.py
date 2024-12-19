@@ -324,7 +324,7 @@ def output():
     log = {
         "no": len(data["logs"]) + 1, 
         "output": err,
-        "time": datetime.now().strftime("%d-%m-%Y %H:%M"),
+        "time": datetime.now(timezone).strftime("%d-%m-%Y %H:%M"),
         "user": user
     }
     
