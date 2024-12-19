@@ -71,7 +71,13 @@ td {
                 <tr>
                     <td>{{log["no"]}}</td>
                     <td>{{log["user"]}}</td>
-                    <td>{{log["output"]}}</td>
+                    {% if "SUCCESS" in log["output"]%}
+                    <td styel="color:green;">{{log["output"]}}</td>
+                    {% elif "ERROR" in log["output"]%}
+                    <td styel="color:red;">{{log["output"]}}</td>
+                    {% else %}
+                    <td styel="color:orange;">{{log["output"]}}</td>
+                    {% endif %}
                     <td>{{log["time"]}}</td>
                 </tr>
               {% endfor %}
@@ -82,14 +88,23 @@ td {
   async function update(){
     const response = await fetch("/update-log",{method:"GET"})
     const logs = await response.json()
-    const tbody = document.querySelector("#logTable tbody");
     const logsTableBody = document.querySelector("#logsTable tbody");
+    let color;
     logs.logs.forEach((log)=>{
+      if(log.output.includes("SUCCESS")){
+        color = "green"
+      }
+      else if(log.output.includes("ERROR")){
+        color = "red";
+      }
+      else{
+        color = "orange";
+      }
     logsTableBody.innerHTML += `
         <tr>
           <td>${log.no}</td>
           <td>${log.user}</td>
-          <td>${log.output}</td>
+          <td style="color:${color};">${log.output}</td>
           <td>${log.time}</td>
         </tr>
       `;})
