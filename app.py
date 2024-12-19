@@ -22,7 +22,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 with open(os.path.join(STATIC_FOLDER,"users.json")) as file:
 	data = json.load(file)
 users = data["users"]
-with open(state_file) as file:
+with open(state_file,"w") as file:
 	states = {}
 	for user in users:
 	           states[str(user)] = {
