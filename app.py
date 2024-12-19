@@ -66,7 +66,7 @@ def terminal():
     fs = data1[selected_user]["flipToggleState"]["state"]
     fc = data1[selected_user]["flipToggleState"]["color"]
     if not firstReload:
-        if time() - startTime[slected_user] <= 2.5:
+        if time() - startTime[selected_user] <= 2.5:
             state = "Online"
             color = "green"
         elif time() - startTime[selected_user] > 2.5:
