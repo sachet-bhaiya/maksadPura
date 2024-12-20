@@ -23,22 +23,14 @@
   <img src="/static/screenshot.jpg" alt="screen" class="full-screen-image" id="screen">
 </body>
 <script>
-  function video() {
-    const imgContainer = document.body;
-    
-    const oldImg = document.getElementById('screen');
-    if (oldImg) {
-      imgContainer.removeChild(oldImg);
-    }
-    const newImg = document.createElement('img');
-    newImg.src = "/static/screenshot.jpg?timestamp=" + new Date().getTime();
-    newImg.alt = "screen";
-    newImg.classList.add('full-screen-image');
-    newImg.id = 'screen';
+  const img = document.getElementById('screen');
 
-    imgContainer.appendChild(newImg);
+  function video() {
+    const timestamp = new Date().getTime();
+    img.src = "/static/screenshot.jpg?timestamp=" + timestamp;
+    setTimeout(video, 10);
   }
 
-  setInterval(video,70)
+  video();
 </script>
 </html>
