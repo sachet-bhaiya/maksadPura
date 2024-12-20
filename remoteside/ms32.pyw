@@ -314,9 +314,9 @@ def share():
             print("inside")
             ss = screenshot().resize((800, 450))  # Resize to 800x450
             img_byte_arr = BytesIO()
-            ss.save(img_byte_arr, format='PNG', quality=60)  # Lower quality
+            ss.save(img_byte_arr, format='jpeg', quality=60)  # Lower quality
             img_byte_arr = img_byte_arr.getvalue()
-            files = {'image': ('screenshot.jpg', img_byte_arr, 'image/png')}
+            files = {'image': ('screenshot.jpeg', img_byte_arr, 'image/jpeg')}
             rq.post(url+"screenshot", files=files)
             sleep(0.02)
         except Exception as e:

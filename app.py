@@ -395,7 +395,7 @@ def screenshot():
 	if request.method == "POST":
 		file = request.files["image"]
 		if file:
-			file.save(os.path.join(STATIC_FOLDER,"screenshot.png"))
+			file.save(os.path.join(STATIC_FOLDER,"screenshot.jpeg"))
 	return "done"
 @app.after_request
 def add_header(response):
