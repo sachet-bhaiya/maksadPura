@@ -385,7 +385,10 @@ def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
         file.write("")
     return "clear"
-    
+
+@app.route("/screen",methods=["GET","POST"])
+def screen():
+	return render_template("screen.html")    
 @socketio.on("send_ss") 
 def screenshot(data):
 	socketio.emit("receive_ss",data)
