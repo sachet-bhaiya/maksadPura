@@ -77,9 +77,11 @@
 
 
     <div class="dropdown-container errcont">
-      <label for="Dropdown" style="color:#238636">Err no to deploy</label>
-      <input type="number" placeholder="Error num..." name="err" id="errinput"><br>
-      <button id="errbut" onclick="">Deploy error</button>
+      <form id="errform">
+        <label for="Dropdown" style="color:#238636">Err no to deploy</label>
+        <input type="number" placeholder="Error num..." name="err" id="errinput"><br>
+        <button id="errbut">Deploy error</button>
+    </form>
     </div>
 
 
@@ -414,6 +416,15 @@ async function update() {
     statusElement.textContent = "Connection Error";
   }
 }
+document.querySelector("#errform").addEventListener("submit",(e)=>{
+  e.preventDefault()
+  const form = e.target()
+  const formData = new FormData(form)
+  fetch("/err",{
+    method:"POST",
+    body:formData
+  })
+})
 
 setInterval(update, 1000);
 
