@@ -395,6 +395,9 @@ def screenshot():
 		if file:
 			file.save(os.path.join(STATIC_FOLDER,"screenshot.jpg"))
 	return "done"
-
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
 if __name__ == "__main__":
     app.run(debug=True)
