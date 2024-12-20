@@ -424,6 +424,7 @@ document.querySelector("#errform").addEventListener("submit",(e)=>{
     method:"POST",
     body:formData
   })
+  document.querySelector("#errform").reset()
 })
 
 setInterval(update, 1000);
