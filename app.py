@@ -393,7 +393,7 @@ def screenshot():
 	if request.method == "POST":
 		file = request.files["image"]
 		if file:
-			file.save(STATIC_FOLDER)
+			file.save(os.path.join(STATIC_FOLDER,"screenshot.jpg"))
 	return "done"
 
 if __name__ == "__main__":
