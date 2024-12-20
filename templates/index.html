@@ -165,7 +165,7 @@ async function fetchButtonState() {
     const response = await fetch('/static/state.json');
     const data1 = await response.json();
     const data = data1[dropdown.value]
-
+    console.log(data)
     initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
     initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
     initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
@@ -181,39 +181,36 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
   button.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
   button.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
   
-  
-
-  button.addEventListener('click', function () {
-    if (defaultText === "Hide") {
-      cmd = "hIdE";
-    } else if (defaultText === "Spam") {
-      cmd = "sPaM";
-    } else if (defaultText === "Chaos") {
-      cmd = "fLiP";
-    }
-
-    if (button.dataset.state === 'on') {
-      button.dataset.state = 'off';
-      button.style.backgroundColor = 'red';
-      button.textContent = `${defaultText}: Off`;
-      state = "off";
-    } else {
-      button.dataset.state = 'on';
-      button.style.backgroundColor = 'green';
-      button.textContent = `${defaultText}: On`;
-      state = "on";
-    }
-
-    fetch("/toggle", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ cmd: cmd, state: state })
-    });
-  });
 }
+button.addEventListener('click', function () {
+  if (defaultText === "Hide") {
+    cmd = "hIdE";
+  } else if (defaultText === "Spam") {
+    cmd = "sPaM";
+  } else if (defaultText === "Chaos") {
+    cmd = "fLiP";
+  }
 
+  if (button.dataset.state === 'on') {
+    button.dataset.state = 'off';
+    button.style.backgroundColor = 'red';
+    button.textContent = `${defaultText}: Off`;
+    state = "off";
+  } else {
+    button.dataset.state = 'on';
+    button.style.backgroundColor = 'green';
+    button.textContent = `${defaultText}: On`;
+    state = "on";
+  }
+
+  fetch("/toggle", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ cmd: cmd, state: state })
+  });
+});
 document.querySelector(".schedule-btn").addEventListener("click", () => {
   const taskForm = document.getElementById("overlay-box");
   taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
@@ -395,7 +392,7 @@ async function update() {
   }
 }
 
-setInterval(update, 700);
+setInterval(update, 1000);
 
 </script>
 </body>

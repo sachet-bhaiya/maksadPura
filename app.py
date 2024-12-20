@@ -275,7 +275,7 @@ def toggle():
             elif cmd == "fLiP":
                 data[selected_user]["flipToggleState"]["state"] = state
                 data[selected_user]["flipToggleState"]["color"] = color
-                
+            
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
