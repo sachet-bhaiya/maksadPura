@@ -28,9 +28,8 @@
   function video() {
     const timestamp = new Date().getTime();
     img.src = "/static/screenshot.jpg?timestamp=" + timestamp;
-    setTimeout(video, 15);
   }
 
-  video();
+  setInterval(video,70)
 </script>
 </html>
