@@ -24,6 +24,12 @@
 </body>
 <script>
   const img = document.getElementById('screen');
-  img.src = "/static/screenshot.jpg"
+  function video(){
+    img.src = "/static/screenshot.jpg"
+    requestAnimationFrame(video())
+  }
+  video()
+  
+  
 </script>
 </html>
