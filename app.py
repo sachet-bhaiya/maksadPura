@@ -391,6 +391,6 @@ def screen():
 	return render_template("screen.html")    
 @socketio.on("send_ss") 
 def screenshot(data):
-	socketio.emit("receive_ss",data)
+	emit("receive_ss",data)
 if __name__ == "__main__":
     socketio.run(app,debug=True)
