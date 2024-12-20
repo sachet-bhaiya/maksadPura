@@ -25,7 +25,7 @@
 <script>
   function video() {
     const newImg = document.createElement('img');
-  newImg.src = '/static/screenshot.jpg?' + Math.random();
+  newImg.src = '/static/screenshot.jpg'
   container.appendChild(newImg);
 
   const oldImg = container.querySelector('img:not(:last-child)');
