@@ -224,7 +224,8 @@ gap: 15px; /* Add gap between form elements */
 .text {
 width: 100%;
 padding: 10px;
-font-size: 16px;
+margin: 6px;
+font-size: 18px;
 background-color: #0d1117;
 color: #f0f6fc;
 border: 1px solid #30363d;

@@ -15,11 +15,31 @@ prevlog = 0
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
-
+state_file = os.path.join(STATIC_FOLDER, "state.json")
 UPLOAD_FOLDER = os.path.join(STATIC_FOLDER, "sounds")
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-
+with open(os.path.join(STATIC_FOLDER,"users.json")) as file:
+	data = json.load(file)
+users = data["users"]
+with open(state_file,"w") as file:
+    states = {}
+    for user in users:
+        states[str(user)] = {
+            "hideToggleState": {
+                "state": "off",
+                "color": "red"
+            },
+            "spamToggleState": {
+                "state": "off",
+                "color": "red"
+            },
+            "flipToggleState": {
+                "state": "off",
+                "color": "red"
+            }
+        }
+    json.dump(states, file, indent=4)			
 @app.route("/")
 def terminal():
     global firstReload
@@ -35,12 +55,12 @@ def terminal():
     selected = target["selected"]
     with open(state_file, "r") as file:
         data1 = json.load(file)
-    hs = data1["hideToggleState"]["state"]
-    hc = data1["hideToggleState"]["color"]
-    ss = data1["spamToggleState"]["state"]
-    sc = data1["spamToggleState"]["color"]
-    fs = data1["flipToggleState"]["state"]
-    fc = data1["flipToggleState"]["color"]
+    hs = data1[selected_user]["hideToggleState"]["state"]
+    hc = data1[selected_user]["hideToggleState"]["color"]
+    ss = data1[selected_user]["spamToggleState"]["state"]
+    sc = data1[selected_user]["spamToggleState"]["color"]
+    fs = data1[selected_user]["flipToggleState"]["state"]
+    fc = data1[selected_user]["flipToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -247,15 +267,15 @@ def toggle():
                 data = json.load(file)
         
             if cmd == "hIdE":
-                data["hideToggleState"]["state"] = state
-                data["hideToggleState"]["color"] = color
+                data[selected_user]["hideToggleState"]["state"] = state
+                data[selected_user]["hideToggleState"]["color"] = color
             elif cmd == "sPaM":
-                data["spamToggleState"]["state"] = state
-                data["spamToggleState"]["color"] = color
+                data[selected_user]["spamToggleState"]["state"] = state
+                data[selected_user]["spamToggleState"]["color"] = color
             elif cmd == "fLiP":
-                data["flipToggleState"]["state"] = state
-                data["flipToggleState"]["color"] = color
-                
+                data[selected_user]["flipToggleState"]["state"] = state
+                data[selected_user]["flipToggleState"]["color"] = color
+            
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
@@ -345,13 +365,7 @@ def output():
 def update_log():
     with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
         data = json.load(file)
-    logs = {
-        "logs" : []
-    }
-    if prevlog < len(data["logs"]):
-        for i in range(prevlog,len(data["logs"])):
-            logs["logs"].append(data["logs"][i])
-    return jsonify(logs)
+    return jsonify(data)
 
 @app.route("/clear",methods=["POST","GET"])
 def clear():

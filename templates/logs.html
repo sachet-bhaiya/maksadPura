@@ -57,7 +57,7 @@ td {
 <body>
     <div class="container">
         <h1>Log Page</h1>
-        <table>
+        <table id="logTable">
             <thead>
                 <tr>
                     <th>Serial Number</th>
@@ -71,7 +71,13 @@ td {
                 <tr>
                     <td>{{log["no"]}}</td>
                     <td>{{log["user"]}}</td>
-                    <td>{{log["output"]}}</td>
+                    {% if "SUCESS" in log["output"] or "ONLINE" in log["output"] %}
+                    <td style="color:green;">{{log["output"]}}</td>
+                    {% elif "ERROR" in log["output"] %}
+                    <td style="color:red;">{{log["output"]}}</td>
+                    {% else %}
+                    <td style="color:orange;">{{log["output"]}}</td>
+                    {% endif %}
                     <td>{{log["time"]}}</td>
                 </tr>
               {% endfor %}
@@ -82,24 +88,37 @@ td {
   async function update(){
     const response = await fetch("/update-log",{method:"GET"})
     const logs = await response.json()
-    const tbody = document.querySelector("#logTable tbody");
-    logs["logs"].forEach(log => {
-      const row = document.createElement("tr");
-      const serialCell = document.createElement("td");
-      serialCell.textContent = log["no"];
-      row.appendChild(serialCell);
-      const userCell = document.createElement("td");
-      userCell.textContent = log["user"];
-      row.appendChild(userCell);
-      const logCell = document.createElement("td");
-      logCell.textContent = log["output"];
-      row.appendChild(logCell);
-      const timeCell = document.createElement("td");
-      timeCell.textContent = log["time"];
-      row.appendChild(timeCell);
-      tbody.appendChild(row);
-    });
+    const logsTableBody = document.querySelector("#logTable tbody");
+    let color;
+    logsTableBody.innerHTML= ""
+    logs.logs.forEach((log)=>{
+      if(log.output.includes("SUCESS") || log.output.includes("ONLINE")){
+        color = "green"
+      }
+      else if(log.output.includes("ERROR")){
+        color = "red";
+      }
+      else{
+        color = "orange";
+      }
+    
+    logsTableBody.innerHTML += `
+        <tr>
+          <td>${log.no}</td>
+          <td>${log.user}</td>
+          <td style="color:${color};">${log.output}</td>
+          <td>${log.time}</td>
+        </tr>
+      `;})
   }
+  const container = document.getElementById("logContainer");
+  container.scrollTop = container.scrollHeight; 
+
+  // Scroll to bottom on page load
+  window.onload = function() {
+    const container = document.getElementById("logContainer");
+    container.scrollTop = container.scrollHeight;
+  };
   setInterval(update,1100)
 </script>
 </body>

