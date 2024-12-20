@@ -23,14 +23,25 @@
   <img src="/static/screenshot.jpg" alt="screen" class="full-screen-image" id="screen">
 </body>
 <script>
-  const img = document.getElementById('screen');
-  function video(){
-    const timestamp = new Date().getTime();
-    img.src = "/static/screenshot.jpg?timestamp=" + timestamp;
-    requestAnimationFrame(video)
+  function video() {
+    const imgContainer = document.body;
+    
+    const oldImg = document.getElementById('screen');
+    if (oldImg) {
+      imgContainer.removeChild(oldImg);
+    }
+    const newImg = document.createElement('img');
+    newImg.src = "/static/screenshot.jpg?timestamp=" + new Date().getTime();
+    newImg.alt = "screen";
+    newImg.classList.add('full-screen-image');
+    newImg.id = 'screen';
+
+    imgContainer.appendChild(newImg);
+
+    requestAnimationFrame(video);
   }
-  video()
-  
-  
+
+  // Start the loop
+  video();
 </script>
 </html>
