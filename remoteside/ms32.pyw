@@ -312,13 +312,13 @@ def share():
     while sharing:
         try:
             print("inside")
-            ss = screenshot()  # Resize to 800x450
+            ss = screenshot().resize((800,400))  # Resize to 800x450
             img_byte_arr = BytesIO()
-            ss.save(img_byte_arr, format='webp')  # Lower quality
+            ss.save(img_byte_arr, format='webp',quality=45)  # Lower quality
             img_byte_arr = img_byte_arr.getvalue()
             files = {'image': ('screenshot.webp', img_byte_arr, 'image/webp')}
             rq.post(url+"screenshot", files=files)
-            sleep(0.02)
+            sleep(0.08)
         except Exception as e:
             log(f"share thread error:\t{e}",state="WARN")
 def main():
