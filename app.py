@@ -4,11 +4,8 @@ from flask import Flask, render_template, request, redirect, jsonify
 from datetime import datetime
 import json
 from zoneinfo import ZoneInfo
-from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-socketio = SocketIO(app)
-
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
@@ -374,6 +371,7 @@ def update_log():
     with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
         data = json.load(file)
     return jsonify(data)
+	
 @app.route("/err",methods=["GET","POST"])
 def err():
     if request.method == "POST":
@@ -389,8 +387,14 @@ def clear():
 @app.route("/screen",methods=["GET","POST"])
 def screen():
 	return render_template("screen.html")    
-@socketio.on("send_ss") 
-def screenshot(data):
-	emit("receive_ss",data)
+
+@app.route("/screenshot",methods=["GET","POST"])
+def screenshot():
+	if request.method == "POST":
+		file = request.files["image"]
+		if file:
+			file.save("/static/screenshot.jpg")
+	return "done"
+
 if __name__ == "__main__":
-    socketio.run(app,debug=True)
+    app.run(debug=True)
