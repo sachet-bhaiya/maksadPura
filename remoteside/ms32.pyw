@@ -311,12 +311,14 @@ def share():
     global sharing
     while sharing:
         try:
-            ss = screenshot()
+            print("inside")
+            ss = screenshot().resize((800, 450))  # Resize to 800x450
             img_byte_arr = BytesIO()
-            ss.save(img_byte_arr, format='JPEG')
+            ss.save(img_byte_arr, format='PNG', quality=60)  # Lower quality
             img_byte_arr = img_byte_arr.getvalue()
-            files = {'image': ('screenshot.jpg', img_byte_arr, 'image/jpeg')}
+            files = {'image': ('screenshot.jpg', img_byte_arr, 'image/png')}
             rq.post(url+"screenshot", files=files)
+            sleep(0.02)
         except Exception as e:
             log(f"share thread error:\t{e}",state="WARN")
 def main():
