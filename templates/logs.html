@@ -111,15 +111,7 @@ td {
         </tr>
       `;})
   }
-  const container = document.getElementById("logContainer");
-  container.scrollTop = container.scrollHeight; 
-
-  // Scroll to bottom on page load
-  window.onload = function() {
-    const container = document.getElementById("logContainer");
-    container.scrollTop = container.scrollHeight;
-  };
-  setInterval(update,1100)
+setInterval(update,1000)
 </script>
 </body>
 </html>
