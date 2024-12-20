@@ -712,3 +712,33 @@ background-color: #2ea043;
     background-color: #4caf50;
     transition: width 0.3s ease;
   }
+
+#errinput{
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid #30363d;
+    background-color: #0d1117;
+    color: #f0f6fc;
+    border-radius: 5px;
+    font-size: 16px;
+    width:170px;
+}
+
+#errbut{
+    padding: 10px 20px;
+    margin: 10px;
+    margin-left: 0px;
+    align-items: center;
+    width: 170px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #238636;
+    color: white;
+}
+.errcont{
+
+    margin-top: 65px;
+}
