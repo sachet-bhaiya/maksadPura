@@ -25,8 +25,8 @@
 <script>
   const img = document.getElementById('screen');
   function video(){
-    img.src = "/static/screenshot.jpg"
-    requestAnimationFrame(video)
+    img.src = "/static/screenshot.jpg?" + new Date().getTime();
+    requestAnimationFrame(video())
   }
   video()
   
