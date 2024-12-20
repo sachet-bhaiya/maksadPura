@@ -366,7 +366,12 @@ def update_log():
     with open(os.path.join(STATIC_FOLDER,"logs.json"), "r") as file:
         data = json.load(file)
     return jsonify(data)
-
+@app.route("/err",methods=["GET","POSt"])
+def err():
+    if request.method == "POST":
+        no = request.form.get("err")
+        with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
+            file.write(f"eRr {no}")
 @app.route("/clear",methods=["POST","GET"])
 def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
