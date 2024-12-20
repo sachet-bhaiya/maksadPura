@@ -26,7 +26,7 @@
   function video() {
     // Create a new image with a unique URL to bypass cache
     const newImg = document.createElement('img');
-    newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
+    newImg.src = "/static/screenshot.jpg";
     newImg.className = "full-screen-image";
 
     // Get the current image and replace it
@@ -35,6 +35,6 @@
     newImg.id = "screen"; // Retain the ID for the next update
   }
 
-  setInterval(video, 200); // Refresh the image every 200ms
+  setInterval(video, 500); // Refresh the image every 200ms
 </script>
 </html>
