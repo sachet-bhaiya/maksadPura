@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen sharing</title>
+  <title>Screen Sharing</title>
   <style>
     body, html {
       margin: 0;
@@ -23,13 +23,18 @@
   <img src="/static/screenshot.jpg" alt="screen" class="full-screen-image" id="screen">
 </body>
 <script>
-  const img = document.getElementById('screen');
-
   function video() {
-    const timestamp = new Date().getTime();
-    img.src = "/static/screenshot.jpg?timestamp=" + timestamp;
+    // Create a new image with a unique URL to bypass cache
+    const newImg = document.createElement('img');
+    newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
+    newImg.className = "full-screen-image";
+
+    // Get the current image and replace it
+    const oldImg = document.getElementById('screen');
+    oldImg.parentNode.replaceChild(newImg, oldImg);
+    newImg.id = "screen"; // Retain the ID for the next update
   }
 
-  setInterval(video,70)
+  setInterval(video, 200); // Refresh the image every 200ms
 </script>
 </html>
