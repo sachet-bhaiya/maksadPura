@@ -26,8 +26,7 @@
   const img = document.getElementById('screen');
 
   function video() {
-    const timestamp = new Date().getTime();
-    img.src = "/static/screenshot.jpg?timestamp=" + timestamp;
+    img.src = "/static/screenshot.jpg?" + Math.random();
   }
 
   setInterval(video,70)
