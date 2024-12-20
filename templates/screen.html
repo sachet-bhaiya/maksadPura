@@ -20,16 +20,10 @@
   </style>
 </head>
 <body>
-  <img alt="screen" class="full-screen-image" id="screen">
+  <img src="/static/screenshot.jpg" alt="screen" class="full-screen-image" id="screen">
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <script>
-  const socketio = io.connect("https://ms32-sha2.onrender.com",{transports: ['websocket']})
-  alert("connected")
-  socketio.on("receive_ss", (data)=>{
-    alert(data)
-    const imgElement = document.getElementById('screen');
-    imgElement.src = 'data:image/png;base64,' + data.image;
-  })
+  const img = document.getElementById('screen');
+  img.src = "/static/screenshot.jpg"
 </script>
 </html>
