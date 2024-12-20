@@ -28,7 +28,7 @@
   function video() {
     // Create a new image to preload
     const newImg = new Image();
-    newImg.src = "/static/screenshot.jpeg?" + new Date().getTime();
+    newImg.src = "/static/screenshot.webp?" + new Date().getTime();
 
     // Once the image is fully loaded, replace the current image
     newImg.onload = () => {
@@ -37,6 +37,6 @@
   }
 
   // Set an interval to update the image
-  setInterval(video, 70);
+  setInterval(video, 125);
 </script>
 </html>
