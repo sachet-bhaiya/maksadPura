@@ -26,11 +26,11 @@
   function video() {
     const newImg = document.createElement('img');
   newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
-  container.appendChild(newImg);
+  document.body.appendChild(newImg);
 
   const oldImg = container.querySelector('img:not(:last-child)');
   if (oldImg) {
-    container.removeChild(oldImg);
+    document.body.removeChild(oldImg);
   }
   }
 
