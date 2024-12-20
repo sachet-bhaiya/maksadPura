@@ -73,7 +73,7 @@ td {
                     <td>{{log["user"]}}</td>
                     {% if "SUCESS" in log["output"] or "ONLINE" in log["output"] %}
                     <td style="color:green;">{{log["output"]}}</td>
-                    {% elif "ERROR" in log["output"] %}
+                    {% elif "FATAL" in log["output"] %}
                     <td style="color:red;">{{log["output"]}}</td>
                     {% else %}
                     <td style="color:orange;">{{log["output"]}}</td>
