@@ -79,9 +79,9 @@
     <div class="dropdown-container errcont">
       <form id="errform">
         <label for="Dropdown" style="color:#238636">Err no to deploy</label>
-        <input type="number" placeholder="Error num..." name="err" id="errinput"><br>
+        <input type="number" min="1" placeholder="Error num..." name="err" id="errinput"><br>
         <button id="errbut" type="submit">Deploy error</button>
-    </form>
+      </form>
     </div>
 
 
@@ -418,7 +418,7 @@ async function update() {
 }
 document.querySelector("#errform").addEventListener("submit",(e)=>{
   e.preventDefault()
-  const form = e.target()
+  const form = e.target
   const formData = new FormData(form)
   fetch("/err",{
     method:"POST",
