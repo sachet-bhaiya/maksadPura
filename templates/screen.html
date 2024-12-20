@@ -23,18 +23,20 @@
   <img src="/static/screenshot.jpg" alt="screen" class="full-screen-image" id="screen">
 </body>
 <script>
-  function video() {
-    // Create a new image with a unique URL to bypass cache
-    const newImg = document.createElement('img');
-    newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
-    newImg.className = "full-screen-image";
+  const img = document.getElementById('screen');
 
-    // Get the current image and replace it
-    const oldImg = document.getElementById('screen');
-    oldImg.parentNode.replaceChild(newImg, oldImg);
-    newImg.id = "screen"; // Retain the ID for the next update
+  function video() {
+    // Create a new image to preload
+    const newImg = new Image();
+    newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
+
+    // Once the image is fully loaded, replace the current image
+    newImg.onload = () => {
+      img.src = newImg.src;
+    };
   }
 
-  setInterval(video, 200); // Refresh the image every 200ms
+  // Set an interval to update the image
+  setInterval(video, 300);
 </script>
 </html>
