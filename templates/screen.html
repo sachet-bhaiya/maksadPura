@@ -28,7 +28,7 @@
   async function video() {
     const response = await fetch("/screenshot",{method:"GET"})
     const data = await response.json()
-    alert(data.image)
+    
     img.setAttribute("src", `data:image/jpg;base64,${data.image}`);
     };
   setInterval(video, 300);
