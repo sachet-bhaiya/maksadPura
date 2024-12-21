@@ -15,7 +15,6 @@
     canvas.full-screen-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
     }
   </style>
 </head>
@@ -26,19 +25,23 @@
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
 
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.json(); 
 
     const img = new Image();
     img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height); 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
   
     img.src = "data:image/jpeg;base64," + data;
   };
+  
+  // Fetch and update image every 250ms
   setInterval(video, 250);
 </script>
 </html>
