@@ -11,6 +11,7 @@ timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
 selected_user = "93"
+image = ""
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -392,10 +393,12 @@ def screen():
 
 @app.route("/screenshot",methods=["GET","POST"])
 def screenshot():
+	global image
+	if request.method == "GET":
+		return jsonify(image)
 	if request.method == "POST":
-		file = request.files["image"]
-		if file:
-			file.save(os.path.join(STATIC_FOLDER,"screenshot.jpg"))
+		file = request.get_json()
+		image = file["image"]		
 	return "done"
 @app.after_request
 def add_header(response):
