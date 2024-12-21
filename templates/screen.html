@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen Sharing</title>
+  <title>Screen Sharing with FPS</title>
   <style>
     body, html {
       margin: 0;
@@ -28,6 +28,10 @@
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  let lastTimestamp = performance.now(); // Track the last frame time
+  let frameCount = 0;
+  let lastFpsUpdate = performance.now();
+  
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.json(); 
@@ -36,11 +40,24 @@
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height); 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // FPS calculation
+      const now = performance.now();
+      frameCount++;
+      const elapsed = now - lastFpsUpdate;
+
+      // Update FPS every second
+      if (elapsed >= 1000) {
+        const fps = frameCount;
+        frameCount = 0; // Reset frame count
+        lastFpsUpdate = now;
+        console.log(`FPS: ${fps}`);
+      }
     };
   
     img.src = "data:image/jpeg;base64," + data;
-  };
+  }
   
-  setInterval(video, 250);
+  setInterval(video, 250); // Fetch and draw every 250ms
 </script>
 </html>
