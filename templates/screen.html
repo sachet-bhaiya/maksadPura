@@ -25,18 +25,11 @@
 <script>
   const img = document.getElementById('screen');
 
-  function video() {
-    // Create a new image to preload
-    const newImg = new Image();
-    newImg.src = "/static/screenshot.jpg?" + new Date().getTime();
-
-    // Once the image is fully loaded, replace the current image
-    newImg.onload = () => {
-      img.src = newImg.src;
+  async function video() {
+    const response = await fetch("/screenshot",{method:"GET"})
+    const data = await response.json()
+    img.setAttribute("src", `data:image/jpg;base64,${data.image}`);
     };
-  }
-
-  // Set an interval to update the image
   setInterval(video, 300);
 </script>
 </html>
