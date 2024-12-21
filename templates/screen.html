@@ -20,22 +20,24 @@
   </style>
 </head>
 <body>
-  <canvas id="screen"></canvas>
+  <canvas id="screen" class="full-screen-image"></canvas>
 </body>
 <script>
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
 
   async function video() {
-    const response = await fetch("/screenshot",{method:"GET"})
-    const data = await response.json()
+    const response = await fetch("/screenshot", { method: "GET" });
+    const data = await response.json(); 
+
     const img = new Image();
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
-    img.src = "data:image/jpeg;base64,"+data;
+  
+    img.src = "data:image/jpeg;base64," + data;
   };
   setInterval(video, 250);
 </script>
