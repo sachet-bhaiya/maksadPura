@@ -37,20 +37,18 @@
     const blob = new Blob([data], { type: 'image/jpeg' }); 
     const newImgUrl = URL.createObjectURL(blob); 
 
-    // Revoke the old image URL if it exists
     if (imgUrl) {
       URL.revokeObjectURL(imgUrl);
     }
 
-    imgUrl = newImgUrl;  // Update imgUrl with the new URL
+    imgUrl = newImgUrl;  
 
     const img = new Image();
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height); 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
-    alert(imgUrl)
-    img.src = imgUrl;  // Load the new image
+    img.src = imgUrl;  
   }
 
   window.addEventListener("keydown", (e) => {
