@@ -11,7 +11,7 @@ timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
 selected_user = "93"
-image = []
+image = ""
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -398,7 +398,7 @@ def screenshot():
 		return jsonify(image)
 	if request.method == "POST":
 		file = request.get_json()
-		image = list(file["image"])
+		image = file["image"]
 	return "done"
 	
 	
