@@ -47,13 +47,12 @@
     })
   })
   canvas.addEventListener("click",(e)=>{
-    let btn
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left; 
     const y = e.clientY - rect.top;
     fetch("/control",{
       method:"POST",
-      body: JSON.stringify({ type: "click", button: btn, x:x ,y:y, width : canvas.width, height : canvas.height })
+      body: JSON.stringify({ type: "click", button: e.button, x:x ,y:y, width : canvas.width, height : canvas.height })
     })
   })
   setInterval(video, 250);
