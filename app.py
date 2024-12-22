@@ -3,12 +3,9 @@ from time import time
 from flask import Flask, render_template, request, redirect, jsonify
 from datetime import datetime
 import json
-from flask_socketio import SocketIO, emit
 from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "ms32"
-socketio = SocketIO(app)
 firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
@@ -404,9 +401,6 @@ def screenshot():
 		image = file["image"]		
 	return "done"
 	
-@socketio.on("image")
-def send_image(data):
-	emit("screenshot",data)
 	
 if __name__ == "__main__":
-    socketio.run(app,debug=True)
+    app.run(debug=True)
