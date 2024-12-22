@@ -24,43 +24,49 @@
 <script>
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
-
+  const keys = new Set()
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
-  let imgUrl = null;  // Store the image URL to revoke it later
 
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.arrayBuffer(); 
 
     const blob = new Blob([data], { type: 'image/jpeg' }); 
-    const newImgUrl = URL.createObjectURL(blob); 
-
-    if (imgUrl) {
-      URL.revokeObjectURL(imgUrl);
-    }
-
-    imgUrl = newImgUrl;  
+    const imgUrl = URL.createObjectURL(blob); 
 
     const img = new Image();
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height); 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
-    img.src = imgUrl;  
+
+    img.src = imgUrl; 
   }
 
   window.addEventListener("keydown", (e) => {
+    keys.add(e.keyCode)
     fetch("/control", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ type: "key", button: e.keyCode })
+      body: JSON.stringify({ type: "key", button: Array.from(keys) })
     });
   });
-
+  window.addEventListener("keyup",(e)=>{
+    if(keys.has(e.keyCode)){
+      keys.delete(e.keyCode)
+    }
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "key", button: Array.from(keys) })
+    });
+    
+  })
   window.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left; 
@@ -73,6 +79,29 @@
       body: JSON.stringify({ type: "click", button: e.button, x: x, y: y, width: canvas.width, height: canvas.height })
     });
   });
+  window.addEventListener("wheel",(e)=>{
+    const deltaY = e.deltaY
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "scroll", deltaY: deltaY })
+    });
+      })
+  window.addEventListener("dblclick",(e)=>{
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "dbclick", x: x, y: y, width: canvas.width, height: canvas.height })
+      });
+    });
+  })
 
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 
