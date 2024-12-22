@@ -11,7 +11,7 @@ timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
 selected_user = "93"
-image = ""
+image = None
 control_data = {}
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
