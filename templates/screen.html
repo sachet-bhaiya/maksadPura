@@ -43,6 +43,9 @@
   canvas.addEventListener("keypress",(e)=>{
     fetch("/control",{
       method:"POST",
+      headers: {
+      'Content-Type': 'application/json'
+    },
       body: JSON.stringify({ type: "key", button: e.keyCode})
     })
   })
@@ -53,6 +56,9 @@
     alert(e.key)
     fetch("/control",{
       method:"POST",
+      headers: {
+      'Content-Type': 'application/json'
+    },
       body: JSON.stringify({ type: "click", button: e.button, x:x ,y:y, width : canvas.width, height : canvas.height })
     })
   })
