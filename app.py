@@ -417,6 +417,7 @@ def control():
 			control_data["mouse"] = data["button"]
 			control_data["width"] = data["width"]
 			control_data["height"] = data["height"]
+		return "done"
 	if request.method == "GET":
 		data1 = control_data
 		control_data = {}
