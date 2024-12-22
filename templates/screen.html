@@ -63,6 +63,7 @@
       body: JSON.stringify({ type: "click", button: e.button, x:x ,y:y, width : canvas.width, height : canvas.height })
     })
   })
+  canvas.addEventListener("contextmenu", (e) => e.preventDefault());
   setInterval(video, 250);
 </script>
 </html>
