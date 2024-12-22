@@ -84,7 +84,7 @@ def playfunc(fp):
         # try:                
         CoInitialize()
         devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        interface = devices.Activate(IAudioEndpointVolume.iid, CLSCTX_ALL, None)
         volume = interface.QueryInterface(IAudioEndpointVolume)
         
         if volume.GetMute():
@@ -341,11 +341,11 @@ async def control():
                 y = data["y"]*(height/data["height"])            
                 move(x,y)
                 if data["mouse"] == 0:
-                	click()
+                    click()
                 elif data["mouse"] == 1:
-                	click(button="right")
+                    click(button="right")
                 elif data["mouse"] == 2:
-                	click(button="middle")
+                    click(button="middle")
             elif data and data["type"] == "key":
                 #controller.press(chr(data["btn"]))
                 keyboard.send("+".join(chr(data["button"])))
