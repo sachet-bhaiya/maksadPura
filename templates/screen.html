@@ -50,6 +50,7 @@
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left; 
     const y = e.clientY - rect.top;
+    alert(e.key)
     fetch("/control",{
       method:"POST",
       body: JSON.stringify({ type: "click", button: e.button, x:x ,y:y, width : canvas.width, height : canvas.height })
