@@ -312,11 +312,11 @@ async def share():
                     ss.rgb)
                 # ss.save(buffer, format="JPEG",quality=40)
                 buffer = BytesIO()
-                img.save(buffer,format="JPEG",quality=50)
+                img.save(buffer,format="JPEG",quality=40)
                 buffer.seek(0)
                 img = base64.b64encode(buffer.getvalue()).decode("utf-8")
                 try:
-                    await client.post(url+"screenshot", json={"image": img})
+                    await client.post(url+"screenshot", json={"image": img}, timeout=1.5)
                 except httpx.RequestError as e:
                     print("Request failed:", e)
                 elapsed_time = time.time() - start_time
