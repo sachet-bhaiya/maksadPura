@@ -1,6 +1,6 @@
 import os
 from time import time
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, Response
 from datetime import datetime
 import json
 from zoneinfo import ZoneInfo
@@ -396,7 +396,8 @@ def screen():
 def screenshot():
 	global image
 	if request.method == "GET":
-		return jsonify(image)
+		if image:
+			return Response(image, mimetype="image/jpeg")
 	if request.method == "POST":
 		image = request.data
 	return "done"
