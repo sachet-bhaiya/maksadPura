@@ -398,8 +398,7 @@ def screenshot():
 	if request.method == "GET":
 		return jsonify(image)
 	if request.method == "POST":
-		file = request.get_json()
-		image = file["image"]
+		image = request.data
 	return "done"
 	
 @app.route("/control",methods=["GET","POST"])
