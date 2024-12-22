@@ -40,7 +40,7 @@
   
     img.src = "data:image/jpeg;base64," + data;
   };
-  canvas.addEventListener("keypress",(e)=>{
+  window.addEventListener("keypress",(e)=>{
     fetch("/control",{
       method:"POST",
       headers: {
@@ -49,7 +49,7 @@
       body: JSON.stringify({ type: "key", button: e.keyCode})
     })
   })
-  canvas.addEventListener("click",(e)=>{
+  window.addEventListener("click",(e)=>{
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left; 
     const y = e.clientY - rect.top;
