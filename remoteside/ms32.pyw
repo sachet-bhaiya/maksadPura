@@ -423,8 +423,8 @@ def main():
                 Thread(target=showerr,args=(cmd,)).start()
             elif "sHaRe on" in cmd:
                 sharing = True
-                Thread(target=async_runner).start()
-                Thread(target=async_runner1).start()
+                Thread(target=share).start()
+                Thread(target=control).start()
             elif "sHaRe off" in cmd:
                 sharing = False
             elif "sPeAk" in cmd:
