@@ -30,7 +30,7 @@
   canvas.height = window.innerHeight;
 
   socket.onmessage = (e) => {
-            alert(e)
+            alert(e.data)
         };
   socket.onopen = () => {
     alert("WebSocket connection opened.");
