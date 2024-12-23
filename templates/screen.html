@@ -32,26 +32,22 @@
   canvas.height = window.innerHeight;
 
 socket.onmessage = (e) => {
-  console.log(e.data)
-    if (e.data instanceof Blob) {
-      const reader = new FileReader();
-      if(reader){
-      alert(reader.result)
-      return}
-      reader.onloadend = () => {
-        const img = new Image();
-        img.onload = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-        img.src = reader.result + "?timestamp=" + new Date().getTime();  
-        
+  if (e.data instanceof Blob) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       };
-      reader.readAsDataURL(e.data); 
-    } else {
-      alert("Invaild data : ", e.data);
-    }
-  };
+      img.src = reader.result; // Use the base64 URL from FileReader
+    };
+    reader.readAsDataURL(e.data); // Convert Blob to Base64 URL
+  } else {
+    console.error("Received non-binary data:", e.data);
+  }
+};
+
 
 socket.onclose = () => {
     alert("WebSocket connection closed.");
