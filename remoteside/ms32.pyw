@@ -307,82 +307,68 @@ def showerr(num):
             os.startfile("error.exe")
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
-async def send_screenshot(session, img_data):
-    try:
-        async with session.post(url + "screenshot", data=img_data) as response:
-            print(f"Screenshot sent with status: {response.status}")
-    except httpx.ConnectTimeout:
-        print("Connection timed out while sending the screenshot.")
-async def share():
+        
+def share():
     global sharing
-    async with aiohttp.ClientSession() as session:
-        with mss() as sct:
-            monitor = sct.monitors[1] 
-            while sharing:
-                try:
-                    start_time = time.time()
-                    ss = sct.grab(monitor)  
-                    img = Image.frombytes("RGB", (ss.width, ss.height), ss.rgb)
-                    buffer = BytesIO()
-                    img.save(buffer, format="JPEG")
-                    buffer.seek(0)
-                    
-                    await send_screenshot(session, buffer.read())
-
-                    elapsed_time = time.time() - start_time
-                    fps = 1 / elapsed_time if elapsed_time > 0 else 0
-                    # Optional: print(f"FPS: {fps:.2f}")
-                    fps_delay = max(0, 1/5 - elapsed_time)  
-                    await asyncio.sleep(fps_delay)
-                except Exception as e:
-                    print(f"Error during screenshot capture: {e}")
-                    continue
-
-async def control():
-    global sharing
-    async with aiohttp.ClientSession() as session:
+    with mss() as sct:
+        monitor = sct.monitors[1]
         while sharing:
             try:
-                async with session.get(url + "control") as response:
-                    data = await response.json()
+                start_time = time.time()
+                ss = sct.grab(monitor)
+                img = Image.frombytes("RGB", 
+                    (ss.width, ss.height), 
+                    ss.rgb)
+                buffer = BytesIO()
+                img.save(buffer,format="JPEG")
+                buffer.seek(0)
+                rq.post(url+"screenshot", data=buffer.read())
+                elapsed_time = time.time() - start_time
+                fps = 1 / elapsed_time if elapsed_time > 0 else 0
+                # print(f"FPS: {fps:.2f}")
+                fps_delay = max(0, 1/5 - elapsed_time)
+                sleep(fps_delay)
+            except httpx.ConnectTimeout:continue
 
-                if data:
-                    print(data) 
-                    if data["type"] == "mouse":
-                        x = data["x"] * (width / data["width"])
-                        y = data["y"] * (height / data["height"])
-                        move(x, y)
-                        if data["mouse"] == 0:
-                            click()
-                        elif data["mouse"] == 1:
-                            click(button="middle")
-                        elif data["mouse"] == 2:
-                            click(button="right")
-                    elif data["type"] == "key" and data["btn"]:
-                        btns = [chr(key) if isinstance(key, int) else key for key in data["btn"]]
-                        keys = "+".join(btns)
-                        print(keys)
-                        controller.press(keys.lower())
-                        controller.release(keys.lower())
-                    elif data["type"] == "scroll":
-                        wheel(delta=-(data["deltaY"]))
-                    elif data["type"] == "dbclick":
-                        x = data["x"] * (width / data["width"])
-                        y = data["y"] * (height / data["height"])
-                        move(x, y)
-                        double_click()
-            except httpx.ConnectTimeout:
-                continue
-            except ValueError:
-                continue
+def control():
+    global sharing
+    controller = pynput.keyboard.Controller()
+        # async with httpx.AsyncClient() as client:
+    while sharing:
+        try:
+            data =  rq.get(url+"control")
+            data = data.json()
+            print(data) if data else None
+            if data and data["type"] == "mouse":
+                # print(data)
+                x = data["x"]*(width/data["width"])
+                y = data["y"]*(height/data["height"])            
+                move(x,y)
+                if data["mouse"] == 0:
+                    click()
+                elif data["mouse"] == 1:        
+                    click(button="middle")
+                elif data["mouse"] == 2:
+                    click(button="right")
+            elif data and data["type"] == "key" and data["btn"]:
+                #{"btn":[17,65],"type":"key"}
+                btns = []
+                for key in data["btn"]:
+                    btns.append(chr(key)) if type(key) == int else btns.append(key)
+                keys = "+".join(btns)
+                print(keys)
+                keyboard.send(keys.lower())
+            elif data and data["type"] == "scroll":                                    
+                wheel(delta=-(data["deltaY"]))
 
-            await asyncio.sleep(0.1)
+            elif data and data["type"] == "dbclick":
+                x = data["x"]*(width/data["width"])
+                y = data["y"]*(height/data["height"])            
+                move(x,y)
+                double_click()
+        except httpx.ConnectTimeout:continue
+        except ValueError:continue
 
-def async_runner1():
-    asyncio.run(control())
-
-def async_runner():
-    asyncio.run(share())
 
 def main():
     global sstate
