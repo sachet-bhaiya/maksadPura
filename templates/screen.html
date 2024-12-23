@@ -49,7 +49,7 @@ socket.onmessage = (e) => {
 };
 
 socket.onopen = () => {
-    socket.send(JSON.stringify({type:"mouse"})
+    socket.send(JSON.stringify({type:"mouse"}))
 };
 socket.onclose = () => {
     alert("WebSocket connection closed.");
