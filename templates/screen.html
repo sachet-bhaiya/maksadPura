@@ -30,14 +30,18 @@
   canvas.height = window.innerHeight;
 
   socket.onmessage = (e) => {
-    try {
-        const data = JSON.parse(e.data);  
-        alert(data.message);
-        socket.send(e.data)
-    } catch (error) {
-        alert('Error parsing message: ' + error);
+    if (e.data instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const text = reader.result;  // The Blob is now a string
+            alert(text);  // Show the content of the Blob as a string
+        };
+        reader.readAsText(e.data);  // Read the Blob as text (or use readAsArrayBuffer for binary data)
+    } else {
+        alert(e.data);  // For non-Blob messages, show the text content directly
     }
 };
+
 
   socket.onopen = () => {
     alert("WebSocket connection opened.");
