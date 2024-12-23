@@ -48,7 +48,9 @@ socket.onmessage = (e) => {
   }
 };
 
-
+socket.onopen = () => {
+    socket.send("open")
+};
 socket.onclose = () => {
     alert("WebSocket connection closed.");
 };
