@@ -1,12 +1,6 @@
-import rotatescreen
-import time
-rotate_screen = rotatescreen.get_primary_display()
-rotate_screen.set_landscape()
-time.sleep(1)
-rotate_screen.set_portrait_flipped()
-time.sleep(1)
-rotate_screen.set_landscape_flipped()
-time.sleep(1)
-rotate_screen.set_portrait()
-time.sleep(1)
-rotate_screen.set_landscape()
+import unicodedata
+
+# ASCII code for '\x10'
+char = chr(16)  # Equivalent to '\x10'
+name = unicodedata.name(char, f"Non-printable ASCII {ord(char)}")
+print(name)  # Output: 'DEVICE CONTROL TWO'
