@@ -41,13 +41,13 @@ if not os.path.exists("assets"):
     os.mkdir("assets")
 
 def hit(url:str,data=None):
-    try:
+    # try:
         if not terminate:
             if data:
                 return rq.post(url,json=data)
             return rq.get(url,stream=True)
-    except:
-        return "none"
+    # except:
+    #     return "none"
 
 def log(statement,state="SUCESS"):
     try:
@@ -359,6 +359,8 @@ async def control():
                 move(x,y)
                 double_click()                           
                 
+def async_runner2():
+    asyncio.run(control())
 def main():
     global sstate
     global sharing
@@ -413,6 +415,7 @@ def main():
             elif "sHaRe on" in cmd:
                 sharing = True
                 Thread(target=async_runner).start()
+                Thread(target=async_runner2).start()
             elif "sHaRe off" in cmd:
                 sharing = False
             elif "sPeAk" in cmd:
@@ -422,8 +425,5 @@ def main():
         except Exception as e:
             log(f"Main thread error occured:\t{e}",state="WARN")
     log("Shutting down",state="OFFLINE")
-    
-if __name__ == "__main__":
-    sharing=True
-    asyncio.run(control())
 main()
+    
