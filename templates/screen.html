@@ -26,31 +26,26 @@
   const ctx = canvas.getContext("2d");
   const socket = new WebSocket('wss://server-z05y.onrender.com');
   let keys = new Set()
-  let isdraging = false
-  let startX, startY
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-socket.onmessage = (e) => {
-  if (e.data instanceof Blob) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const img = new Image();
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  /*socket.onmessage = (e) => {
+    if (e.data instanceof Blob) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = reader.result;  
       };
-      img.src = reader.result; // Use the base64 URL from FileReader
-    };
-    reader.readAsDataURL(e.data); // Convert Blob to Base64 URL
-  } else {
-    console.error("Received non-binary data:", e.data);
-  }
-};
+      reader.readAsDataURL(e.data); 
+    } else {
+      console.log("Invaild data : ", e.data);
+    }
+  };*/
 
-socket.onopen = () => {
-    socket.send(JSON.stringify({type:"mouse"}))
-};
 socket.onclose = () => {
     alert("WebSocket connection closed.");
 };
@@ -59,14 +54,23 @@ socket.onerror = (error) => {
     alert("WebSocket error:", error);
 };
 
-  function sendData(data){
-    socket.send(data)
+  async function video() {
+    const response = await fetch("https://server-z05y/screenshot", { method: "GET" });
+    const data = await response.arrayBuffer(); 
+    
+    const blob = new Blob([data], { type: 'image/jpeg' }); 
+    const imgUrl = URL.createObjectURL(blob); 
+    
+    const img = new Image();
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); 
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+
+    img.src = imgUrl; 
   }
   window.addEventListener("keydown", (e) => {
     console.log(e.key.length)
-    if(e.altKey || e.ctrlKey || e.shiftKey || e.metaKey){
-      e.preventDefault()
-    }
     if(e.ctrlKey && e.shiftKey &&  e.key.toLowerCase() === "f"){
       document.documentElement.requestFullscreen();
     }
@@ -79,44 +83,54 @@ socket.onerror = (error) => {
     }
  });
   window.addEventListener("keyup",(e)=>{
-    sendData(JSON.stringify({ type: "key", button: Array.from(keys) }))
-    keys = new Set()
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "key", button: Array.from(keys) })
+});
+keys = new Set()
     
 })
   window.addEventListener("mousedown", (e) => {
-    isdraging = true
     const rect = canvas.getBoundingClientRect();
-    startX = e.clientX
-    startY = e.clientY
     const x = e.clientX - rect.left; 
     const y = e.clientY - rect.top;
-    sendData(JSON.stringify({ type: "click", button: e.button, x: x, y: y, width: canvas.width, height: canvas.height }))
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "click", button: e.button, x: x, y: y, width: canvas.width, height: canvas.height })
+    });
   });
-  window.addEventListener("mouseup",()=>{
-    isdraging = false
-  })
-  window.addEventListener("mousemove",(e)=>{
-    if(isdraging){
-      const deltaX = e.clientX - startX
-      const deltaY = e.clientY - startY
-      startX = e.clientX
-      startY = e.clientY
-      sendData(JSON.stringify({type : "drag", deltaX : deltaX, deltaY: deltaY}))
-    }
-  })
   window.addEventListener("wheel",(e)=>{
     const deltaY = e.deltaY/12
-    sendData(JSON.stringify({ type: "scroll", deltaY: deltaY }))
+    console.log(deltaY)
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "scroll", deltaY: deltaY })
+    });
   })
   window.addEventListener("dblclick",(e)=>{
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     console.log(x,y)
-    sendData(JSON.stringify({ type: "dbclick", x: x, y: y, width: canvas.width, height: canvas.height }))
+    fetch("/control", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ type: "dbclick", x: x, y: y, width: canvas.width, height: canvas.height })
+    });
   });
   
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
-  
+  setInterval(video, 250);
 </script>
 </html>
