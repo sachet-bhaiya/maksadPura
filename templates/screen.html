@@ -30,8 +30,20 @@
   canvas.height = window.innerHeight;
 
   socket.onmessage = (e) => {
-            alert(e.data)
+            alert(e)
         };
+  socket.onopen = () => {
+    alert("WebSocket connection opened.");
+};
+
+socket.onclose = () => {
+    alert("WebSocket connection closed.");
+};
+
+socket.onerror = (error) => {
+    alert("WebSocket error:", error);
+};
+
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.arrayBuffer(); 
