@@ -33,6 +33,7 @@
     try {
         const data = JSON.parse(e.data);  
         alert(data.message);
+        socket.send(e.data)
     } catch (error) {
         alert('Error parsing message: ' + error);
     }
