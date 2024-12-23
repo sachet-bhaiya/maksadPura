@@ -30,8 +30,14 @@
   canvas.height = window.innerHeight;
 
   socket.onmessage = (e) => {
-            alert(e.data)
-        };
+    try {
+        const data = JSON.parse(e.data);  
+        alert(data.message);
+    } catch (error) {
+        alert('Error parsing message: ' + error);
+    }
+};
+
   socket.onopen = () => {
     alert("WebSocket connection opened.");
 };
