@@ -24,10 +24,14 @@
 <script>
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
+  const socket = new WebSocket('ws://localhost:8080');
   let keys = new Set()
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  
+
+  socket.onmessage = (e) => {
+            alert(e.data)
+        };
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.arrayBuffer(); 
