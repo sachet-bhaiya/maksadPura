@@ -32,6 +32,7 @@
   canvas.height = window.innerHeight;
 
 socket.onmessage = (e) => {
+  console.log(e.data)
     if (e.data instanceof Blob) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -40,8 +41,8 @@ socket.onmessage = (e) => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
-        img.src = reader.result;  
-        alert(reader.result)
+        img.src = reader.result + "?timestamp=" + new Date().getTime();  
+        
       };
       reader.readAsDataURL(e.data); 
     } else {
