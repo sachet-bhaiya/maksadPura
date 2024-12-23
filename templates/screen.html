@@ -27,14 +27,14 @@
   let keys = new Set()
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
+  
   async function video() {
     const response = await fetch("/screenshot", { method: "GET" });
     const data = await response.arrayBuffer(); 
-
+    
     const blob = new Blob([data], { type: 'image/jpeg' }); 
     const imgUrl = URL.createObjectURL(blob); 
-
+    
     const img = new Image();
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height); 
@@ -43,22 +43,20 @@
 
     img.src = imgUrl; 
   }
-
+  
   window.addEventListener("keydown", (e) => {
     console.log(e.key.length)
-    if(e.key.length === 1){
-      keys.add(e.keyCode)
-    }else{
-      keys.add(e.key)
+    if(e.ctrlKey && e.shiftKey &&  e.key.toLowerCase() === "f"){
+      document.documentElement.requestFullscreen();
     }
-    //fetch("/control", {
-      //method: "POST",
-    //  headers: {
-    //    'Content-Type': 'application/json'
-      //},
-      //body: JSON.stringify({ type: "key", button: Array.from(keys) })
-    //}); 
-  });
+    else{
+      if(e.key.length === 1){
+        keys.add(e.keyCode)
+      }else{
+        keys.add(e.key)
+      }
+    }
+ });
   window.addEventListener("keyup",(e)=>{
     fetch("/control", {
       method: "POST",
@@ -66,10 +64,10 @@
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ type: "key", button: Array.from(keys) })
-    });
-    keys = new Set()
+});
+keys = new Set()
     
-  })
+})
   window.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left; 
@@ -83,7 +81,7 @@
     });
   });
   window.addEventListener("wheel",(e)=>{
-    const deltaY = e.deltaY/10
+    const deltaY = e.deltaY/12
     console.log(deltaY)
     fetch("/control", {
       method: "POST",
@@ -92,7 +90,7 @@
       },
       body: JSON.stringify({ type: "scroll", deltaY: deltaY })
     });
-      })
+  })
   window.addEventListener("dblclick",(e)=>{
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -104,11 +102,10 @@
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ type: "dbclick", x: x, y: y, width: canvas.width, height: canvas.height })
-      });
     });
-
+  });
+  
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
-
   setInterval(video, 250);
 </script>
 </html>
