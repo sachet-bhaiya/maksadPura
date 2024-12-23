@@ -33,7 +33,6 @@
 
 socket.onmessage = (e) => {
   console.log(e.data)
-  alert(e.data)
     if (e.data instanceof Blob) {
       const reader = new FileReader();
       if(reader){
