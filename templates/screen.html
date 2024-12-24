@@ -27,7 +27,6 @@
   const ctx = canvas.getContext("2d");
   const socket = new WebSocket('wss://server-z05y.onrender.com');
   let keys = new Set()
-  const socket = io("wss://server-z05y.onrender.com")
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   socket.onmessage = (e) => {
