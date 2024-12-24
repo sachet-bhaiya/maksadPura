@@ -60,6 +60,7 @@ socket.onerror = (error) => {
    
 if (response.ok) {
     const arrayBuffer = await response.arrayBuffer();
+  console.log(arrayBuffer)
     const imageDataArray = new Uint8Array(arrayBuffer);
     const blob = new Blob([imageDataArray], { type: 'image/jpeg' });
     const imgUrl = URL.createObjectURL(blob);
