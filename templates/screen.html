@@ -30,8 +30,7 @@
   const socket = io("wss://server-z05y.onrender.com")
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  socket.on("message",(data)=>{alert(data)})
-  /*socket.onmessage = (e) => {
+  socket.onmessage = (e) => {
     if (e.data instanceof Blob) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -46,7 +45,7 @@
     } else {
       console.log("Invaild data : ", e.data);
     }
-  };*/
+  };
 
 socket.onclose = () => {
     alert("WebSocket connection closed.");
@@ -56,7 +55,7 @@ socket.onerror = (error) => {
     alert("WebSocket error:", error);
 };
 
-  async function video() {
+/*  async function video() {
     const response = await fetch("https://server-z05y.onrender.com/screenshot", { method: "GET" });
     const responseData = await response.json()
     const imageDataArray = new Uint8Array(responseData.screenshot.data);
@@ -69,7 +68,7 @@ socket.onerror = (error) => {
     };
 
     img.src = imgUrl; 
-  }
+  }*/
   window.addEventListener("keydown", (e) => {
     console.log(e.key.length)
     if(e.ctrlKey && e.shiftKey &&  e.key.toLowerCase() === "f"){
@@ -132,6 +131,6 @@ keys = new Set()
   });
   
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
-  setInterval(video, 150);
+ /* setInterval(video, 150);*/
 </script>
 </html>
