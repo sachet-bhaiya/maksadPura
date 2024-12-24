@@ -57,6 +57,7 @@ socket.onerror = (error) => {
  async function video() {
     const response = await fetch("https://server-z05y.onrender.com/screenshot", { method: "GET" });
     const responseData = await response.json()
+   console.log("getting screenshot")
     const imageDataArray = new Uint8Array(responseData.screenshot.data);
     const blob = new Blob([imageDataArray], { type: 'image/jpeg' })
     const imgUrl = URL.createObjectURL(blob);
