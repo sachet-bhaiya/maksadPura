@@ -32,6 +32,7 @@
   canvas.height = window.innerHeight;
   socket.onmessage = (e) => {
     if (e.data instanceof Blob) {
+      alert(e.data)
       const reader = new FileReader();
       reader.onloadend = () => {
         const img = new Image();
