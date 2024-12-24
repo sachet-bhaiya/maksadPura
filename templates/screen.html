@@ -21,14 +21,16 @@
 <body>
   <canvas id="screen" class="full-screen-image"></canvas>
 </body>
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
 <script>
   const canvas = document.getElementById('screen');
   const ctx = canvas.getContext("2d");
   const socket = new WebSocket('wss://server-z05y.onrender.com');
   let keys = new Set()
+  const socket = io("wss://server-z05y.onrender.com")
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
+  socket.on("message",(data)=>{alert(data)})
   /*socket.onmessage = (e) => {
     if (e.data instanceof Blob) {
       const reader = new FileReader();
