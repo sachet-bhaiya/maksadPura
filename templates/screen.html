@@ -62,8 +62,8 @@ if (response.ok) {
     const arrayBuffer = await response.arrayBuffer();
   console.log("getting screenshot")
   console.log(arrayBuffer)
-    const imageDataArray = new Uint8Array(arrayBuffer);
-    const blob = new Blob([imageDataArray], { type: 'image/jpeg' });
+    /*const imageDataArray = new Uint8Array(arrayBuffer);*/
+    const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
     const imgUrl = URL.createObjectURL(blob);
     const img = new Image();
     img.onload = () => {
