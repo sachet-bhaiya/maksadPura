@@ -140,6 +140,7 @@
       <button id="spam-toggle" style="background-color:{{sc}}">Spam: {{ss}}</button>
       <button id="flip-toggle" style="background-color:{{fc}}">Chaos: {{fs}}</button>
       <button id="share-toggle" style="background-color:{{shc}}">Share: {{shs}}</button>
+      <button id="IN-toggle" style="background-color:{{ic}}">IN_Block: {{is}}</button>
     </div>
   </div>
 <script>
@@ -182,6 +183,7 @@ async function fetchButtonState() {
     initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
     initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
     initializeToggleButton('share-toggle', 'Share', data.shareToggleState.state || 'off');
+    initializeToggleButton('IN-toggle', 'IN_Block', data.INToggleState.state || 'off');
   } catch (error) {
     console.error('Error fetching button state:', error);
   }
@@ -211,6 +213,8 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
       cmd = "fLiP";
     }else if (defaultText === "Share"){
       cmd = "sHaRe"
+    }else if (defaultText === "IN_Block"){
+      cmd = "bLoCk"
     }
 
     if (updatedButton.dataset.state === 'on') {
