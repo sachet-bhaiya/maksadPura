@@ -1,4 +1,4 @@
- import os
+import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify, Response
 from datetime import datetime
