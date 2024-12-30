@@ -109,7 +109,7 @@
       </div>
     </div>
 
-    <div class="sidebar">
+    <div class="sidebar audio-bar">
       <div class="sidebar-header">Audio Files</div>
       <div class="sidebar-content">
         <div class="audio-list">
@@ -127,7 +127,24 @@
           {% endfor %}
         </div>
       </div>
+    <div class="sidebar img-bar">
+      <div class="sidebar-header">Image Files</div>
+      <div class="sidebar-content">
+        <div class="img-list">
+          {% for img in images %}
+          <div class="img-item">
+            <span>{{img}}</span>
+            <div>
+              <form action="/img" method="POST" style="display:inline">
+                <input type="hidden" name="text" value="{{ img }}">
+                <button class="img-btn"><i class="fas fa-img"></i></button>
+              </form>
 
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
       <div class="bottom-right-buttons">
         <label for="image-upload" class="upload-image-btn">Upload Img/Vid</label>
         <input type="file" id="image-upload" class="file-input">
@@ -142,6 +159,10 @@
       <button id="share-toggle" style="background-color:{{shc}}">Share: {{shs}}</button>
       <button id="IN-toggle" style="background-color:{{ic}}">IN_Block: {{is1}}</button>
     </div>
+    <div class="right-switcher">
+      <button id="audio-btn" class="active"><i class="fas fa-music"></i></button>
+      <button id="img-btn"><i class="fas fa-cog"></i></button>
+  </div>
   </div>
 <script>
 
@@ -161,7 +182,39 @@ const exeInput = document.getElementById("center-file-input");
 let isadded = false;
 let cmd;
 let state;
+const audioBtn = document.getElementById("audio-btn");
+const imgBtn = document.getElementById("img-btn");
+const audioSidebar = document.getElementById("audio-bar");
+const imgSidebar = document.getElementById("img-bar");
 
+function hideAllSidebars() {
+  audioSidebar.classList.add("hidden");
+  imgSidebar.classList.add("hidden");
+  audioBtn.classList.remove("active");
+  imgBtn.classList.remove("active");
+}
+
+audioBtn.addEventListener("click", () => {
+  if (audioSidebar.classList.contains("hidden")) {
+    hideAllSidebars();
+    audioSidebar.classList.remove("hidden");
+    audioBtn.classList.add("active");
+  } else {
+    audioSidebar.classList.add("hidden");
+    audioBtn.classList.remove("active");
+  }
+});
+
+imgBtn.addEventListener("click", () => {
+  if (imgSidebar.classList.contains("hidden")) {
+    hideAllSidebars();
+    imgSidebar.classList.remove("hidden");
+    imgBtn.classList.add("active");
+  } else {
+    imgSidebar.classList.add("hidden");
+    imgBtn.classList.remove("active");
+  }
+});
 dropdown.addEventListener("change", () => {
   fetch("/change-user", {
     method: "POST",
