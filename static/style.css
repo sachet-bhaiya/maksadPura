@@ -777,33 +777,9 @@ background-color: #2ea043;
       border-radius: 5px;
     }
 
-    .sidebar {
-      width: 300px;
-      color: white;
-      overflow-y: auto;
-      transition: transform 0.3s ease-in-out;
-      position: fixed;
-      right: 50px;
-      top: 0;
-      height: 100%;
-    }
-
-    .sidebar.hidden {
+.sidebar{
+  right: 50px;
+}
+  .sidebar.hidden {
       transform: translateX(100%);
     }
-
-    .sidebar-header {
-      padding: 10px;
-      font-size: 20px;
-    }
-
-    .sidebar-content {
-      padding: 10px;
-    }
-
-    .container {
-      flex: 1;
-      padding: 10px;
-    }
-
-    
