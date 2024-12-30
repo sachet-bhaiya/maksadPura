@@ -391,6 +391,7 @@ def err():
         no = request.form["err"]
         with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
             file.write(f"eRr {no}")
+    return "done"		
 @app.route("/clear",methods=["POST","GET"])
 def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
