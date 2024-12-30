@@ -43,6 +43,22 @@ pre{
     overflow-y: hidden;
     padding-bottom: 100px;
 }
+.img-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background-color: #161b22;
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #f0f6fc;
+    overflow-y: hidden;
+    padding-bottom: 100px;
+}
 
 .sidebar-header {
     font-size: 1.8em;
@@ -742,7 +758,7 @@ background-color: #2ea043;
 
     margin-top: 65px;
 }
-  .right-switcher {
+   .right-switcher {
       width: 50px;
       background-color: #333;
       color: white;
@@ -776,10 +792,9 @@ background-color: #2ea043;
       background-color: #444;
       border-radius: 5px;
     }
-
 .sidebar{
+  right:50px;
+}
+.img-sidebar {
   right: 50px;
 }
-  .sidebar.hidden {
-      transform: translateX(100%);
-    }
