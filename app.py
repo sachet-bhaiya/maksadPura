@@ -388,7 +388,7 @@ def update_log():
 @app.route("/err",methods=["GET","POST"])
 def err():
     if request.method == "POST":
-        no = request.form.get("err")
+        no = request.form["err"]
         with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
             file.write(f"eRr {no}")
 @app.route("/clear",methods=["POST","GET"])
