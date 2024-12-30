@@ -43,22 +43,6 @@ pre{
     overflow-y: hidden;
     padding-bottom: 100px;
 }
-.img-sidebar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 280px;
-    height: 100%;
-    background-color: #161b22;
-    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    color: #f0f6fc;
-    overflow-y: hidden;
-    padding-bottom: 100px;
-}
 
 .sidebar-header {
     font-size: 1.8em;
@@ -757,44 +741,4 @@ background-color: #2ea043;
 .errcont{
 
     margin-top: 65px;
-}
-   .right-switcher {
-      width: 50px;
-      background-color: #333;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 10px;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-      position: fixed;
-      right: 0;
-      top: 0;
-      height: 100%;
-    }
-
-    .right-switcher button {
-      width: 40px;
-      height: 40px;
-      margin: 10px 0;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-
-    .right-switcher button.active {
-      background-color: #555;
-      border-radius: 5px;
-    }
-
-    .right-switcher button:hover {
-      background-color: #444;
-      border-radius: 5px;
-    }
-.sidebar{
-  right:50px;
-}
-.img-sidebar {
-  right: 50px;
 }
