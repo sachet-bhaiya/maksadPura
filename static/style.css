@@ -797,7 +797,7 @@ background-color: #2ea043;
       width: 280px;
       background-color: #222;
       color: white;
-      overflow-y: auto;
+      overflow-y: hidden;
       box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s ease-in-out;
       position: fixed;
