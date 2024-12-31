@@ -87,8 +87,8 @@ def root():
 def edit():
     global spam
     if request.method == "POST":
-        message = request.form["text"]  if request.form["text"] != "" else request.get_data()
-        print(message)
+        message = request.form["text"]  if request.form["text"] != "" else request.get_data().decode("utf-8")
+	    print(message)
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
@@ -158,7 +158,7 @@ def sounds():
 @app.route("/play", methods=["POST", "GET"])
 def play():
     if request.method == "POST":
-        file = request.form["text"] if request.form["text"] != "" else request.get_data()
+        file = request.form["text"] if request.form["text"] != "" else request.get_data().decode("utf-8")
         if file != "":
             try:
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
@@ -333,7 +333,7 @@ def img():
 @app.route("/img",methods=["GET", "POST"])
 def display():
 	if request.method == "POST":
-		file = request.form["img"] if request.form["img"] != "" else request.get_data()
+		file = request.form["img"] if request.form["img"] != "" else request.get_data().decode("utf-8")
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("iMaGe " + file)
 	return redirect("/")
@@ -341,7 +341,7 @@ def display():
 @app.route("/vid",methods=["GET", "POST"])
 def video():
 	if request.method == "POST":
-		file = request.form["vid"] if request.form["vid"] != "" else request.get_data()
+		file = request.form["vid"] if request.form["vid"] != "" else request.get_data().decode("utf-8")
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("vIdEo " + file)	
 	return redirect("/")
