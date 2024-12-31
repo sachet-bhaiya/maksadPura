@@ -54,6 +54,7 @@ def terminal():
     global firstReload
     state_file = os.path.join(STATIC_FOLDER, "state.json")
     files = os.listdir(UPLOAD_FOLDER)
+    images = os.listdir(os.path.join(STATIC_FOLDER,"images"))
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     state = None
     color = "red"
@@ -87,7 +88,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files,images=images, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
