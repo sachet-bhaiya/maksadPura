@@ -10,8 +10,8 @@ firstReload = True
 timezone = ZoneInfo("Asia/Kolkata")
 startTime = time()
 spam = False
-selected_user = "93"
-image = None
+selected_user = "01"
+output = ""
 control_data = {}
 STATIC_FOLDER = os.path.join("static")
 if not os.path.exists(STATIC_FOLDER):
@@ -46,7 +46,7 @@ with open(state_file,"w") as file:
         }
     json.dump(states, file, indent=4)			
 @app.route("/")
-def terminal():
+def root():
     global firstReload
     state_file = os.path.join(STATIC_FOLDER, "state.json")
     files = os.listdir(UPLOAD_FOLDER)
@@ -432,6 +432,28 @@ def control():
         data1 = control_data
         control_data = {}
         return jsonify(data1)
-    
+@app.route("/terminal",methods=["GET", "POST"])
+def terminal():
+    global output
+    if request.method == "GET":
+        return render_template("terminal.html",user=selected_user)
+    elif request.method == "POST":
+        cmd = request.get_json()
+        if cmd["input"]:
+            with open(os.path.join(STATIC_FOLDER,"message.txt"),"wt") as file:
+                file.write(cmd["input"])
+            while not output:
+                pass
+            shaktimaan = output
+            output = None
+            return jsonify(shaktimaan)
+        elif cmd["output"]:
+            output = cmd["output"]
+    return "done"
+@app.route("/get-output",methods=["GET"])
+def returnOutput():
+    shaktimaan = output
+    output = None
+    return jsonify(shaktimaan)
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
