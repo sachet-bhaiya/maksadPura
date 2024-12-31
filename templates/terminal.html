@@ -162,9 +162,9 @@
             }else if(cmd === "lis-aud"){
               response = "{{audios}}"
             }else if (cmd === "lis-img") {
-              response = "{ { images } }"
+              response = "{{images}}"
             }else if (cmd === "lis-vid") {
-              response = "{ { videos } }"
+              response = "{{videos}}"
             }else if(cmd.startsWith("aud")){
               aud = cmd.replace("aud ","")
               fetch("/play", {
