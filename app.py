@@ -346,7 +346,7 @@ def display():
 		file = request.form["img"]
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("iMaGe " + file)
-	redirect("/")
+	return redirect("/")
 	
 @app.route("/vid",methods=["GET", "POST"])
 def video():
@@ -354,7 +354,7 @@ def video():
 		file = request.form["vid"]
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("vIdEo " + file)	
-	redirect("/")
+	return redirect("/")
 	
 @app.route("/logs",methods=["GET","POST"])
 def logs():
