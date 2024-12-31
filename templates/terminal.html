@@ -5,63 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminal for {{user}} by ms32</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            color: #33ff33;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: black;
+    color: #33ff33;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.5;
+}
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow-y: hidden;
-            overflow-x:hidden;
-        }
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
 
-        .header {
-            text-align: center;
-            padding: 10px;
-            border-bottom: 1px solid #33ff33;
-            text-transform: uppercase;
-            font-size: 20px;
-        }
+.header {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #33ff33;
+    text-transform: uppercase;
+    font-size: 20px;
+}
 
-        .terminal {
-            flex-grow: 1;
-            padding: 10px;
-            overflow-y: auto;
-            font-size:17px;
-        }
+.terminal {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 17px;
+}
 
-        .input-line {
-            display: flex;
-            font-size:17px;
-        }
+.input-line {
+    display: flex;
+    font-size: 17px;
+    padding: 10px;
+}
 
-        .input-line span {
-            margin-right: 5px;
-        }
+.input-line span {
+    margin-right: 5px;
+}
 
-        input {
-            background: none;
-            border: none;
-            color: #33ff33;
-            flex: 1;
-            outline: none;
-        }
+input {
+    background: none;
+    border: none;
+    color: #33ff33;
+    flex: 1;
+    outline: none;
+}
 
-        input::placeholder {
-            color: #33ff33;
-        }
+input::placeholder {
+    color: #33ff33;
+}
 
-        .output {
-            margin-bottom: 10px;
-        }
+.output {
+    margin-bottom: 10px;
+}
+
     </style>
 </head>
 <body>
