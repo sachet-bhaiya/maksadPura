@@ -154,10 +154,26 @@
         </div>
       </div>
     </div>
-
+    <div id="vid-sidebar" class="sidebar hidden">
+      <div class="sidebar-header">Video Files</div>
+      <div class="sidebar-content">
+        <div class="audio-list">
+          {% for vid in videos %}
+          <div class="audio-item" style="display: flex; align-items: center; gap: 10px;">
+            <span>{{ vid }}</span>
+            <form action="/image" method="POST" style="display:inline">
+              <input type="hidden" name="text" value="{{ vid }}">
+              <button class="play-btn"><i class="fas fa-play"></i></button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
     <div class="right-switcher">
-      <button id="audio-btn" class="active"><i class="fa fa-music"></i></button>
-      <button id="custom-btn"><i class="fas fa-image"></i></button>
+      <button id="audio-btn"><i class="fa fa-music"></i></button>
+      <button id="img-btn"><i class="fas fa-image"></i></button>
+      <button id="vid-btn"><i class="fas fa-video"></i></button>
     </div>
   </div>
 <script>
@@ -453,15 +469,19 @@ setInterval(update, 1000);
 </script>
   <script>
     const audioBtn = document.getElementById("audio-btn");
-    const imgBtn = document.getElementById("custom-btn");
+    const imgBtn = document.getElementById("img-btn");
+    const vidBtn = document.getElementById("vid-btn");
     const audioSidebar = document.getElementById("audio-sidebar");
     const imgSidebar = document.getElementById("img-sidebar");
+    const vidSidebar = document.getElementById("vid-sidebar");
 
     function hideAllSidebars() {
       audioSidebar.classList.add("hidden");
       imgSidebar.classList.add("hidden");
+      vidSidebar.classList.add("hidden");
       audioBtn.classList.remove("active");
       imgBtn.classList.remove("active");
+      vidBtn.classList.remove("active");
     }
 
     audioBtn.addEventListener("click", () => {
@@ -470,7 +490,7 @@ setInterval(update, 1000);
         audioSidebar.classList.remove("hidden");
         audioBtn.classList.add("active");
       } else {
-        imgSidebar.classList.add("hidden");
+        audioSidebar.classList.add("hidden");
         audioBtn.classList.remove("active");
       }
     });
@@ -483,6 +503,16 @@ setInterval(update, 1000);
       } else {
         imgSidebar.classList.add("hidden");
         imgBtn.classList.remove("active");
+      }
+    });
+    vidBtn.addEventListener("click", () => {
+      if (vidSidebar.classList.contains("hidden")) {
+        hideAllSidebars();
+        vidSidebar.classList.remove("hidden");
+        vidBtn.classList.add("active");
+      } else {
+        vidSidebar.classList.add("hidden");
+        vidBtn.classList.remove("active");
       }
     });
   </script>
