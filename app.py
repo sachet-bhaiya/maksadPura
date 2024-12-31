@@ -55,6 +55,7 @@ def terminal():
     state_file = os.path.join(STATIC_FOLDER, "state.json")
     files = os.listdir(UPLOAD_FOLDER)
     images = os.listdir(os.path.join(STATIC_FOLDER,"images"))
+    videos = os.listdir(os.path.join(STATIC_FOLDER,"videos"))
     tasks_file = os.path.join(STATIC_FOLDER, "tasks.json")
     state = None
     color = "red"
@@ -88,7 +89,7 @@ def terminal():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files,images=images, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files,images=images,videos=videos, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,is1=is1,ic=ic,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -164,7 +165,7 @@ def sounds():
 @app.route("/play", methods=["POST", "GET"])
 def play():
     if request.method == "POST":
-        file = request.form["text"]
+        file = request.form["audio"]
         if file != "":
             try:
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
@@ -338,7 +339,23 @@ def img():
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
                 a.write("iMaGe " + file.filename)
     return redirect("/")
-
+    
+@app.route("/img",methods=["GET", "POST"])
+def display():
+	if request.method == "POST":
+		file = request.form["img"]
+		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
+			a.write("iMaGe " + file)
+	redirect("/")
+	
+@app.route("/vid",methods=["GET", "POST"])
+def video():
+	if request.method == "POST":
+		file = request.form["vid"]
+		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
+			a.write("vIdEo " + file)	
+	redirect("/")
+	
 @app.route("/logs",methods=["GET","POST"])
 def logs():
     global prevlog
