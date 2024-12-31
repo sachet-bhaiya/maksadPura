@@ -195,10 +195,6 @@ left: 320px; /* Same as the width of the left sidebar */
 font-size: 24px;
 color: red;
 }
-
-
-
-
 /* File Upload Label & Button */
 .file-label-green {
     background-color: #238636;
@@ -214,7 +210,6 @@ color: red;
 .file-label-green:hover {
     background-color: #2ea043;
 }
-
 /* Make Audio List Scrollable and fill available space */
 .audio-list {
     max-height: calc(100% - 120px); /* Adjust based on other elements height */
@@ -222,7 +217,6 @@ color: red;
     margin-bottom: 20px;
     flex-grow: 1;
 }
-
 /* Keep the sidebar content fixed */
 .sidebar-content {
     display: flex;
@@ -605,7 +599,7 @@ display: none;
 .right-toggle-buttons {
     position: fixed; /* Keeps the buttons fixed on the screen */
     top: 10%; /* Adjust to control vertical positioning */
-    right: 315px; /* Adjust for horizontal distance from the right edge */
+    right: 350px; /* Adjust for horizontal distance from the right edge */
     display: flex;
     flex-direction: column;
     gap: 10px; /* Space between buttons */
