@@ -128,7 +128,7 @@
           <div class="audio-item">
             <span>{{file}}</span>
             <form action="/play" method="POST" style="display:inline">
-              <input type="hidden" name="text" value="{{ file }}">
+              <input type="hidden" name="audio" value="{{ file }}">
               <button class="play-btn"><i class="fas fa-play"></i></button>
             </form>
           </div>
@@ -145,8 +145,8 @@
           <div class="audio-item" style="display: flex; align-items: center; gap: 10px;">
             <img src="/static/images/{{ img }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
             <span>{{ img }}</span>
-            <form action="/image" method="POST" style="display:inline">
-              <input type="hidden" name="text" value="{{ img }}">
+            <form action="/img" method="POST" style="display:inline">
+              <input type="hidden" name="img" value="{{ img }}">
               <button class="play-btn"><i class="fas fa-play"></i></button>
             </form>
           </div>
@@ -161,8 +161,8 @@
           {% for vid in videos %}
           <div class="audio-item" style="display: flex; align-items: center; gap: 10px;">
             <span>{{ vid }}</span>
-            <form action="/image" method="POST" style="display:inline">
-              <input type="hidden" name="text" value="{{ vid }}">
+            <form action="/vid" method="POST" style="display:inline">
+              <input type="hidden" name="vid" value="{{ vid }}">
               <button class="play-btn"><i class="fas fa-play"></i></button>
             </form>
           </div>
