@@ -88,7 +88,7 @@ def edit():
     global spam
     if request.method == "POST":
         message = request.form["text"]  if request.form["text"] != "" else request.get_data()
-	    print(message)
+        print(message)
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
