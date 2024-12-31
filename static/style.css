@@ -19,7 +19,6 @@ body {
     font-size: 36px;
     margin-top: 20px;
     color: #196b28; /* Green color */
-    margin:20px;
     letter-spacing: 2px;
 }
 pre{
@@ -49,13 +48,14 @@ pre{
     text-align: center;
     border-bottom: 2px solid #c9d1d9;
     padding-bottom: 10px;
+    margin:20px
     margin-bottom: 20px;
 }
 
 /* Audio Item Styles */
 .audio-item {
     background-color: #21262d;
-    padding: 20px;
+    padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
