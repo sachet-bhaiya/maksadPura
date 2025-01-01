@@ -154,18 +154,10 @@ input::placeholder {
                 body: JSON.stringify({ user: user })
               });
               response = `user changed to ${user}`
-            }else if(cmd.startsWith("speak")){
-              const text = cmd.replace("speak ","")
-              fetch("/edit",{
+            }else if(cmd.startsWith("speak") || cmd.startsWith("open") || cmd.startsWith("play") || cmd.startsWith("img")|| cmd.startsWith("vid")){
+              fetch("/cmd",{
                 method:"POST",
-                body: text
-              })
-              response = await output()
-            }else if(cmd.startsWith("open")){
-              const url = cmd.replace("open ","")
-              fetch("/url", {
-                method: "POST",
-                body: url
+                body: cmd
               })
               response = await output()
             }else if(cmd === "lis-aud"){
@@ -174,27 +166,6 @@ input::placeholder {
               response = "{{images}}"
             }else if (cmd === "lis-vid") {
               response = "{{videos}}"
-            }else if(cmd.startsWith("aud")){
-              aud = cmd.replace("aud ","")
-              fetch("/play", {
-                method: "POST",
-                body: aud
-              })
-              response = await output()
-            }else if (cmd.startsWith("img")) {
-              const img = cmd.replace("img ", "")
-              fetch("/img", {
-                method: "POST",
-                body: img
-              })
-              response = await output()
-            }else if (cmd.startsWith("vid")) {
-              const vid = cmd.replace("vid ", "")
-              fetch("/vid", {
-                method: "POST",
-                body: vid
-              })
-              response = await output()
             }else if (cmd.startsWith("hide")){
               const state = cmd.replace("hide ","")
               fetch("/toggle", {
