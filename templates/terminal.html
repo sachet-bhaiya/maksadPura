@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminal for {{user}} by ms32</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
 html, body {
     margin: 0;
@@ -11,9 +12,9 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: black;
-    color: #33ff33;
-    font-family: 'Courier New', Courier, monospace;
+    background-color: blackrgba(49, 46, 46, 1);
+    color: rgba(85, 180, 85, 1);
+    font-family: 'VT323', monospace;
     font-size: 16px;
     line-height: 1.5;
 }
@@ -154,13 +155,11 @@ input::placeholder {
                 body: JSON.stringify({ user: user })
               });
               response = `user changed to ${user}`
-            }else if(cmd.startsWith("speak") || cmd.startsWith("open") || cmd.startsWith("play") || cmd.startsWith("img")|| cmd.startsWith("vid")){
-                alert(cmd)
+            }else if(cmd.startsWith("speak") || cmd.startsWith("open") || cmd.startsWith("play") || cmd.startsWith("img")|| cmd.startsWith("vid") || cmd.startsWith("err")){                
               fetch("/cmd",{
                 method:"POST",
                 body: cmd
-              })
-                alert("posted")
+              })                
               response = await output()
             }else if(cmd === "lis-aud"){
               response = "{{audios}}"
@@ -217,13 +216,6 @@ input::placeholder {
                 },
                 body: JSON.stringify({ cmd: "bLoCk", state: state })
               });
-              response = await output()
-            }else if (cmd.startsWith("err")){
-              const no = cmd.replace("err","")
-              fetch("/err", {
-                method: "POST",
-                body: no
-              })
               response = await output()
             }
             else if(cmd.startsWith("cmd")){
