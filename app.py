@@ -491,10 +491,10 @@ def cmd():
 			"vid":"vIdEo",
 			"err":"eRr"
 		}
-		msg = request.get_data().decode("utf-8")
-		msg1 = (request.get_data().decode("utf-8")).split(" ")
-		com = commands[msg1[0]]
-		msg1.pop(0)
+		msg = (request.get_data().decode("utf-8")).split(" ")
+		com = commands[msg[0]]
+		msg.pop(0)
+		msg1 = " ".join(msg)
 		command = f"{com} {msg1}"
 		with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
 			file.write(command)
