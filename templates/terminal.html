@@ -155,10 +155,12 @@ input::placeholder {
               });
               response = `user changed to ${user}`
             }else if(cmd.startsWith("speak") || cmd.startsWith("open") || cmd.startsWith("play") || cmd.startsWith("img")|| cmd.startsWith("vid")){
+                alert(cmd)
               fetch("/cmd",{
                 method:"POST",
                 body: cmd
               })
+                alert("posted")
               response = await output()
             }else if(cmd === "lis-aud"){
               response = "{{audios}}"
