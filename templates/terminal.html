@@ -45,13 +45,13 @@ html, body {
 
 .input-line {
     display: flex;
-    font-size: 17px;
+    font-size: 20px;
     padding: 10px;
 }
 
 .input-line span {
     margin-right: 5px;
-    font-size: 17px;
+    font-size: 20px;
     
 }
 
@@ -61,19 +61,20 @@ input {
     color: rgba(85, 180, 85, 1);
     font-family: 'VT323', monospace;
     flex: 1;
-    font-size: 17px;
+    font-size: 20px;
     outline: none;
 }
 
 input::placeholder {
     color: rgba(85, 180, 85, 1);
     font-family: 'VT323', monospace;
-    font-size:17px;
+    font-size:20px;
 }
 
 .output {
     margin-bottom: 10px;
-    font-size: 17px;
+    font-size: 20px;
+    white-space: pre-wrap; 
 }
 
     </style>
@@ -232,8 +233,6 @@ input::placeholder {
                     body: JSON.stringify({input: cmd})
                 });
                 response = await data.json();
-            }else{
-              response = `invaild command : ${cmd}`
             }
 
             terminal.innerHTML += `<div class="output">>> ${response.replace(/\n/g, '<br>')}</div>`;
