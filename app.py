@@ -87,8 +87,7 @@ def root():
 def edit():
     global spam
     if request.method == "POST":
-        message = request.form["text"]  if request.form["text"] != "" else request.get_data().decode("utf-8")
-	    
+        message = request.form["text"]  
         with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
             if ("pLaY" not in message and "oPeN" not in message):    
                 file.write("sPeAk" + message)
@@ -158,7 +157,7 @@ def sounds():
 @app.route("/play", methods=["POST", "GET"])
 def play():
     if request.method == "POST":
-        file = request.form["text"] if request.form["text"] != "" else request.get_data().decode("utf-8")
+        file = request.form["text"] 
         if file != "":
             try:
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
@@ -333,7 +332,7 @@ def img():
 @app.route("/img",methods=["GET", "POST"])
 def display():
 	if request.method == "POST":
-		file = request.form["img"] if request.form["img"] != "" else request.get_data().decode("utf-8")
+		file = request.form["img"]
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("iMaGe " + file)
 	return redirect("/")
@@ -341,7 +340,7 @@ def display():
 @app.route("/vid",methods=["GET", "POST"])
 def video():
 	if request.method == "POST":
-		file = request.form["vid"] if request.form["vid"] != "" else request.get_data().decode("utf-8")
+		file = request.form["vid"] 
 		with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
 			a.write("vIdEo " + file)	
 	return redirect("/")
@@ -446,8 +445,9 @@ def control():
 
     if request.method == "GET":
         data1 = control_data
-        control_data = {}
-        return jsonify(data1)
+        control_data = {}      
+        return jsonify(data1)             
+        
 @app.route("/terminal",methods=["GET", "POST"])
 def terminal():
     global output
@@ -471,6 +471,20 @@ def terminal():
             if cmd["output"]:
             	output = cmd["output"]
     return "done"
-
+@app.route("/cmd",methods=["POST","GET"])
+def cmd():
+	if request.method == "POST":
+		commands = {
+			"speak":"sPeAk",
+			"open":"oPeN",
+			"play":"pLaY",
+			"img":"iMaGe",
+			"vid":"vIdEo"
+		}
+		msg = request.get_data().decode("utf-8")
+		msg1 = (request.get_data().decode("utf-8")).split(" ")
+		command = f"{commands[msg1[0]]} {msg}"
+		with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
+			file.write(command)
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
