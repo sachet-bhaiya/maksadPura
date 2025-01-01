@@ -484,7 +484,8 @@ def cmd():
 		msg = request.get_data().decode("utf-8")
 		msg1 = (request.get_data().decode("utf-8")).split(" ")
 		command = f"{commands[msg1[0]]} {msg}"
-		with open(os.path.join(STATIC_FOLDER,"message.txt")) as file:
+		with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
 			file.write(command)
+	return "done"
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
