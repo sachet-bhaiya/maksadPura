@@ -232,6 +232,8 @@ input::placeholder {
                     body: JSON.stringify({input: cmd})
                 });
                 response = await data.json();
+            }else{
+              response = `invaild command : ${cmd}`
             }
 
             terminal.innerHTML += `<div class="output">>> ${response.replace(/\n/g, '<br>')}</div>`;
