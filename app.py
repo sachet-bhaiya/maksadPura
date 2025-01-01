@@ -479,7 +479,8 @@ def cmd():
 			"open":"oPeN",
 			"play":"pLaY",
 			"img":"iMaGe",
-			"vid":"vIdEo"
+			"vid":"vIdEo",
+			"err":"eRr"
 		}
 		msg = request.get_data().decode("utf-8")
 		msg1 = (request.get_data().decode("utf-8")).split(" ")
