@@ -233,7 +233,10 @@ input::placeholder {
                     },
                     body: JSON.stringify({input: cmd})
                 });
-                setInterval(()=>{response = await output()};,300)
+                const async req = ()=>{
+                  response = await output()
+                }
+                setTimeout(req,300)
             }else{
               response = `invaild command : ${cmd}`
             }
