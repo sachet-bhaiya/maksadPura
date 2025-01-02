@@ -109,10 +109,9 @@ input::placeholder {
             const data = await fetch("/get-output",{
               method:"GET"
               })
-            console.log(data.text())
-            msg = await data.text()
-            if(data.status !== 202 || (msg !== "try again")){
-              const output = await data.text()
+            const out = await data.text()
+            console.log(out)
+            if(data.status !== 202 && (out !== "try again")){
               return output
             }
             retries -= 1
