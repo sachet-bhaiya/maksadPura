@@ -104,13 +104,20 @@ input::placeholder {
             }
         });
         async function output(){
+          let a = true
+          let retries = 4
+          while(a && retries >0){
             const data = await fetch("/get-output",{
               method:"GET",
-            })
-            const output = await data.json()
-            alert(output)
-            return output
-        }
+              })
+            if(data.status !== 202 || data.text() !== "try again"){
+              const output = await data.json()
+              alert(output)
+              a = false
+              return output
+            }
+            retries -= 1
+        }}
         async function processCommand(cmd) {
             let response;
             let data;
