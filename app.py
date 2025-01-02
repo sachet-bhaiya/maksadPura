@@ -471,7 +471,7 @@ def terminal():
         cmd = request.get_json()
         if "input" in cmd:
             if cmd["input"]:
-	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"wt") as file:
+	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
 	                file.write(cmd["input"])
 	            while not output:
 	                pass
