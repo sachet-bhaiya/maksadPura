@@ -109,8 +109,8 @@ input::placeholder {
             const data = await fetch("/get-output",{
               method:"GET"
               })
-            
-            if(data.status !== 202 || await data.json() !== "try again"){
+            console.log(data.json())
+            if(data.status !== 202 || (await data.json() !== "try again")){
               const output = await data.json()
               return output
             }
@@ -233,10 +233,10 @@ input::placeholder {
                     },
                     body: JSON.stringify({input: cmd})
                 });
-                const async req = ()=>{
-                  response = await output()
-                }
-                setTimeout(req,300)
+                setTimeout(async () => {
+                    response = await output();
+                }, 300);
+
             }else{
               response = `invaild command : ${cmd}`
             }
