@@ -108,9 +108,9 @@ input::placeholder {
           let retries = 4
           while(a && retries >0){
             const data = await fetch("/get-output",{
-              method:"GET",
+              method:"GET"
               })
-            
+            alert(data.json)
             if(data.status !== 202 || data.text() !== "try again"){
               const output = await data.json()
               a = false
