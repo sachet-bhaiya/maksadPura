@@ -299,8 +299,8 @@ def runcmd(cmd):
         if not stderr:stderr="none"
         if not stdout:stdout="none"
         output = f"OUTPUT:\t{stdout}\nERROR:\t{stderr}\nCODE:\t{exit_code}"
-        post(url+"terminal",json={"output":output})  
-        print("done")      
+        print(post(url+"terminal",json={"output":output}).status_code)
+        print("done")
 
     except Exception as e:
         log(f"runcmd thread error:\t{e}",state="WARN")
