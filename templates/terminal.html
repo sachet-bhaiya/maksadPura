@@ -233,7 +233,7 @@ input::placeholder {
                     },
                     body: JSON.stringify({input: cmd})
                 });
-                response = await output();
+                setInterval(()=>{response = await output()};,400)
             }else{
               response = `invaild command : ${cmd}`
             }
