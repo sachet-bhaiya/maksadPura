@@ -476,13 +476,14 @@ def terminal():
         elif "output" in cmd:
             if cmd["output"]:
             	output = cmd["output"]
+            	with open(os.path.join(STATIC_FOLDER,"debug.txt"),"w") as file:
+            		file.write(output)
         elif "get" in output:
         	while not output:
 	                pass
         	shaktimaan = output
         	output = None
-        	with open(os.path.join(STATIC_FOLDER,"debug.txt"),"w") as file:
-        		file.write(shaktimaan)
+        	
         	return jsonify(shaktimaan)  
     return "done"
 @app.route("/cmd",methods=["POST","GET"])
