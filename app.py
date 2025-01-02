@@ -480,6 +480,7 @@ def terminal():
         elif "output" in cmd:
             if cmd["output"]:
             	output = cmd["output"]
+            	print("---------output stored-----------")		    
             
     return "done"
     
