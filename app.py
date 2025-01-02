@@ -493,9 +493,9 @@ def get_output():
 			output = None
 			with open(os.path.join(STATIC_FOLDER,"debug.txt"),"w") as file:
 				file.write(f"output {shaktimaan}")
-			return jsonify(shaktimaan)
+			return shaktimaan
 		else:
-			return jsonify("try again"),202	              
+			return "try again",202	              
 @app.route("/cmd",methods=["POST","GET"])
 def cmd():
 	if request.method == "POST":
