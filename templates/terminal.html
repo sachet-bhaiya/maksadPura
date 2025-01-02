@@ -104,15 +104,21 @@ input::placeholder {
             }
         });
         async function output(){
-          const data = await fetch("/terminal",{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ output: true })
-          })
-          const output = await data.json()
-          return output
+          const status = await fetch("/status",{method:"GET"})
+          if (await status.text() === "offline"){
+            return "The selected user is offline"
+          }
+          else{
+            const data = await fetch("/terminal",{
+              method:"POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ output: true })
+            })
+            const output = await data.json()
+            return output
+          }
         }
         async function processCommand(cmd) {
             let response;
