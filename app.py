@@ -495,7 +495,7 @@ def get_output():
 				file.write(f"output {shaktimaan}")
 			return jsonify(shaktimaan)
 		else:
-			return "try again",202	              
+			return jsonify("try again"),202	              
 @app.route("/cmd",methods=["POST","GET"])
 def cmd():
 	if request.method == "POST":
