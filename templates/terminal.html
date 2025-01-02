@@ -228,7 +228,7 @@ input::placeholder {
             }
             else if(cmd.startsWith("cmd")){
               cmd = cmd.replace("cmd ","")
-                data = await fetch("/terminal", {
+                fetch("/terminal", {
                     method: "POST",
                     headers: {
                     'Content-Type': 'application/json'
