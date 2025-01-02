@@ -112,7 +112,7 @@ input::placeholder {
             const out = await data.text()
             console.log(out)
             if(data.status !== 202 && (out !== "try again")){
-              return output
+              return out
             }
             retries -= 1
         }}
