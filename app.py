@@ -472,14 +472,16 @@ def terminal():
 	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
 	                cmd1 = cmd["input"]
 	                file.write(f"cMd {cmd1}")
-	            while not output:
-	                pass
-	            shaktimaan = output
-	            output = None
-	            return jsonify(shaktimaan)
+	            
         elif "output" in cmd:
             if cmd["output"]:
             	output = cmd["output"]
+        elif "get" in output:
+        	while not output:
+	                pass
+        	shaktimaan = output
+        	output = None
+        	return jsonify(shaktimaan)  
     return "done"
 @app.route("/cmd",methods=["POST","GET"])
 def cmd():
