@@ -486,6 +486,8 @@ def get_output():
 		if output:
 			shaktimaan = output
 			output = None
+			with open(os.path.join(STATIC_FOLDER,"debug.txt"),"w") as file:
+				file.write(f"output {shaktimaan}")
 			return jsonify(shaktimaan)
 		else:
 			return "try again",202	              
