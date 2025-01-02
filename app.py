@@ -165,7 +165,7 @@ def sounds():
 @app.route("/play", methods=["POST", "GET"])
 def play():
     if request.method == "POST":
-        file = request.form["text"] 
+        file = request.form["audio"] 
         if file != "":
             try:
                 with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as a:
