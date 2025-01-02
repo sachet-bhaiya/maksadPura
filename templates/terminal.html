@@ -237,7 +237,7 @@ input::placeholder {
                     },
                     body: JSON.stringify({input: cmd})
                 });
-                response = await data.json();
+                response = await output();
             }else{
               response = `invaild command : ${cmd}`
             }
