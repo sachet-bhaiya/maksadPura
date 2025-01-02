@@ -481,6 +481,8 @@ def terminal():
 	                pass
         	shaktimaan = output
         	output = None
+        	with open(os.path.join(STATIC_FOLDER,"debug.txt"),"w") as file:
+        		file.write(shaktimaan)
         	return jsonify(shaktimaan)  
     return "done"
 @app.route("/cmd",methods=["POST","GET"])
