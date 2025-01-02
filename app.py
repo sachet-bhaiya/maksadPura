@@ -469,6 +469,7 @@ def terminal():
         return render_template("terminal.html",user=selected_user,audios=audios,videos=videos,images=images)
     elif request.method == "POST":
         cmd = request.get_json()
+        print(cmd)	
         if "input" in cmd:		
             if cmd["input"]:
 	            output = None
