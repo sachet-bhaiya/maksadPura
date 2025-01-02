@@ -104,22 +104,12 @@ input::placeholder {
             }
         });
         async function output(){
-          const status = await fetch("/status",{method:"GET"})
-          if (await status.text() === "offline"){
-            return "The selected user is offline"
-          }
-          else{
-            const data = await fetch("/terminal",{
-              method:"POST",
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ get: true })
+            const data = await fetch("/get-output",{
+              method:"GET",
             })
             const output = await data.json()
             alert(output)
             return output
-          }
         }
         async function processCommand(cmd) {
             let response;
