@@ -114,7 +114,7 @@ input::placeholder {
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ output: true })
+              body: JSON.stringify({ get: true })
             })
             const output = await data.json()
             return output
