@@ -472,7 +472,7 @@ def terminal():
         if "input" in cmd:
             if cmd["input"]:
 	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-	                file.write(cmd["input"])
+	                file.write(f"cMd {cmd["input"]}")
 	            while not output:
 	                pass
 	            shaktimaan = output
