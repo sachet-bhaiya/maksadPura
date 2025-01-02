@@ -109,7 +109,7 @@ input::placeholder {
             const data = await fetch("/get-output",{
               method:"GET"
               })
-            alert(data.status)
+            
             if(data.status !== 202 || await data.json() !== "try again"){
               const output = await data.json()
               return output
