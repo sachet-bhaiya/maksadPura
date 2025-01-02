@@ -483,11 +483,12 @@ def terminal():
 def get_output():
 	global output
 	if request.method == "GET":
-		while not output:
-	                pass
-		shaktimaan = output
-		output = None
-		return jsonify(shaktimaan)	              
+		if output:
+			shaktimaan = output
+			output = None
+			return jsonify(shaktimaan)
+		else:
+			return "try again",202	              
 @app.route("/cmd",methods=["POST","GET"])
 def cmd():
 	if request.method == "POST":
