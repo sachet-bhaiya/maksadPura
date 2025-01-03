@@ -205,21 +205,28 @@ dropdown.addEventListener("change", () => {
   });
   fetchButtonState()
 });
-
 async function playAudio() {
-  const audioElement = new Audio();
   while (mic) {
     try {
       const response = await fetch('https://server-20zy.onrender.com/audio', { method: "GET" });
+
       if (!response.ok) {
-        throw new Error(`Failed to fetch audio: ${response.statusText}`);
+        throw new Error('Failed to fetch audio');
       }
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      audioElement.src = audioUrl;
-      audioElement.play();
+
+      const buffer = await response.arrayBuffer();
+
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      audioContext.decodeAudioData(buffer, (audioBuffer) => {
+        const audioSource = audioContext.createBufferSource();
+        audioSource.buffer = audioBuffer;
+        audioSource.connect(audioContext.destination); 
+        audioSource.start();
+      }, (error) => {
+        console.error('Error decoding audio data:', error);
+      });
     } catch (error) {
-      console.error("Error fetching or playing audio:", error);
+      console.error('Error fetching audio:', error);
     }
   }
 }
