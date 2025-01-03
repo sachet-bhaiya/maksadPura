@@ -472,15 +472,15 @@ def terminal():
         print(cmd)	
         if "input" in cmd:		
             if cmd["input"]:
-	            output = None
-	            with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
-	                cmd1 = cmd["input"]
-	                file.write(f"cMd {cmd1}")
+                output = None
+                with open(os.path.join(STATIC_FOLDER,"message.txt"),"w") as file:
+                    cmd1 = cmd["input"]
+                    file.write(f"cMd {cmd1}")
 	            
         elif "output" in cmd:
             if cmd["output"]:
-            	output = cmd["output"]
-            	print("---------output stored-----------")		    
+                output = cmd["output"]
+                print("---------output stored-----------")		    
             
     return "done"
     
