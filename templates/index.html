@@ -205,18 +205,24 @@ dropdown.addEventListener("change", () => {
   });
   fetchButtonState()
 });
-async function playAudio(){
-  while(mic){
-    const response = await fetch("https://server-20zy.onrender.com/audio",{method:"GET"})
-    const data = await response.arrayBuffer()
-    console.log(data)
-    const blob = new Blob([data], { type: 'audio/wav' })
-    const audioUrl = URL.createObjectURL(blob);
-    const audio = new Audio(audioUrl);
-    audio.play()
-    console.log("played")
+async function playAudio() {
+  while (mic) {
+    try {
+      const response = await fetch("https://server-20zy.onrender.com/audio", { method: "GET" });
+      const data = await response.arrayBuffer();
+      console.log("Received audio data:", data);
+      const blob = new Blob([data], { type: 'audio/wav' });
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+
+      console.log("Audio played successfully");
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
   }
 }
+
 async function fetchButtonState() {
   try {
     const response = await fetch('/static/state.json');
