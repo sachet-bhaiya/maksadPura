@@ -1,27 +1,41 @@
 import subprocess
+import threading
 
-def run_command(command):
-    """
-    Runs a shell command and returns the output.
+# Function to read output from the subprocess and print it
+def read_output(process):
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print(output, end='')
 
-    Args:
-        command (str): The command to execute.
+# Start the Command Prompt session
+process = subprocess.Popen('cmd', stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    Returns:
-        tuple: A tuple containing the standard output, standard error, and exit code.
-    """
-    try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        return result.stdout, result.stderr, result.returncode
-    except Exception as e:
-        return "", str(e), -1
+# Start a separate thread to handle reading the output
+thread = threading.Thread(target=read_output, args=(process,))
+thread.daemon = True  # Daemon thread will exit when the main program exits
+thread.start()
 
-if __name__ == "__main__":
-    # Example usage
-    user_command = input("Enter a command to run: ")
-    stdout, stderr, exit_code = run_command(user_command)
-    
-    print(f"Output:\n{stdout}")
-    if stderr:
-        print(f"Error:\n{stderr}")
-    print(f"Exit Code: {exit_code}")
+# Print a welcome message
+print("Welcome to the Python CMD terminal! Type 'exit' to quit.")
+
+while True:
+    # Get user input (command)
+    user_input = input()
+
+    # Check if user wants to exit
+    if user_input.lower() == 'exit':
+        print("Exiting the CMD terminal.")
+        break
+
+    # Send the user input to the CMD process
+    process.stdin.write(user_input + '\n')
+    process.stdin.flush()
+
+# Close the process when done
+process.stdin.close()
+process.stdout.close()
+process.stderr.close()
+process.wait()

